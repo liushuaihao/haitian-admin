@@ -1,0 +1,93 @@
+{
+  "name": "security-enterprise-admin",
+  "version": "2.4.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "build:sit": "vue-cli-service build --mode production.sit",
+    "build:uat": "vue-cli-service build --mode production.uat",
+    "build:prod": "vue-cli-service build --mode production",
+    "lint": "vue-cli-service lint",
+    "et": "node_modules/.bin/et",
+    "et:init": "node_modules/.bin/et -i",
+    "et:list": "gulp themes"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "babel-eslint": "^8.0.1",
+    "babel-plugin-component": "^1.1.1",
+    "echarts": "^4.9.0",
+    "element-theme": "^2.0.1",
+    "element-ui": "^2.13.2",
+    "gulp-autoprefixer": "^6.1.0",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-load-plugins": "^2.0.3",
+    "gulp-rename": "^1.4.0",
+    "gulp-sass": "^4.1.0",
+    "jquery": "^3.5.1",
+    "js-cookie": "^2.2.1",
+    "lodash": "^4.17.19",
+    "lodash.debounce": "^4.0.8",
+    "moment": "^2.29.1",
+    "node-sass": "^4.14.1",
+    "qs": "^6.9.4",
+    "quill": "^1.3.7",
+    "sass-loader": "^7.3.1",
+    "screenfull": "^4.2.1",
+    "svg-sprite-loader": "^4.3.0",
+    "vue": "^2.6.11",
+    "vue-i18n": "^8.20.0",
+    "vue-router": "^3.4.3",
+    "vue-scroller": "^2.2.4",
+    "vuedraggable": "^2.24.0",
+    "vuex": "^3.5.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.12.1",
+    "@vue/cli-plugin-eslint": "^3.12.1",
+    "@vue/cli-service": "^3.12.1",
+    "@vue/eslint-config-standard": "^4.0.0",
+    "element-theme-chalk": "^2.13.2",
+    "natives": "^1.1.6",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "@vue/standard"
+    ],
+    "rules": {},
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "engines": {
+    "node": ">= 8.11.1",
+    "npm": ">= 5.6.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 10"
+  ],
+  "element-theme": {
+    "config": "./src/element-ui/theme-variables.scss",
+    "out": "./src/element-ui/theme",
+    "minimize": true,
+    "browsers": [
+      "> 1%",
+      "last 2 versions",
+      "not ie <= 10"
+    ]
+  }
+}
