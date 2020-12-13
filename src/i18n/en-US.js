@@ -451,4 +451,12 @@ t.region.province = 'Province'
 t.region.city = 'City'
 t.region.county = 'County'
 
+t.essential = {}
+t.essential.name = '姓名'
+t.essential.mobile = '手机号'
+t.essential.identityCard = '身份证'
+t.essential.id = '设备ID'
+t.essential.updateDate = '更新时间'
+t.essential.type = '预警类型'
+
 export default t
