@@ -16,7 +16,7 @@
         </el-menu-item>
       </el-menu>
       <el-menu class="aui-navbar__menu" mode="horizontal">
-        <el-menu-item index="1">
+        <!-- <el-menu-item index="1">
           <el-dropdown placement="bottom" :show-timeout="0">
             <el-button size="mini">{{ $t('_lang') }}</el-button>
             <el-dropdown-menu slot="dropdown">
@@ -28,14 +28,14 @@
           <a href="//www.renren.io/" target="_blank">
             <svg class="icon-svg aui-navbar__icon-menu" aria-hidden="true"><use xlink:href="#icon-earth"></use></svg>
           </a>
-        </el-menu-item>
+        </el-menu-item> -->
         <el-menu-item index="3" @click="fullscreenHandle()">
           <svg class="icon-svg aui-navbar__icon-menu" aria-hidden="true"><use xlink:href="#icon-fullscreen"></use></svg>
         </el-menu-item>
         <el-menu-item index="4" class="aui-navbar__avatar">
           <el-dropdown placement="bottom" :show-timeout="0">
             <span class="el-dropdown-link">
-              <img src="~@/assets/img/avatar.png">
+              <!-- <img src="~@/assets/img/avatar.png"> -->
               <span>{{ $store.state.user.name }}</span>
               <i class="el-icon-arrow-down"></i>
             </span>

@@ -85,7 +85,7 @@ import debounce from "lodash/debounce";
 import { messages } from "@/i18n";
 import { getUUID } from "@/utils";
 export default {
-  data() {
+  data () {
     return {
       i18nMessages: messages,
       captchaPath: "",
@@ -98,7 +98,7 @@ export default {
     };
   },
   computed: {
-    dataRule() {
+    dataRule () {
       return {
         username: [
           {
@@ -124,18 +124,18 @@ export default {
       };
     },
   },
-  created() {
+  created () {
     this.getCaptcha();
   },
   methods: {
     // 获取验证码
-    getCaptcha() {
+    getCaptcha () {
       this.dataForm.uuid = getUUID();
       this.captchaPath = `${window.SITE_CONFIG["apiURL"]}/captcha?uuid=${this.dataForm.uuid}`;
     },
     // 表单提交
     dataFormSubmitHandle: debounce(
-      function() {
+      function () {
         this.$refs["dataForm"].validate((valid) => {
           if (!valid) {
             return false;
