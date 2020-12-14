@@ -1,6 +1,7 @@
 <template>
+<!-- 心电 -->
   <el-card shadow="never" class="aui-card--fill">
-    <div class="mod-message__mail-log">
+    <div class="mod-essential_ecg">
       <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
         <el-form-item>
           <el-input
