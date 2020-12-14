@@ -97,7 +97,7 @@ export default {
       basicInformation: {
         name: "张三",
         sex: "男",
-        age: "22",
+        age: "43",
         stature: "165",
         weight: "70",
         tel: "16601275207",
