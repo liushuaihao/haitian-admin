@@ -19,6 +19,12 @@ import renRegionTree from '@/components/ren-region-tree'
 import { hasPermission, getDictLabel } from '@/utils'
 import cloneDeep from 'lodash/cloneDeep'
 
+import echarts from "echarts";
+import china from "echarts/map/json/china.json";
+
+echarts.registerMap("china", china);
+Vue.prototype.$echarts = echarts;
+
 Vue.config.productionTip = false
 
 Vue.use(Element, {
