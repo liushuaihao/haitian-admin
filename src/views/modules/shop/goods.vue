@@ -57,7 +57,13 @@
         >
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="forwardUrl(scope.row)"
-              >查看</el-button
+              >详情</el-button
+            >
+            <el-button type="text" size="small"
+              >修改</el-button
+            >
+            <el-button type="text" size="small"
+              >删除</el-button
             >
           </template>
         </el-table-column>
@@ -125,15 +131,17 @@ export default {
   },
   methods: {
     forwardUrl (row) {
+      let type = row.type
       var routeParams = {
         routeName: `${this.$route.name}__instance_${row.id}`,
         menuId: `${this.$route.meta.menuId}`,
-        title: `${this.$route.meta.title}详情 - ${row.name}`,
+        title: `${this.$route.meta.title}详情 - ${row.goodsName}`,
         path: "shop/goods-details",
-        params: {},
+        params: {type},
       };
       addDynamicRoute(routeParams, this.$router, this.$route);
     },
   },
+
 };
 </script>
