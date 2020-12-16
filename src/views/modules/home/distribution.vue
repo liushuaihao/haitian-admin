@@ -1,6 +1,6 @@
 <template>
   <!-- 高级搜索 -->
-  <el-card shadow="never" class="aui-card--fill flex-center">
+  <el-card shadow="never"  class="aui-card--fill flex-center">
     <div
       class="mod-home_distribution"
       id="myChartChina"
@@ -15,6 +15,8 @@ export default {
     return {
       title: "",
       dataList: [],
+      isShow: false,
+      myChartChina: null
     };
   },
   // 钩子函数  不了解的话 建议看看 vue的生命周期
@@ -28,10 +30,11 @@ export default {
       var myChartContainer = document.getElementById("myChartChina");
       var resizeMyChartContainer = function () {
         myChartContainer.style.width = document.body.offsetWidth / 1.3 + "px"; // 页面一半的大小
-        myChartContainer.style.height = document.body.offsetHeight / 1.3 + "px"; // 页面一半的大小
+        myChartContainer.style.height = " calc(calc(100vh - 50px - 38px - 70px) - 2px)"; // 页面一半的大小
       };
       resizeMyChartContainer();
       var myChartChina = this.$echarts.init(myChartContainer);
+      this.myChartChina = myChartChina
       // 绘制图表
       var optionMap = {
         tooltip: {},
@@ -41,28 +44,67 @@ export default {
             // 定义样式
             normal: {
               // 普通状态下的样式
-              areaColor: "#323c48",
-              borderColor: "#111",
+              areaColor: '#0064B3',
+              borderColor: '#0080B4',
             },
             emphasis: {
               // 高亮状态下的样式
-              areaColor: "#2a333d",
-            },
+              areaColor: '#83C9E9',
+            }
           },
         },
-        color: "#31B531",
         legend: {
           orient: "vertical",
           left: "left",
         },
         selectedMode: "single",
+        visualMap: {
+          min: 0,
+          x: "right",
+          y: "bottom",
+          right: "10%",
+          calculable: true
+        },
         series: [
           {
+            name: '销量',
+            type: 'scatter',
+            coordinateSystem: 'geo',
+            data: [
+              {name: '海门', value: [121.15, 31.89, 90]},
+              {name: '鄂尔多斯', value: [109.781327, 39.608266, 120]},
+              {name: '招远', value: [120.38, 37.35, 142]},
+              {name: '舟山', value: [122.207216, 29.985295, 123]},
+            ] // series数据内容
+          },
+          {
+            name: "全部数据",
             type: "map",
             mapType: "china",
-            data: [],
-          },
-        ],
+            itemStyle: {
+              normal: {
+                borderColor: "rgba(0, 0, 0, 0.2)"
+              },
+              emphasis: {
+                shadowOffsetX: 0,
+                shadowOffsetY: 0,
+                shadowBlur: 20,
+                borderWidth: 0,
+                shadowColor: "rgba(0, 0, 0, 0.5)"
+              }
+            },
+            showLegendSymbol: false,
+            label: {
+              normal: {
+                show: false
+              },
+              emphasis: {
+                show: false
+              }
+            },
+            data: []
+          }
+        ]
       };
 
       myChartChina.setOption(optionMap);
@@ -74,7 +116,7 @@ export default {
   },
   beforeDestroy () {
     window.removeEventListener("resize", this.chart);
-  },
+  }
 };
 </script>
 

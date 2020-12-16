@@ -14,15 +14,17 @@
         <el-input v-model="dataForm.id" placeholder="手机号" clearable></el-input>
       </el-form-item>
       <el-form-item>
+        <el-select class="selects" clearable v-model="condition" placeholder="订单状态">
+          <el-option v-for="item in states" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
         <el-button @click="getDataList()">{{ $t('query') }}</el-button>
       </el-form-item>
       <el-form-item>
         <el-button type="danger" @click="deleteHandle()">{{ $t('deleteBatch') }}</el-button>
       </el-form-item>
     </el-form>
-    <el-select class="selects" v-model="condition" placeholder="状态">
-      <el-option v-for="item in states" :key="item.value" :label="item.label" :value="item.value"></el-option>
-    </el-select>
     <el-table
       v-loading="dataListLoading"
       :data="dataList"
@@ -34,7 +36,7 @@
       <el-table-column prop="order" label="订单号" header-align="center" align="center"></el-table-column>
       <el-table-column prop="name" label="姓名" header-align="center" align="center"></el-table-column>
       <el-table-column prop="mobile" label="电话" header-align="center" align="center"></el-table-column>
-      <el-table-column prop="status" label="状态" header-align="center" align="center"></el-table-column>
+      <el-table-column prop="status" label="订单状态" header-align="center" align="center"></el-table-column>
       <el-table-column
         prop="tmti"
         label="操作时间"
