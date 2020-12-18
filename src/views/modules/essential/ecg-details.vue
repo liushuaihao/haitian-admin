@@ -56,6 +56,44 @@
           </el-form-item>
         </el-form>
       </el-card>
+      <el-card>
+        <h4>心电情况</h4>
+        <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
+          <el-form-item>
+            <el-date-picker
+              v-model="daterange"
+              type="daterange"
+              value-format="yyyy-MM-dd"
+              :range-separator="$t('datePicker.range')"
+              :start-placeholder="$t('datePicker.start')"
+              :end-placeholder="$t('datePicker.end')"
+            ></el-date-picker>
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="getDataList()">{{ $t("query") }}</el-button>
+          </el-form-item>
+          <el-card class="tjx">心电图</el-card>
+          <el-form-item label="分析时段：">
+            <el-select v-model="time" placeholder="分析时段">
+              <el-option label="24小时" value="hour"></el-option>
+              <el-option label="1周" value="week"></el-option>
+              <el-option label="1个月" value="month"></el-option>
+            </el-select>
+          </el-form-item>
+          <div class="human">
+          <el-form-item label="心率：">
+            <div>60~100次/分</div>
+          </el-form-item>
+          <el-form-item label="时段：">
+            <div>2019-04-05 14:00</div>
+          </el-form-item>
+        </div>
+        <el-card class="tjx">心率展示</el-card>
+          <el-form-item label="心电变异性分析：">
+            <div>T波改变 异常建议进一步进行检查</div>
+          </el-form-item>
+        </el-form>
+      </el-card>
     </div>
   </el-card>
 </template>
@@ -71,7 +109,9 @@ export default {
         weight: "70",
         tel: "16601275207",
         site: "北京市海淀区中关村科技大厦502"
-      }
+      },
+      daterange: "",
+      time: ""
     };
   },
   methods: {}
@@ -88,6 +128,20 @@ export default {
   width: 70%;
 }
 .personal > p {
+  flex: 1;
+}
+.tjx {
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.human{
+  width: 36%;
+  display: flex;
+}
+.human>div{
   flex: 1;
 }
 </style>
