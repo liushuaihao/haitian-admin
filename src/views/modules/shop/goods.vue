@@ -29,7 +29,13 @@
           label="图片"
           header-align="center"
           align="center"
-        ></el-table-column>
+        >
+          <template slot-scope="scope">
+            <div>
+              <img :src="scope.row.image"  width="50px" height="50px" alt="">
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="goodsName"
           label="商品名称"
@@ -104,7 +110,7 @@ export default {
       dataList: [
         {
           id: "1",
-          iamge: "",
+          image: "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2536716619,1370324927&fm=26&gp=0.jpg",
           goodsName: "在线服务",
           code: "13012345671",
           number: "100",
@@ -112,7 +118,7 @@ export default {
         },
         {
           id: "2",
-          iamge: "",
+          image: "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2536716619,1370324927&fm=26&gp=0.jpg",
           goodsName: "设备购买",
           code: "13012212671",
           number: "100",
@@ -120,7 +126,7 @@ export default {
         },
         {
           id: "3",
-          iamge: "",
+          image: "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2536716619,1370324927&fm=26&gp=0.jpg",
           goodsName: "设备租赁",
           code: "130143245671",
           number: "100",

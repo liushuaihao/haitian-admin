@@ -38,7 +38,7 @@
         style="width: 100%;"
       >
         <el-table-column
-          prop="name"
+          prop="zh"
           :label="$t('updatePassword.username')"
           header-align="center"
           align="center"
@@ -51,13 +51,13 @@
         ></el-table-column>
 
         <el-table-column
-          prop="mobile"
+          prop="age"
           label="年龄"
           header-align="center"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="identityCard"
+          prop="sex"
           :label="$t('user.gender')"
           header-align="center"
           align="center"
@@ -76,13 +76,13 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="id"
+          prop="j"
           label="角色"
           header-align="center"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="heart"
+          prop="q"
           label="所属区域"
           header-align="center"
           align="center"
@@ -128,44 +128,28 @@ export default {
       dataList: [
         {
           id: "1111-0000-1111",
+          zh: "123",
           name: "张三",
+          age: "48",
+          sex: "女",
           mobile: "13012345671",
-          identityCard: "11011011123456789",
-          heart: "60", // 心率值
-          tmti: "2019-04-05", // 最近时间
+          identityCard: "50110111234567890",
+          j: "医生",
+          q: "山东省泰安市",
+          tmti: "2018-01-05", // 最近时间
         },
         {
           id: "1111-0000-1111",
-          name: "张三",
+          zh: "bb",
+          name: "李四",
+          age: "53",
+          sex: "女",
           mobile: "13012345671",
-          identityCard: "11011011123456789",
-          heart: "70",
-          tmti: "2019-04-05",
-        },
-        {
-          id: "1111-0000-1111",
-          name: "张三",
-          mobile: "13012345671",
-          identityCard: "11011011123456789",
-          heart: "60",
-          tmti: "2019-04-05",
-        },
-        {
-          id: "1111-0000-1111",
-          name: "张三",
-          mobile: "13012345671",
-          identityCard: "11011011123456789",
-          heart: "80",
-          tmti: "2019-04-05",
-        },
-        {
-          id: "1111-0000-1111",
-          name: "张三",
-          mobile: "13012345671",
-          identityCard: "11011011123456789",
-          heart: "50",
-          tmti: "2019-04-05",
-        },
+          identityCard: "50110111234567890",
+          j: "患者",
+          q: "北京",
+          tmti: "2018-01-05", // 最近时间
+        }
       ],
     };
   },
