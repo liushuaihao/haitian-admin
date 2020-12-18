@@ -1,6 +1,5 @@
 <template>
   <el-card shadow="never" class="aui-card--fill">
-    <div class="details">
       <el-card>
         <el-button type="success">导出</el-button>
         <h3>基本信息</h3>
@@ -56,7 +55,9 @@
           </el-form-item>
         </el-form>
       </el-card>
-    </div>
+    <el-card class="sleep">
+      Maecenas eu elit fringilla, sollicitudin magna eget, convallis tellus. Morbi eget elementum magna. Cras lacinia risus id purus malesuada, mattis posuere sapien aliquet. Praesent porttitor lobortis sollicitudin. Sed dolor nisi, tincidunt a nibh et, malesuada molestie sem. Maecenas elementum auctor est. Cras vitae consectetur eros. Aliquam sodales elementum pretium. Nulla non lacus a magna iaculis vulputate nec eu tortor. Nunc commodo lacinia posuere. Sed eu enim ut odio finibus efficitur. Ut sit amet commodo quam, id ullamcorper est. Maecenas aliquet ipsum tortor, sit amet facilisis nisi efficitur in. Integer congue rhoncus feugiat.
+    </el-card>
   </el-card>
 </template>
 <script>
@@ -89,5 +90,8 @@ export default {
 }
 .personal > p {
   flex: 1;
+}
+.sleep{
+  padding-bottom: 100px;
 }
 </style>

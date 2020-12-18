@@ -2,7 +2,20 @@
   <el-card shadow="never" class="aui-card--fill">
     <el-card>
       <el-button type="success" v-if="$hasPermission('business:report:expor')">导出</el-button>
-      <el-button type="success" v-if="$hasPermission('business:report:edit')">修改</el-button>
+      <el-button
+        type="success"
+        v-if="$hasPermission('business:report:edit')"
+        @click="dialogFormVisible = true"
+      >修改</el-button>
+      <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+        <el-form>
+
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        </div>
+      </el-dialog>
       <h3>基本信息</h3>
       <el-form ref="form" label-width="130px">
         <div class="personal">
@@ -79,7 +92,7 @@
             <el-option label="11：00~12：00" value="beijing"></el-option>
           </el-select>
         </el-form-item>
-        <el-card class="tjx">心电图</el-card>
+        <div class="tjx">心电图</div>
         <el-form-item label="心率：">
           <div>60～100次/分</div>
         </el-form-item>
@@ -97,9 +110,7 @@
           </el-form-item>
         </div>
       </el-form>
-      <el-card class="tjx">
-        运动轨迹
-      </el-card>
+      <div class="tjx">运动轨迹</div>
     </el-card>
     <el-card>
       <h4>肌电情况</h4>
@@ -114,14 +125,14 @@
       <el-form>
         <div class="three">
           <el-form-item label="步数：">
-          <div>500</div>
-        </el-form-item>
-        <el-form-item label="步频：">
-          <div>20</div>
-        </el-form-item>
-        <el-form-item label="步幅：">
-          <div>10</div>
-        </el-form-item>
+            <div>500</div>
+          </el-form-item>
+          <el-form-item label="步频：">
+            <div>20</div>
+          </el-form-item>
+          <el-form-item label="步幅：">
+            <div>10</div>
+          </el-form-item>
         </div>
         <div class="human">
           <el-form-item label="运动距离：">
@@ -132,8 +143,8 @@
           </el-form-item>
         </div>
         <el-form-item label="消耗热量：">
-            <div>252卡</div>
-          </el-form-item>
+          <div>252卡</div>
+        </el-form-item>
       </el-form>
     </el-card>
     <el-card>
@@ -152,22 +163,19 @@
     <el-card>
       <h4>异常数据</h4>
       <el-form>
-          <el-form-item label="心电异常">
-          </el-form-item>
+        <el-form-item label="心电异常"></el-form-item>
       </el-form>
     </el-card>
     <el-card>
       <h4>运动状态</h4>
       <el-form>
-          <el-form-item label="运动量少于范围">
-          </el-form-item>
+        <el-form-item label="运动量少于范围"></el-form-item>
       </el-form>
     </el-card>
     <el-card>
       <h4>睡眠状态</h4>
       <el-form>
-          <el-form-item label="睡眠良好">
-          </el-form-item>
+        <el-form-item label="睡眠良好"></el-form-item>
       </el-form>
     </el-card>
   </el-card>
@@ -186,7 +194,8 @@ export default {
         site: "北京市海淀区中关村科技大厦502"
       },
       breatheDate: "",
-      ecgDate: ""
+      ecgDate: "",
+      dialogFormVisible: false
     };
   },
   methods: {}
@@ -210,19 +219,20 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #ccc;
 }
-.human{
+.human {
   width: 36%;
   display: flex;
 }
-.human>div{
+.human > div {
   flex: 1;
 }
-.three{
+.three {
   width: 50%;
   display: flex;
 }
-.three>div{
+.three > div {
   flex: 1;
 }
 </style>

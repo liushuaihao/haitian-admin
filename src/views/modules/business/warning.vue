@@ -1,5 +1,5 @@
 <template>
-<!-- 预警设置 -->
+  <!-- 预警设置 -->
   <el-card shadow="never" class="aui-card--fill">
     <div class="mod-mod-essential_sls">
       <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
@@ -46,36 +46,11 @@
           header-align="center"
           align="center"
         ></el-table-column>
-        <el-table-column
-            prop="step"
-          label="步数"
-          header-align="center"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-            prop="respiratory"
-          label="呼吸率"
-          header-align="center"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-            prop="distance"
-          label="距离"
-          header-align="center"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-            prop="minheartL"
-          label="心率"
-          header-align="center"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-            prop="momental"
-          label="运动量"
-          header-align="center"
-          align="center"
-        ></el-table-column>
+        <el-table-column prop="step" label="步数" header-align="center" align="center"></el-table-column>
+        <el-table-column prop="respiratory" label="呼吸率" header-align="center" align="center"></el-table-column>
+        <el-table-column prop="distance" label="距离" header-align="center" align="center"></el-table-column>
+        <el-table-column prop="minheartL" label="心率" header-align="center" align="center"></el-table-column>
+        <el-table-column prop="momental" label="运动量" header-align="center" align="center"></el-table-column>
 
         <el-table-column
           :label="$t('handle')"
@@ -84,7 +59,7 @@
           align="center"
           width="150"
         >
-          <template slot-scope="scope">
+          <template>
             <el-button type="text" size="small">修改</el-button>
           </template>
         </el-table-column>
@@ -125,48 +100,48 @@ export default {
         {
           name: "张三",
           mobile: "13012345671",
-          step: '100-1000',
-          respiratory: '10-100',
-          distance: '100-1000',
-          minheartL: '60-120',
-          momental: '500-5000'
+          step: "100-1000",
+          respiratory: "10-100",
+          distance: "100-1000",
+          minheartL: "60-120",
+          momental: "500-5000"
         },
         {
           name: "张三",
           mobile: "13012345671",
-          step: '100-1000',
-          respiratory: '10-100',
-          distance: '100-1000',
-          minheartL: '60-120',
-          momental: '500-5000'
+          step: "100-1000",
+          respiratory: "10-100",
+          distance: "100-1000",
+          minheartL: "60-120",
+          momental: "500-5000"
         },
         {
           name: "张三",
           mobile: "13012345671",
-          step: '100-1000',
-          respiratory: '10-100',
-          distance: '100-1000',
-          minheartL: '60-120',
-          momental: '500-5000'
+          step: "100-1000",
+          respiratory: "10-100",
+          distance: "100-1000",
+          minheartL: "60-120",
+          momental: "500-5000"
         },
         {
           name: "张三",
           mobile: "13012345671",
-          step: '100-1000',
-          respiratory: '10-100',
-          distance: '100-1000',
-          minheartL: '60-120',
-          momental: '500-5000'
+          step: "100-1000",
+          respiratory: "10-100",
+          distance: "100-1000",
+          minheartL: "60-120",
+          momental: "500-5000"
         },
         {
           name: "张三",
           mobile: "13012345671",
-          step: '100-1000',
-          respiratory: '10-100',
-          distance: '100-1000',
-          minheartL: '60-120',
-          momental: '500-5000'
-        },
+          step: "100-1000",
+          respiratory: "10-100",
+          distance: "100-1000",
+          minheartL: "60-120",
+          momental: "500-5000"
+        }
       ]
     };
   },
