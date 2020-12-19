@@ -41,7 +41,7 @@
           <el-button @click="getDataList()">{{ $t("query") }}</el-button>
         </el-form-item>
         <el-form-item label="统计项" class="tjx-ledt">
-          <el-select v-model="dataForm.System" placeholder="统计项" >
+          <el-select v-model="dataForm.System" placeholder="统计项">
             <el-option label="全部测试项目" value="all"></el-option>
             <el-option label="心电" value="xindian"></el-option>
             <el-option label="呼吸" value="huxi"></el-option>
@@ -137,25 +137,25 @@ export default {
           id: "1111-0000-1111",
           name: "张三",
           mobile: "13012345671",
-          identityCard: "11011011123456789",
+          identityCard: "11011011123456789"
         },
         {
           id: "1111-0000-1111",
           name: "张三",
           mobile: "13012345671",
-          identityCard: "11011011123456789",
+          identityCard: "11011011123456789"
         },
         {
           id: "1111-0000-1111",
           name: "张三",
           mobile: "13012345671",
-          identityCard: "11011011123456789",
+          identityCard: "11011011123456789"
         },
         {
           id: "1111-0000-1111",
           name: "张三",
           mobile: "13012345671",
-          identityCard: "11011011123456789",
+          identityCard: "11011011123456789"
         },
         {
           id: "1111-0000-1111",
@@ -183,7 +183,7 @@ export default {
 };
 </script>
 <style scoped>
-.tjx-ledt{
+.tjx-ledt {
   margin-left: 50px;
 }
 </style>
