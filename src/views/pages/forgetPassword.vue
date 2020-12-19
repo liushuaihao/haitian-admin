@@ -1,11 +1,10 @@
 <template>
-  <div>
-    <div class="r_title">
-      <h3>找回密码</h3>
+  <el-card class="forgetPassword">
+    <div class="l-tab">
+      <div class="active">找回密码</div>
     </div>
     <div class="r_form">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" class="demo-ruleForm">
-        
         <el-form-item label="电话：" prop="tel">
           <el-input v-model="form.tel"></el-input>
         </el-form-item>
@@ -18,7 +17,6 @@
         <el-form-item label="验证码" prop="verification">
           <el-input v-model="form.verification"></el-input>
         </el-form-item>
-        
       </el-form>
     </div>
     <div class="r_button">
@@ -26,16 +24,15 @@
         <el-button type="primary">登录</el-button>
       </div>
       <div>
-        <el-button type="primary">取消</el-button>
+        <el-button type="primary" @click="typeClick(0)">取消</el-button>
       </div>
     </div>
-  </div>
+  </el-card>
 </template>
 
 <script>
-import { regionData } from "element-china-area-data";
 export default {
-  data() {
+  data () {
     var checkPhone = (rule, value, callback) => {
       if (!value) {
         return callback(new Error("请输入手机号"));
@@ -53,7 +50,7 @@ export default {
         tel: "",
         pass: "",
         confirmPass: "",
-        verification:"",
+        verification: "",
 
       },
       rules: {
@@ -72,33 +69,30 @@ export default {
           { required: true, message: "请输入密码", trigger: "blur" },
           { min: 6, max: 12, message: "请输入6-12位密码", trigger: "blur" }
         ],
-        verification:[
-            { required: true, message: "请输入验证码", trigger: "blur" },
+        verification: [
+          { required: true, message: "请输入验证码", trigger: "blur" },
         ]
       },
-      
+
     };
   },
 
   methods: {
-    
+    typeClick (type) {
+      this.$emit('typeClick', type)
+    }
   }
 };
 </script>
 
 <style scoped lang="scss">
-* {
-  margin: 0;
-  padding: 0;
-}
-.r_title h3 {
-  text-align: center;
-  line-height: 100px;
-}
-.r_form {
-  padding-left: 160px;
+.forgetPassword{
+  width: 400px;
+  padding: 5px 10px;
+  border-radius: 6px
 }
 .r_button {
+  padding-top: 20px;
   display: flex;
 }
 .r_button > div {

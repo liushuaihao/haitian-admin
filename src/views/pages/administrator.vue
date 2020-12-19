@@ -40,7 +40,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     var checkPhone = (rule, value, callback) => {
       if (!value) {
         return callback(new Error("请输入手机号"));
@@ -55,13 +55,13 @@ export default {
     };
     return {
       form: {
-        userName: "",//用户名
-        name: "", //姓名
-        tel: "", //电话
-        identityCard: "", //身份证
-        pass: "", //密码
-        confirmPass: "", //确认密码
-        
+        userName: "", // 用户名
+        name: "", // 姓名
+        tel: "", // 电话
+        identityCard: "", // 身份证
+        pass: "", // 密码
+        confirmPass: "", // 确认密码
+
       },
       rules: {
         userName: [
@@ -96,17 +96,12 @@ export default {
   },
 
   methods: {
-    
-    
+
   }
 };
 </script>
 
 <style scoped lang="scss">
-* {
-  margin: 0;
-  padding: 0;
-}
 .r_title h3 {
   text-align: center;
   line-height: 100px;

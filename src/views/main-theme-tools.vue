@@ -1,5 +1,5 @@
 <template>
-  <div class="aui-theme-tools" :class="{ 'aui-theme-tools--open': isOpen }">
+  <div v-if="false" class="aui-theme-tools" :class="{ 'aui-theme-tools--open': isOpen }">
     <div class="aui-theme-tools__toggle" @click="isOpen = !isOpen">
       <svg class="icon-svg" aria-hidden="true"><use xlink:href="#icon-setting"></use></svg>
     </div>
@@ -30,6 +30,9 @@ export default {
       themeList: require('@/element-ui/config.js'),
       themeColor: 'turquoise'
     }
+  },
+  created () {
+    this.themeColorChangeHandle('default')
   },
   methods: {
     themeColorChangeHandle (val) {

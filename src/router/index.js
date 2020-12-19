@@ -26,7 +26,7 @@ export const pageRoutes = [
     component: () => import("@/views/pages/login"),
     name: "login",
     meta: { title: "登录" },
-  },
+  }
 ];
 
 // 模块路由(基于主入口布局页面)
