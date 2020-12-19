@@ -72,7 +72,7 @@
           <el-form-item>
             <el-button @click="getDataList()">{{ $t("query") }}</el-button>
           </el-form-item>
-          <el-card class="tjx">心电图</el-card>
+          <div class="tjx">心电图</div>
           <el-form-item label="分析时段：">
             <el-select v-model="time" placeholder="分析时段">
               <el-option label="24小时" value="hour"></el-option>
@@ -88,7 +88,7 @@
             <div>2019-04-05 14:00</div>
           </el-form-item>
         </div>
-        <el-card class="tjx">心率展示</el-card>
+        <div class="tjx">心率展示</div>
           <el-form-item label="心电变异性分析：">
             <div>T波改变 异常建议进一步进行检查</div>
           </el-form-item>
@@ -136,6 +136,7 @@ export default {
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
+  background-color: #ccc;
 }
 .human{
   width: 36%;

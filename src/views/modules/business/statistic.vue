@@ -40,9 +40,7 @@
         <el-form-item>
           <el-button @click="getDataList()">{{ $t("query") }}</el-button>
         </el-form-item>
-      </el-form>
-      <el-form>
-        <el-form-item label="统计项">
+        <el-form-item label="统计项" class="tjx-ledt">
           <el-select v-model="dataForm.System" placeholder="统计项" >
             <el-option label="全部测试项目" value="all"></el-option>
             <el-option label="心电" value="xindian"></el-option>
@@ -184,3 +182,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+.tjx-ledt{
+  margin-left: 50px;
+}
+</style>

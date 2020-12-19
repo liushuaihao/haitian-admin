@@ -22,6 +22,12 @@ import cloneDeep from 'lodash/cloneDeep'
 import echarts from "echarts";
 import china from "echarts/map/json/china.json";
 
+import BaiduMap from 'vue-baidu-map'
+
+Vue.use(BaiduMap, {
+  ak: 'qVPKjgBE57zU6hz0AWjyrLCyo9P3OvBH'
+});
+
 echarts.registerMap("china", china);
 Vue.prototype.$echarts = echarts;
 

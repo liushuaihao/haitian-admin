@@ -40,10 +40,8 @@
         <el-form-item>
           <el-button @click="getDataList()">{{ $t("query") }}</el-button>
         </el-form-item>
-      </el-form>
-      <el-form>
-        <el-form-item label="活动区域">
-          <el-select v-model="dataForm.System" placeholder="请选择活动区域">
+        <el-form-item label="分析项" class="tjx-ledt">
+          <el-select v-model="dataForm.System" placeholder="分析项">
             <el-option label="全部测试项目" value="all"></el-option>
             <el-option label="心电" value="xindian"></el-option>
             <el-option label="呼吸" value="huxi"></el-option>
@@ -176,7 +174,7 @@ export default {
         routeName: `${this.$route.name}__instance_${row.id}`,
         menuId: `${this.$route.meta.menuId}`,
         title: `${this.$route.meta.title}详情 - ${row.name}`,
-        path: "business/statistic-details",
+        path: "business/trend-details",
         params: {}
       };
       addDynamicRoute(routeParams, this.$router, this.$route);
@@ -184,3 +182,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+.tjx-ledt{
+  margin-left: 50px;
+}
+</style>

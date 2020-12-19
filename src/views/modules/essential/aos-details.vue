@@ -1,6 +1,5 @@
 <template>
   <el-card shadow="never" class="aui-card--fill">
-    <div class="details">
       <el-card>
         <el-button type="success">导出</el-button>
         <h3>基本信息</h3>
@@ -56,7 +55,10 @@
           </el-form-item>
         </el-form>
       </el-card>
-    </div>
+    <el-card class="sleep">
+      睡眠分析：根据基础数据分析睡眠状态，睡眠情况，睡眠质量等，根据基础数据分析睡眠状态，睡眠情况，睡眠质量等根据基础数据分析睡眠状态，睡眠情况，睡眠质量等根据基础数据分析睡眠状态，睡眠情况，睡眠质量等，根据基础数据分析睡眠状态，睡眠情况，睡眠质量等根据基础数据分析睡眠状态，睡眠情况，睡眠质量等
+    </el-card>
+
   </el-card>
 </template>
 <script>
@@ -89,5 +91,8 @@ export default {
 }
 .personal > p {
   flex: 1;
+}
+.sleep{
+  padding-bottom: 100px;
 }
 </style>

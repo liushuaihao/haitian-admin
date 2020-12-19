@@ -93,7 +93,9 @@
         <div>四肢运动数据曲线展示</div>
         <div></div>
         </div>
-
+<el-form-item label="运动及步态分析：">
+            <div>根据运动量强度进行运动分析，根据运动量强度进行运动分析，根据运动量强度进行运动分析，根据运动量强度进行运动分析</div>
+          </el-form-item>
         </el-form>
       </el-card>
     </div>
