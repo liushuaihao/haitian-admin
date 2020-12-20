@@ -1,77 +1,61 @@
 <template>
   <el-card shadow="never" class="aui-card--fill">
-    <el-card>
-      <el-button type="success" v-if="$hasPermission('business:report:expor')">导出</el-button>
-      <el-button
+    <p>
+     <el-button
         type="success"
         v-if="$hasPermission('business:report:edit')"
-        @click="dialogFormVisible = true"
       >修改</el-button>
-      <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-        <el-form>
-
+    <el-button type="success" v-if="$hasPermission('business:report:expor')">导出</el-button>
+    </p>
+    <div class="details-box">
+      <div class="details-title">
+          基本信息
+      </div>
+      <div class="details-main">
+        <p>
+         <el-row :gutter="10">
+          <el-col :span="4">姓名：{{basicInformation.name}}</el-col>
+          <el-col :span="4">姓别：{{basicInformation.sex}}</el-col>
+          <el-col :span="4">年龄：{{basicInformation.age}}</el-col>
+          <el-col :span="4">身高：{{basicInformation.stature}}cm</el-col>
+          <el-col :span="4">体重：{{basicInformation.weight}}kg</el-col>
+         </el-row>
+        </p>
+        <p>电话：{{basicInformation.tel}}</p>
+        <p>住址：{{basicInformation.site}}</p>
+        <p>紧急联系人</p>
+        <p>张儿子：16601275207</p>
+        <p>张女儿：16601275207</p>
+        <p>张弟弟：16601275207</p>
+        <p>关联设备</p>
+        <p>主控设备：1111-0000-1111</p>
+        <p>手环设备：1111-0000-1111</p>
+        <p>心电设备：1111-0000-1111</p>
+        <p>呼吸设备：1111-0000-1111</p>
+        <p>下肢运动及机电：1111-0000-1111</p>
+      </div>
+      <!-- 呼吸情况 -->
+      <div class="details-title">
+          呼吸情况
+      </div>
+      <div class="details-main">
+        <el-form label-width="120px">
+          <el-form-item label="数据区间选择：">
+            <el-select v-model="breatheDate" placeholder="请选择数据区间">
+              <el-option label="9：00~9：40" value="shanghai"></el-option>
+              <el-option label="11：00~12：00" value="beijing"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="呼吸率：">
+            <div>16～18次/分</div>
+            <div class="tjx">心率图</div>
+          </el-form-item>
         </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-        </div>
-      </el-dialog>
-      <h3>基本信息</h3>
-      <el-form ref="form" label-width="130px">
-        <div class="personal">
-          <el-form-item label="姓名：">
-            <div>{{basicInformation.name}}</div>
-          </el-form-item>
-          <el-form-item label="姓别：">
-            <div>{{basicInformation.sex}}</div>
-          </el-form-item>
-          <el-form-item label="年龄：">
-            <div>{{basicInformation.age}}</div>
-          </el-form-item>
-          <el-form-item label="身高：">
-            <div>{{basicInformation.stature}}cm</div>
-          </el-form-item>
-          <el-form-item label="体重：">
-            <div>{{basicInformation.weight}}kg</div>
-          </el-form-item>
-        </div>
-        <el-form-item label="电话：">
-          <div>{{basicInformation.tel}}</div>
-        </el-form-item>
-        <el-form-item label="住址：">
-          <div>{{basicInformation.site}}</div>
-        </el-form-item>
-        <h4>紧急联系人</h4>
-        <el-form-item label="张儿子：">
-          <div>16601275207</div>
-        </el-form-item>
-        <el-form-item label="张女儿：">
-          <div>16601275207</div>
-        </el-form-item>
-        <el-form-item label="张弟弟：">
-          <div>16601275207</div>
-        </el-form-item>
-        <h4>关联设备</h4>
-        <el-form-item label="主控设备：">
-          <div>1111-0000-1111</div>
-        </el-form-item>
-        <el-form-item label="手环设备：">
-          <div>1111-0000-1111</div>
-        </el-form-item>
-        <el-form-item label="心电设备：">
-          <div>1111-0000-1111</div>
-        </el-form-item>
-        <el-form-item label="呼吸设备：">
-          <div>1111-0000-1111</div>
-        </el-form-item>
-        <el-form-item label="下肢运动及机电：">
-          <div>1111-0000-1111</div>
-        </el-form-item>
-      </el-form>
-    </el-card>
+      </div>
+    </div>
     <el-card>
       <h4>呼吸情况</h4>
-      <el-form>
+      <el-form label-width="120px">
         <el-form-item label="数据区间选择：">
           <el-select v-model="breatheDate" placeholder="请选择数据区间">
             <el-option label="9：00~9：40" value="shanghai"></el-option>
@@ -80,6 +64,7 @@
         </el-form-item>
         <el-form-item label="呼吸率：">
           <div>16～18次/分</div>
+           <div class="tjx">心率图</div>
         </el-form-item>
       </el-form>
     </el-card>

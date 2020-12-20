@@ -1,64 +1,25 @@
 <template>
   <el-card shadow="never" class="aui-card--fill">
-    <div class="details">
-      <el-card>
-        <el-button type="success">导出</el-button>
-        <h3>基本信息</h3>
-        <el-form ref="form" label-width="130px">
-          <div class="personal">
-            <el-form-item label="姓名：">
-              <div>{{basicInformation.name}}</div>
-            </el-form-item>
-            <el-form-item label="姓别：">
-              <div>{{basicInformation.sex}}</div>
-            </el-form-item>
-            <el-form-item label="年龄：">
-              <div>{{basicInformation.age}}</div>
-            </el-form-item>
-            <el-form-item label="身高：">
-              <div>{{basicInformation.stature}}</div>
-            </el-form-item>
-            <el-form-item label="体重：">
-              <div>{{basicInformation.weight}}</div>
-            </el-form-item>
-          </div>
-          <el-form-item label="电话：">
-            <div>{{basicInformation.tel}}</div>
-          </el-form-item>
-          <el-form-item label="住址：">
-            <div>{{basicInformation.site}}</div>
-          </el-form-item>
-          <h4>紧急联系人</h4>
-          <el-form-item label="张儿子：">
-            <div>16601275207</div>
-          </el-form-item>
-          <el-form-item label="张女儿：">
-            <div>16601275207</div>
-          </el-form-item>
-          <el-form-item label="张弟弟：">
-            <div>16601275207</div>
-          </el-form-item>
-          <h4>关联设备</h4>
-          <el-form-item label="主控设备：">
-            <div>1111-0000-1111</div>
-          </el-form-item>
-          <el-form-item label="手环设备：">
-            <div>1111-0000-1111</div>
-          </el-form-item>
-          <el-form-item label="心电设备：">
-            <div>1111-0000-1111</div>
-          </el-form-item>
-          <el-form-item label="呼吸设备：">
-            <div>1111-0000-1111</div>
-          </el-form-item>
-          <el-form-item label="下肢运动及机电：">
-            <div>1111-0000-1111</div>
-          </el-form-item>
-        </el-form>
-      </el-card>
-      <el-card>
-        <h4>运动量情况</h4>
-        <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
+    <p>
+      <el-button type="success">导出</el-button>
+    </p>
+    <div class="details-box">
+      <div class="details-title">
+        基本信息
+      </div>
+      <div class="details-main">
+        <details-info />
+      </div>
+      <!-- 呼吸情况 -->
+      <div class="details-title">
+        呼吸情况
+      </div>
+      <div class="details-main">
+        <el-form
+          :inline="true"
+          :model="dataForm"
+          @keyup.enter.native="getDataList()"
+        >
           <el-form-item label="分析时段：">
             <el-select v-model="time" placeholder="分析时段">
               <el-option label="24小时" value="hour"></el-option>
@@ -67,54 +28,48 @@
             </el-select>
           </el-form-item>
           <div class="five">
-          <el-form-item label="步数：">
-            <div>60</div>
-          </el-form-item>
-          <el-form-item label="距离：">
-            <div>100</div>
-          </el-form-item>
-          <el-form-item label="运动强度：">
-            <div>20</div>
-          </el-form-item>
-          <el-form-item label="消耗热量：">
-            <div>80</div>
-          </el-form-item>
-          <el-form-item label="能量代谢：">
-            <div>20</div>
-          </el-form-item>
-        </div>
-        <div class="frequency">
-        <div>运动强度曲线</div>
-        <div>运动量曲线</div>
-        </div>
-        <div class="frequency">
-        <div>消耗热量</div>
-        <div>运动距离</div>
-        </div>
-        <div class="tjx">能量代谢当量</div>
+            <el-form-item label="步数：">
+              <div>60</div>
+            </el-form-item>
+            <el-form-item label="距离：">
+              <div>100</div>
+            </el-form-item>
+            <el-form-item label="运动强度：">
+              <div>20</div>
+            </el-form-item>
+            <el-form-item label="消耗热量：">
+              <div>80</div>
+            </el-form-item>
+            <el-form-item label="能量代谢：">
+              <div>20</div>
+            </el-form-item>
+          </div>
+          <div class="frequency">
+            <div>运动强度曲线</div>
+            <div>运动量曲线</div>
+          </div>
+          <div class="frequency">
+            <div>消耗热量</div>
+            <div>运动距离</div>
+          </div>
+          <div class="tjx">能量代谢当量</div>
         </el-form>
-      </el-card>
+      </div>
     </div>
   </el-card>
 </template>
 <script>
 export default {
+  components: {
+    "details-info": () => import("@/components/details-info"),
+  },
   data () {
     return {
-      basicInformation: {
-        name: "张三",
-        sex: "男",
-        age: "22",
-        stature: "165",
-        weight: "70",
-        tel: "16601275207",
-        site: "北京市海淀区中关村科技大厦502"
-      },
       daterange: "",
-      time: ""
+      time: "",
     };
   },
-  methods: {}
+  methods: {},
 };
 </script>
 <style scoped>
@@ -138,24 +93,24 @@ export default {
   margin-bottom: 20px;
   background-color: #ccc;
 }
-.human{
+.human {
   width: 36%;
   display: flex;
 }
-.human>div{
+.human > div {
   flex: 1;
 }
-.five{
-  width:60%;
+.five {
+  width: 60%;
   display: flex;
 }
-.five>div{
+.five > div {
   flex: 1;
 }
-.frequency{
+.frequency {
   display: flex;
 }
-.frequency>div{
+.frequency > div {
   flex: 1;
   height: 300px;
   display: flex;
@@ -165,5 +120,4 @@ export default {
   margin: 0 10px;
   margin-bottom: 20px;
 }
-
 </style>
