@@ -1,28 +1,23 @@
 <template>
   <el-card shadow="never" class="aui-card--fill">
-    <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
-      <el-form-item>
-        <el-input v-model="dataForm.identityCard" placeholder="订单号" clearable></el-input>
+    <el-form :inline="true" @keyup.enter.native="getDataList()" class="order">
+      <el-form-item label="订单编号">
+        <el-input v-model="dataForm.serial" placeholder="订单编号" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="用户ID">
+        <el-input v-model="dataForm.id" placeholder="用户ID" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="姓名">
+        <el-input v-model="dataForm.name" placeholder="姓名" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="手机号">
+        <el-input v-model="dataForm.mobile" placeholder="手机号" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="身份证">
+        <el-input v-model="dataForm.identityCard" placeholder="身份证" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="dataForm.name" placeholder="身份证" clearable></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-input v-model="dataForm.mobile" placeholder="姓名" clearable></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-input v-model="dataForm.id" placeholder="手机号" clearable></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-select class="selects" clearable v-model="condition" placeholder="订单状态">
-          <el-option v-for="item in states" :key="item.value" :label="item.label" :value="item.value"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button @click="getDataList()">{{ $t('query') }}</el-button>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="danger" @click="deleteHandle()">{{ $t('deleteBatch') }}</el-button>
+        <el-button >筛选</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -90,7 +85,6 @@ export default {
   mixins: [mixinViewModule],
   data () {
     return {
-      condition: '',
       mixinViewModuleOptions: {
         getDataListURL: "",
         getDataListIsPage: true,
@@ -98,10 +92,11 @@ export default {
         deleteIsBatch: true
       },
       dataForm: {
-        identityCard: "",
+        serial: "",
+        id: "",
         name: "",
         mobile: "",
-        id: ""
+        identityCard: ""
       },
       dataList: [
         {
@@ -178,5 +173,8 @@ export default {
 <style scoped>
 .selects{
   margin-bottom:20px !important;
+}
+.order>div{
+margin-right: 30px;
 }
 </style>

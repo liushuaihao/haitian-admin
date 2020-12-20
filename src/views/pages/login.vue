@@ -41,7 +41,6 @@
                 </div>
             </div>
         </div>
-
         <signin @typeClick="typeClick" v-if="type == 1"/>
         <forget-password @typeClick="typeClick" v-if="type == 2"/>
     </div>
