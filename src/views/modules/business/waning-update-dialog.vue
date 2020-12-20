@@ -15,29 +15,6 @@
       <el-form-item prop="goodsName" label="商品名称">
         <el-input v-model="dataForm.goodsName" placeholder="商品名称"></el-input>
       </el-form-item>
-      <el-form-item prop="goodsName" label="商品单价">
-        <el-input v-model="dataForm.price" placeholder="商品单价" type="number"></el-input>
-      </el-form-item>
-      <el-form-item prop="goodsName" label="商品说明">
-        <el-input v-model="dataForm.explain" placeholder="商品说明"></el-input>
-      </el-form-item>
-      <el-form-item prop="goodsName" label="商品图片">
-      </el-form-item>
-      <el-form-item prop="goodsName" label="服务类型">
-        <el-select v-model="dataForm.type" placeholder="请选择活动区域">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item prop="goodsName" label="租赁时长">
-        <el-select v-model="dataForm.duration" placeholder="请选择活动区域">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item prop="goodsName" label="库存数量">
-        <el-input v-model="dataForm.quantity" placeholder="库存数量" type="number"></el-input>
-      </el-form-item>
     </el-form>
     <template slot="footer">
       <el-button @click="visible = false">{{ $t('cancel') }}</el-button>
@@ -54,13 +31,7 @@ export default {
       visible: false,
       dataForm: {
         id: "",
-        goodsName: "",
-        price: "", // 单价
-        explain: "", // 说明
-        picture: "", // 图片
-        type: "", // 类型
-        duration: "", // 时长
-        quantity: "" // 库存数量
+        goodsName: ""
       }
     };
   },
@@ -82,8 +53,6 @@ export default {
       this.visible = true;
       this.$nextTick(() => {
         this.$refs["dataForm"].resetFields();
-        if (this.dataForm.id) {
-        }
       });
     },
     // 获取信息

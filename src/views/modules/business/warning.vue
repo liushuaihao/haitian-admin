@@ -22,9 +22,6 @@
         <el-form-item>
           <el-button @click="getDataList()">{{ $t('query') }}</el-button>
         </el-form-item>
-        <el-form-item>
-          <el-button type="danger" @click="deleteHandle()">{{ $t('deleteBatch') }}</el-button>
-        </el-form-item>
       </el-form>
       <el-table
         v-loading="dataListLoading"
@@ -59,8 +56,8 @@
           align="center"
           width="150"
         >
-          <template>
-            <el-button type="text" size="small">修改</el-button>
+          <template slot-scope="scope">
+            <el-button  type="text" size="small" >{{ $t('update') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -79,7 +76,6 @@
 
 <script>
 import mixinViewModule from "@/mixins/view-module";
-import { addDynamicRoute } from "@/router"; // 添加动态路由
 export default {
   mixins: [mixinViewModule],
   data () {
@@ -104,7 +100,8 @@ export default {
           respiratory: "10-100",
           distance: "100-1000",
           minheartL: "60-120",
-          momental: "500-5000"
+          momental: "500-5000",
+          id: 10
         },
         {
           name: "张三",
@@ -113,7 +110,8 @@ export default {
           respiratory: "10-100",
           distance: "100-1000",
           minheartL: "60-120",
-          momental: "500-5000"
+          momental: "500-5000",
+          id: 10
         },
         {
           name: "张三",
@@ -122,7 +120,8 @@ export default {
           respiratory: "10-100",
           distance: "100-1000",
           minheartL: "60-120",
-          momental: "500-5000"
+          momental: "500-5000",
+          id: 10
         },
         {
           name: "张三",
@@ -131,7 +130,8 @@ export default {
           respiratory: "10-100",
           distance: "100-1000",
           minheartL: "60-120",
-          momental: "500-5000"
+          momental: "500-5000",
+          id: 10
         },
         {
           name: "张三",
@@ -140,22 +140,12 @@ export default {
           respiratory: "10-100",
           distance: "100-1000",
           minheartL: "60-120",
-          momental: "500-5000"
+          momental: "500-5000",
+          id: 10
         }
       ]
     };
   },
-  methods: {
-    forwardUrl (row) {
-      var routeParams = {
-        routeName: `${this.$route.name}__instance_${row.id}`,
-        menuId: `${this.$route.meta.menuId}`,
-        title: `${this.$route.meta.title}详情 - ${row.name}`,
-        path: "business/report-details",
-        params: {}
-      };
-      addDynamicRoute(routeParams, this.$router, this.$route);
-    }
-  }
+  methods: {}
 };
 </script>

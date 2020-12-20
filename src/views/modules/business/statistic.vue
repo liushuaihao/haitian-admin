@@ -20,14 +20,6 @@
           <el-input v-model="dataForm.id" :placeholder="$t('essential.id')" clearable></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button>{{ $t('query') }}</el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="danger" @click="deleteHandle()">{{ $t('deleteBatch') }}</el-button>
-        </el-form-item>
-      </el-form>
-      <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
-        <el-form-item>
           <el-date-picker
             v-model="daterange"
             type="daterange"
@@ -37,10 +29,7 @@
             :end-placeholder="$t('datePicker.end')"
           ></el-date-picker>
         </el-form-item>
-        <el-form-item>
-          <el-button @click="getDataList()">{{ $t("query") }}</el-button>
-        </el-form-item>
-        <el-form-item label="统计项" class="tjx-ledt">
+        <el-form-item >
           <el-select v-model="dataForm.System" placeholder="统计项">
             <el-option label="全部测试项目" value="all"></el-option>
             <el-option label="心电" value="xindian"></el-option>
@@ -49,6 +38,9 @@
             <el-option label="运动及步态" value="yudong"></el-option>
             <el-option label="运动量" value="yudongliang"></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button>{{ $t('query') }}</el-button>
         </el-form-item>
       </el-form>
       <el-table

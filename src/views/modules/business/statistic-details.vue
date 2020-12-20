@@ -12,9 +12,6 @@
         ></el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button @click="getDataList()">{{ $t("query") }}</el-button>
-      </el-form-item>
-      <el-form-item label="统计项" class="tjx-ledt">
         <el-select v-model="dataForm.System" placeholder="统计项">
           <el-option label="全部测试项目" value="all"></el-option>
           <el-option label="心电" value="xindian"></el-option>
@@ -23,6 +20,9 @@
           <el-option label="运动及步态" value="yundong"></el-option>
           <el-option label="运动量" value="yundongliang"></el-option>
         </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="getDataList()">{{ $t("query") }}</el-button>
       </el-form-item>
     </el-form>
 
