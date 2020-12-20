@@ -31,10 +31,17 @@
       <el-table-column prop="order" label="订单号" header-align="center" align="center"></el-table-column>
       <el-table-column prop="name" label="姓名" header-align="center" align="center"></el-table-column>
       <el-table-column prop="mobile" label="电话" header-align="center" align="center"></el-table-column>
-      <el-table-column prop="status" label="订单状态" header-align="center" align="center"></el-table-column>
+      <el-table-column prop="status" label="状态" header-align="center" align="center">
+        <template slot-scope="scope">
+          <div>
+            <div v-if="scope.row.status === '已下单'">{{scope.row.status}}</div>
+            <el-tag v-else>{{scope.row.status}}</el-tag>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="tmti"
-        label="操作时间"
+        label="下单时间"
         sortable="custom"
         header-align="center"
         align="center"
@@ -44,23 +51,37 @@
             <el-tag v-else size="small" type="danger">{{ $t('mail.status0') }}</el-tag>
         </template>-->
       </el-table-column>
-      <!-- <el-table-column
-          prop="createDate"
-          :label="$t('mail.createDate')"
-          sortable="custom"
-          header-align="center"
-          align="center"
-          width="180"
-      ></el-table-column>-->
       <el-table-column
-        :label="$t('handle')"
-        fixed="right"
+        prop="tmti"
+        label="支付时间"
+        sortable="custom"
+        header-align="center"
+        align="center"
+      >
+      </el-table-column>
+      <el-table-column
+        label="支付方式"
         header-align="center"
         align="center"
         width="150"
       >
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="forwardUrl(scope.row)">查看</el-button>
+          <div v-if="scope.row.status === '已付款'">
+            {{'微信支付'}}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column
+        :label="$t('handle')"
+        header-align="center"
+        align="center"
+        width="150"
+      >
+        <template slot-scope="scope">
+          <el-button type="text" size="small" @click="forwardUrl(scope.row)">
+            <el-tag style="margin-right: 20px" v-if="scope.row.status === '已付款'">发货</el-tag>
+            <el-tag type="warning">详情</el-tag>
+          </el-button>
         </template>
       </el-table-column>
     </el-table>

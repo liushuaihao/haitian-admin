@@ -34,135 +34,139 @@
         <p>呼吸设备：1111-0000-1111</p>
         <p>下肢运动及机电：1111-0000-1111</p>
       </div>
+      <!-- 心电情况 -->
+      <div class="details-title">
+          心电情况
+      </div>
+       <div class="details-main">
+        <el-form label-width="140px" label="">
+          <el-form-item label="心律图：">
+            <el-form-item label="数据区间选择：">
+              <el-select v-model="breatheDate" placeholder="请选择数据区间">
+                <el-option label="9：00~9：40" value="shanghai"></el-option>
+                <el-option label="11：00~12：00" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-form-item>
+          <el-form-item label="24小时心律图：">
+            <div class="tjx">24小时心率图</div>
+          </el-form-item>
+          <el-form-item label="医生诊断：">
+            <el-input v-model="val1"></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
       <!-- 呼吸情况 -->
       <div class="details-title">
           呼吸情况
       </div>
-      <div class="details-main">
-        <el-form label-width="120px">
-          <el-form-item label="数据区间选择：">
-            <el-select v-model="breatheDate" placeholder="请选择数据区间">
-              <el-option label="9：00~9：40" value="shanghai"></el-option>
-              <el-option label="11：00~12：00" value="beijing"></el-option>
-            </el-select>
+       <div class="details-main">
+        <el-form label-width="140px" label="">
+          <el-form-item label="呼吸波形图：">
+            <el-form-item label="数据区间选择：">
+              <el-select v-model="breatheDate" placeholder="请选择数据区间">
+                <el-option label="9：00~9：40" value="shanghai"></el-option>
+                <el-option label="11：00~12：00" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
           </el-form-item>
-          <el-form-item label="呼吸率：">
-            <div>16～18次/分</div>
-            <div class="tjx">心率图</div>
+          <el-form-item label="24小时呼吸率图：">
+            <div class="tjx">呼吸波形图</div>
+            <div class="tjx">24小时呼吸律图</div>
+          </el-form-item>
+          <el-form-item label="医生诊断：">
+            <el-input v-model="val3"></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <!-- 运动量 -->
+      <div class="details-title">
+          运动量
+      </div>
+       <div class="details-main">
+        <el-form label-width="140px" label="">
+          <el-form-item label="24小时运动数据：">
+            <el-row :gutter="20">
+              <el-col :span="12"><div class="tjx">运动步数</div></el-col>
+              <el-col :span="12"><div class="tjx">运动距离</div></el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="12"><div class="tjx">运动强度曲线</div></el-col>
+              <el-col :span="12"><div class="tjx">运动量曲线</div></el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="12"><div class="tjx">消耗热量</div></el-col>
+              <el-col :span="12"><div class="tjx">能量代谢当量</div></el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="12"><div class="tjx">综合运动量评估</div></el-col>
+            </el-row>
+          </el-form-item>
+          <el-form-item label="医生诊断：">
+            <el-input v-model="val4"></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <!-- 运动状态 -->
+      <div class="details-title">
+          运动状态
+      </div>
+       <div class="details-main">
+        <el-form label-width="140px" label="">
+          <el-form-item label="运动波形图：">
+            <el-form-item label="数据区间选择：">
+              <el-select v-model="breatheDate" placeholder="请选择数据区间">
+                <el-option label="9：00~9：40" value="shanghai"></el-option>
+                <el-option label="11：00~12：00" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-form-item>
+          <el-form-item label="24小时运动状态：">
+            <el-row :gutter="20">
+              <el-col :span="12"><div class="tjx">机电波形数据图</div></el-col>
+              <el-col :span="12"><div class="tjx">加速度波形图</div></el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="12"><div class="tjx">四肢运动轨迹图</div></el-col>
+              <el-col :span="12"><div class="tjx">肌力数值波形数据</div></el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="12"><div class="tjx">四肢运动数据曲线展示</div></el-col>
+            </el-row>
+          </el-form-item>
+          <el-form-item label="医生诊断：">
+            <el-input v-model="val5"></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <!-- 预警信息 -->
+      <div class="details-title">
+          预警信息
+      </div>
+       <div class="details-main">
+        <el-form label-width="140px" label="">
+          <el-form-item label="24小时异常报警：">
+            <div>心电异常</div>
+            <div>步数异常</div>
+          </el-form-item>
+          <el-form-item label="医生诊断：">
+            <el-input v-model="val2"></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <!-- 睡眠状态 -->
+      <div class="details-title">
+          睡眠状态
+      </div>
+       <div class="details-main">
+        <el-form label-width="140px" label="">
+            <div>睡眠状态睡眠状态睡眠状态睡眠状态睡眠状态睡眠状态睡眠状态睡眠状态</div>
+          <el-form-item label="医生诊断：">
+            <el-input v-model="val6"></el-input>
           </el-form-item>
         </el-form>
       </div>
     </div>
-    <el-card>
-      <h4>呼吸情况</h4>
-      <el-form label-width="120px">
-        <el-form-item label="数据区间选择：">
-          <el-select v-model="breatheDate" placeholder="请选择数据区间">
-            <el-option label="9：00~9：40" value="shanghai"></el-option>
-            <el-option label="11：00~12：00" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="呼吸率：">
-          <div>16～18次/分</div>
-           <div class="tjx">心率图</div>
-        </el-form-item>
-      </el-form>
-    </el-card>
-    <el-card>
-      <h4>心电情况</h4>
-      <el-form>
-        <el-form-item label="数据区间选择：">
-          <el-select v-model="ecgDate" placeholder="请选择数据区间">
-            <el-option label="9：00~9：40" value="shanghai"></el-option>
-            <el-option label="11：00~12：00" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-        <div class="tjx">心电图</div>
-        <el-form-item label="心率：">
-          <div>60～100次/分</div>
-        </el-form-item>
-      </el-form>
-    </el-card>
-    <el-card>
-      <h4>肢体情况</h4>
-      <el-form>
-        <div class="human">
-          <el-form-item label="角度：">
-            <div>30°</div>
-          </el-form-item>
-          <el-form-item label="幅度：">
-            <div></div>
-          </el-form-item>
-        </div>
-      </el-form>
-      <div class="tjx">运动轨迹</div>
-    </el-card>
-    <el-card>
-      <h4>肌电情况</h4>
-      <el-form>
-        <el-form-item label="数值：">
-          <div>100</div>
-        </el-form-item>
-      </el-form>
-    </el-card>
-    <el-card>
-      <h4>运动量</h4>
-      <el-form>
-        <div class="three">
-          <el-form-item label="步数：">
-            <div>500</div>
-          </el-form-item>
-          <el-form-item label="步频：">
-            <div>20</div>
-          </el-form-item>
-          <el-form-item label="步幅：">
-            <div>10</div>
-          </el-form-item>
-        </div>
-        <div class="human">
-          <el-form-item label="运动距离：">
-            <div>1000m</div>
-          </el-form-item>
-          <el-form-item label="运动强度：">
-            <div>中</div>
-          </el-form-item>
-        </div>
-        <el-form-item label="消耗热量：">
-          <div>252卡</div>
-        </el-form-item>
-      </el-form>
-    </el-card>
-    <el-card>
-      <h4>体征数据</h4>
-      <el-form>
-        <div class="human">
-          <el-form-item label="心率：">
-            <div>60~100次/分</div>
-          </el-form-item>
-          <el-form-item label="呼吸率：">
-            <div>60次/分</div>
-          </el-form-item>
-        </div>
-      </el-form>
-    </el-card>
-    <el-card>
-      <h4>异常数据</h4>
-      <el-form>
-        <el-form-item label="心电异常"></el-form-item>
-      </el-form>
-    </el-card>
-    <el-card>
-      <h4>运动状态</h4>
-      <el-form>
-        <el-form-item label="运动量少于范围"></el-form-item>
-      </el-form>
-    </el-card>
-    <el-card>
-      <h4>睡眠状态</h4>
-      <el-form>
-        <el-form-item label="睡眠良好"></el-form-item>
-      </el-form>
-    </el-card>
   </el-card>
 </template>
 <script>
@@ -180,13 +184,29 @@ export default {
       },
       breatheDate: "",
       ecgDate: "",
-      dialogFormVisible: false
+      dialogFormVisible: false,
+      val1: '',
+      val2: '',
+      val3: '',
+      val4: '',
+      val5: '',
+      val6: '',
     };
   },
   methods: {}
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
+.details-main {
+  .el-row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    .tjx {
+      height: 80px;
+    }
+  }
+}
+
 .details > h3 {
   text-align: center;
   line-height: 80px;
@@ -200,7 +220,8 @@ export default {
   flex: 1;
 }
 .tjx {
-  height: 300px;
+  height: 150px;
+  margin-bottom: 20px;
   display: flex;
   justify-content: center;
   align-items: center;

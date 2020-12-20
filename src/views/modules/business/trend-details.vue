@@ -26,24 +26,57 @@
       </el-form-item>
     </el-form>
 
-    <div v-if="dataForm.System=='xindian'||dataForm.System=='all'" class="tjx">
-      <h4>心电情况统计</h4>
-    </div>
+    <div class="details-box">
 
-    <div v-if="dataForm.System=='huxi'||dataForm.System=='all'" class="tjx">
-      <h4>呼吸情况统计</h4>
-    </div>
+      <div class="details-title">
+          心电趋势分析
+      </div>
+      <div v-if="dataForm.System=='xindian'||dataForm.System=='all'" class="tjx">
+        <h4>心电情况统计</h4>
+      </div>
+      <div class="analysisReport">
+        趋势分析：缓慢增加
+      </div>
 
-    <div v-if="dataForm.System=='bubinbufu'||dataForm.System=='all'" class="tjx">
-      <h4>步频步幅度情况统计</h4>
-    </div>
+      <div class="details-title">
+          呼吸趋势分析
+      </div>
+      <div v-if="dataForm.System=='huxi'||dataForm.System=='all'" class="tjx">
+        <h4>呼吸情况统计</h4>
+      </div>
+      <div class="analysisReport">
+        趋势分析：缓慢增加
+      </div>
 
-    <div v-if="dataForm.System=='yundong'||dataForm.System=='all'" class="tjx">
-      <h4>运动及步态情况统计</h4>
-    </div>
+      <div class="details-title">
+          步频步幅度趋势分析
+      </div>
+      <div v-if="dataForm.System=='bubinbufu'||dataForm.System=='all'" class="tjx">
+        <h4>步频步幅度情况统计</h4>
+      </div>
+      <div class="analysisReport">
+        趋势分析：缓慢增加
+      </div>
 
-    <div v-if="dataForm.System=='yundongliang'||dataForm.System=='all'" class="tjx">
-      <h4>运动量情况统计</h4>
+      <div class="details-title">
+          运动及步态趋势分析
+      </div>
+      <div v-if="dataForm.System=='yundong'||dataForm.System=='all'" class="tjx">
+        <h4>运动及步态情况统计</h4>
+      </div>
+      <div class="analysisReport">
+        趋势分析：缓慢增加
+      </div>
+
+      <div class="details-title">
+          运动量趋势分析
+      </div>
+      <div v-if="dataForm.System=='yundongliang'||dataForm.System=='all'" class="tjx">
+        <h4>运动量情况统计</h4>
+      </div>
+      <div class="analysisReport">
+        趋势分析：缓慢增加
+      </div>
     </div>
   </el-card>
 </template>
@@ -119,13 +152,19 @@ export default {
 };
 </script>
 <style scoped>
+.analysisReport {
+  padding-left: 50px;
+  margin-bottom: 50px;
+}
     .tjx{
-        height: 360px;
-        display: flex;
-        justify-content:center;
-        align-items:center;
-        background-color: #ccc;
-        margin-bottom: 20px;
+      width: 60%;
+      margin: 20px auto 0;
+      height: 160px;
+      display: flex;
+      justify-content:center;
+      align-items:center;
+      background-color: #ccc;
+      margin-bottom: 20px;
     }
     .tjx-ledt{
       margin-left: 50px;

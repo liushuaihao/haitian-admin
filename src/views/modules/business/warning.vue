@@ -57,7 +57,7 @@
           width="150"
         >
           <template slot-scope="scope">
-            <el-button  type="text" size="small" >{{ $t('update') }}</el-button>
+            <el-button  type="text" size="small" @click="editWarn(scope.row)" >{{ $t('update') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -71,13 +71,16 @@
         @current-change="pageCurrentChangeHandle"
       ></el-pagination>
     </div>
+    <warning-edit ref="warningUpdateDialog"> </warning-edit>
   </el-card>
 </template>
 
 <script>
 import mixinViewModule from "@/mixins/view-module";
+import warningEdit from './warning-edit'
 export default {
   mixins: [mixinViewModule],
+  components: { warningEdit },
   data () {
     return {
       mixinViewModuleOptions: {
@@ -146,6 +149,10 @@ export default {
       ]
     };
   },
-  methods: {}
+  methods: {
+    editWarn (row) {
+      this.$refs.warningUpdateDialog.visible = true
+    }
+  }
 };
 </script>
