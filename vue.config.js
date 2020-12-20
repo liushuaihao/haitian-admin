@@ -11,6 +11,7 @@ module.exports = {
       .use('svg-sprite-loader')
       .loader('svg-sprite-loader')
   },
+  lintOnSave: false, // 关闭格式检查
   productionSourceMap: false,
   devServer: {
     open: true,
