@@ -50,7 +50,7 @@
         <el-table-column prop="mobile" :label="$t('sms.mobile')" header-align="center" align="center" ></el-table-column>
         <el-table-column prop="idCard" label="身份证号" header-align="center" align="center"></el-table-column>
         <el-table-column prop="status" label="状态" header-align="center" align="center"></el-table-column>
-        <el-table-column prop="dataTime" label="时间" header-align="center" align="center"></el-table-column>
+        <el-table-column prop="dateTime" label="时间" header-align="center" align="center"></el-table-column>
         <el-table-column :label="$t('handle')" fixed="right" header-align="center" align="center" width="200">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="infoHandle(scope.row.id)">详情</el-button>
@@ -88,7 +88,10 @@ export default {
         getDataListIsPage: true,
         deleteURL: "",
         deleteIsBatch: true
-      }
+      },
+      dataList: [
+        {id: 1, name: '姓名', mobile: 12333333333, idCard: 341204199912121410, status: "绑定", dateTime: '2020-02-02'}
+      ]
     }
   },
   components: {
