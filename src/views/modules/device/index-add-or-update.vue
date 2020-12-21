@@ -1,11 +1,11 @@
 <template>
   <el-dialog :visible.sync="visible" :title="!dataForm.id ? $t('add') : $t('update')" :close-on-click-modal="false" :close-on-press-escape="false">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmitHandle()" label-width="120px">
-      <el-form-item prop="name" :label="'机构'+$t('dept.name')">
-        <el-input v-model="dataForm.name" :placeholder="'机构'+$t('dept.name')"></el-input>
+      <el-form-item prop="mobile" label="患者电话">
+        <el-input v-model="dataForm.mobile" placeholder="患者电话"></el-input>
       </el-form-item>
-      <el-form-item prop="mobile" :label="$t('sms.mobile')">
-        <el-input v-model="dataForm.mobile" :placeholder="$t('sms.mobile')"></el-input>
+      <el-form-item prop="id" label="中控设备ID">
+        <el-input v-model="dataForm.id" placeholder="中控设备ID"></el-input>
       </el-form-item>
     </el-form>
     <template slot="footer">

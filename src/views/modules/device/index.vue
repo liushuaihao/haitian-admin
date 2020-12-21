@@ -40,7 +40,7 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="getDataList()">{{ $t('query') }}</el-button>
-          <el-button v-if="$hasPermission('organ:index:save')" type="primary" @click="addOrUpdateHandle()">{{ $t('add') }}</el-button>
+          <el-button  type="primary" @click="addOrUpdateHandle()">{{ $t('add') }}</el-button>
         </el-form-item>
       </el-form>
       <!-- 设备ID 姓名 电话 身份证号 状态 时间 -->
@@ -54,7 +54,7 @@
         <el-table-column :label="$t('handle')" fixed="right" header-align="center" align="center" width="200">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="infoHandle(scope.row.id)">详情</el-button>
-            <el-button v-if="$hasPermission('organ:index:delete')" type="text" size="small" @click="deleteHandle(scope.row.id)">{{ $t('delete') }}</el-button>
+            <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">{{ $t('delete') }}</el-button>
             <el-button type="text" size="small" @click="unbindHandle(scope.row.id)">解绑</el-button>
           </template>
         </el-table-column>
@@ -88,7 +88,12 @@ export default {
         getDataListIsPage: true,
         deleteURL: "",
         deleteIsBatch: true
-      }
+      },
+      dataList:[
+        {
+          id: 10
+        }
+      ]
     }
   },
   components: {
