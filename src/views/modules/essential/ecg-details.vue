@@ -1,64 +1,20 @@
 <template>
   <el-card shadow="never" class="aui-card--fill">
-    <div class="details">
-      <el-card>
-        <el-button type="success">导出</el-button>
-        <h3>基本信息</h3>
-        <el-form ref="form" label-width="130px">
-          <div class="personal">
-            <el-form-item label="姓名：">
-              <div>{{basicInformation.name}}</div>
-            </el-form-item>
-            <el-form-item label="姓别：">
-              <div>{{basicInformation.sex}}</div>
-            </el-form-item>
-            <el-form-item label="年龄：">
-              <div>{{basicInformation.age}}</div>
-            </el-form-item>
-            <el-form-item label="身高：">
-              <div>{{basicInformation.stature}}</div>
-            </el-form-item>
-            <el-form-item label="体重：">
-              <div>{{basicInformation.weight}}</div>
-            </el-form-item>
-          </div>
-          <el-form-item label="电话：">
-            <div>{{basicInformation.tel}}</div>
-          </el-form-item>
-          <el-form-item label="住址：">
-            <div>{{basicInformation.site}}</div>
-          </el-form-item>
-          <h4>紧急联系人</h4>
-          <el-form-item label="张儿子：">
-            <div>16601275207</div>
-          </el-form-item>
-          <el-form-item label="张女儿：">
-            <div>16601275207</div>
-          </el-form-item>
-          <el-form-item label="张弟弟：">
-            <div>16601275207</div>
-          </el-form-item>
-          <h4>关联设备</h4>
-          <el-form-item label="主控设备：">
-            <div>1111-0000-1111</div>
-          </el-form-item>
-          <el-form-item label="手环设备：">
-            <div>1111-0000-1111</div>
-          </el-form-item>
-          <el-form-item label="心电设备：">
-            <div>1111-0000-1111</div>
-          </el-form-item>
-          <el-form-item label="呼吸设备：">
-            <div>1111-0000-1111</div>
-          </el-form-item>
-          <el-form-item label="下肢运动及机电：">
-            <div>1111-0000-1111</div>
-          </el-form-item>
-        </el-form>
-      </el-card>
-      <el-card>
-        <h4>心电情况</h4>
-        <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
+    <p>
+      <el-button type="success">导出</el-button>
+    </p>
+    <div class="details-box" id="ecg-details-dome">
+      <div class="details-title">
+        基本信息
+      </div>
+      <div class="details-main">
+        <details-info />
+      </div>
+      <div class="details-title">
+        心电情况
+      </div>
+      <div class="details-main">
+        <el-form :inline="true" :model="dataForm">
           <el-form-item>
             <el-date-picker
               v-model="daterange"
@@ -81,24 +37,27 @@
             </el-select>
           </el-form-item>
           <div class="human">
-          <el-form-item label="心率：">
-            <div>60~100次/分</div>
-          </el-form-item>
-          <el-form-item label="时段：">
-            <div>2019-04-05 14:00</div>
-          </el-form-item>
-        </div>
-        <div class="tjx">心率展示</div>
+            <el-form-item label="心率：">
+              <div>60~100次/分</div>
+            </el-form-item>
+            <el-form-item label="时段：">
+              <div>2019-04-05 14:00</div>
+            </el-form-item>
+          </div>
+          <div class="tjx">心率展示</div>
           <el-form-item label="心电变异性分析：">
             <div>T波改变 异常建议进一步进行检查</div>
           </el-form-item>
         </el-form>
-      </el-card>
+      </div>
     </div>
   </el-card>
 </template>
 <script>
 export default {
+  components: {
+    "details-info": () => import("@/components/details-info"),
+  },
   data () {
     return {
       basicInformation: {
@@ -108,13 +67,24 @@ export default {
         stature: "165",
         weight: "70",
         tel: "16601275207",
-        site: "北京市海淀区中关村科技大厦502"
+        site: "北京市海淀区中关村科技大厦502",
       },
       daterange: "",
-      time: ""
+      time: "",
+      dataForm: ""
     };
   },
-  methods: {}
+  watch: {
+    daterange (val) {
+      this.dataForm.startDate = val[0]
+      this.dataForm.endDate = val[1]
+    }
+  },
+  methods: {
+    handleDown () {
+      this.$htmlToPdf.downloadPDF(document.querySelector('#ecg-details-dome'), this.$route.name)
+    }
+  },
 };
 </script>
 <style scoped>
@@ -138,11 +108,11 @@ export default {
   margin-bottom: 20px;
   background-color: #ccc;
 }
-.human{
+.human {
   width: 36%;
   display: flex;
 }
-.human>div{
+.human > div {
   flex: 1;
 }
 </style>

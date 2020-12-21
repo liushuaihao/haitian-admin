@@ -10,15 +10,13 @@
       <div class="details-main">
         <details-info />
       </div>
-      <!-- 呼吸情况 -->
       <div class="details-title">
-        呼吸情况
+        运动量情况
       </div>
       <div class="details-main">
         <el-form
           :inline="true"
           :model="dataForm"
-          @keyup.enter.native="getDataList()"
         >
           <el-form-item label="分析时段：">
             <el-select v-model="time" placeholder="分析时段">
@@ -45,14 +43,18 @@
             </el-form-item>
           </div>
           <div class="frequency">
+            <div>运动步数</div>
+            <div>运动距离</div>
+          </div>
+          <div class="frequency">
             <div>运动强度曲线</div>
             <div>运动量曲线</div>
           </div>
           <div class="frequency">
             <div>消耗热量</div>
-            <div>运动距离</div>
+            <div>能量代谢当量</div>
           </div>
-          <div class="tjx">能量代谢当量</div>
+          <div class="tjx">综合运动量评估</div>
         </el-form>
       </div>
     </div>

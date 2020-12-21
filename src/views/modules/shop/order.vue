@@ -34,7 +34,7 @@
       <el-table-column prop="status" label="状态" header-align="center" align="center">
         <template slot-scope="scope">
           <div>
-            <div v-if="scope.row.status === '已下单'">{{scope.row.status}}</div>
+            <el-tag v-if="scope.row.status === '已下单'">{{scope.row.status}}</el-tag>
             <el-tag v-else>{{scope.row.status}}</el-tag>
           </div>
         </template>
@@ -78,10 +78,10 @@
         width="150"
       >
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="forwardUrl(scope.row)">
-            <el-tag style="margin-right: 20px" v-if="scope.row.status === '已付款'">发货</el-tag>
-            <el-tag type="warning">详情</el-tag>
+          <el-button style="color:#E6A23C" type="text" size="small" @click="sipping(scope.row)" v-if="scope.row.status === '已付款'">
+           发货
           </el-button>
+          <el-button type="text" size="small" @click="forwardUrl(scope.row)">详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -178,6 +178,15 @@ export default {
     };
   },
   methods: {
+    // 发货
+    sipping (id) {
+      this.$confirm('订单发货', '发货', {
+        confirmButtonText: this.$t('confirm'),
+        cancelButtonText: this.$t('cancel'),
+        type: 'warning'
+      }).then(() => {
+      }).catch(() => {})
+    },
     forwardUrl (row) {
       var routeParams = {
         routeName: `${this.$route.name}__instance_${row.id}`,

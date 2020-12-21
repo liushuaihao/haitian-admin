@@ -3,7 +3,7 @@
     <p>
       <el-row :gutter="10">
         <el-col :span="4">姓名：{{ basicInformation.name }}</el-col>
-        <el-col :span="4">姓别：{{ basicInformation.sex }}</el-col>
+        <el-col :span="4">性别：{{ basicInformation.sex }}</el-col>
         <el-col :span="4">年龄：{{ basicInformation.age }}</el-col>
         <el-col :span="4">身高：{{ basicInformation.stature }}cm</el-col>
         <el-col :span="4">体重：{{ basicInformation.weight }}kg</el-col>

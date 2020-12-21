@@ -17,6 +17,7 @@ import renProcessDetail from '@/components/ren-process-detail'
 import renDeptTree from '@/components/ren-dept-tree'
 import renRegionTree from '@/components/ren-region-tree'
 import { hasPermission, getDictLabel } from '@/utils'
+import htmlToPdf from '@/utils/htmlToPdf'
 import cloneDeep from 'lodash/cloneDeep'
 
 import echarts from "echarts";
@@ -30,6 +31,7 @@ Vue.use(BaiduMap, {
 
 echarts.registerMap("china", china);
 Vue.prototype.$echarts = echarts;
+Vue.prototype.$htmlToPdf = htmlToPdf;
 
 Vue.config.productionTip = false
 

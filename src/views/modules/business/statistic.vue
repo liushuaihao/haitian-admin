@@ -160,6 +160,12 @@ export default {
       ]
     };
   },
+  watch: {
+    daterange (val) {
+      this.dataForm.startDate = val[0]
+      this.dataForm.endDate = val[1]
+    }
+  },
   methods: {
     forwardUrl (row) {
       var routeParams = {

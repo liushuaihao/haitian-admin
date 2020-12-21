@@ -1,6 +1,8 @@
 <template>
   <el-card shadow="never" class="aui-card--fill">
     <p>
+      {{$hasPermission('business:report:edit')}}
+      {{$hasPermission('business:report:expor')}}
      <el-button
         type="success"
         v-if="$hasPermission('business:report:edit')"
@@ -15,7 +17,7 @@
         <p>
          <el-row :gutter="10">
           <el-col :span="4">姓名：{{basicInformation.name}}</el-col>
-          <el-col :span="4">姓别：{{basicInformation.sex}}</el-col>
+          <el-col :span="4">性别：{{basicInformation.sex}}</el-col>
           <el-col :span="4">年龄：{{basicInformation.age}}</el-col>
           <el-col :span="4">身高：{{basicInformation.stature}}cm</el-col>
           <el-col :span="4">体重：{{basicInformation.weight}}kg</el-col>
@@ -160,7 +162,9 @@
       </div>
        <div class="details-main">
         <el-form label-width="140px" label="">
+          <el-form-item label="睡眠状态：">
             <div>睡眠状态睡眠状态睡眠状态睡眠状态睡眠状态睡眠状态睡眠状态睡眠状态</div>
+          </el-form-item>
           <el-form-item label="医生诊断：">
             <el-input v-model="val6"></el-input>
           </el-form-item>
