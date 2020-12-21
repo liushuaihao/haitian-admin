@@ -11,7 +11,7 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="getDataList()">{{ $t('query') }}</el-button>
-          <el-button v-if="$hasPermission('organ:index:save')" type="primary" @click="addOrUpdateHandle()">{{ $t('add') }}</el-button>
+          <el-button type="primary" @click="addOrUpdateHandle()">{{ $t('add') }}</el-button>
         </el-form-item>
       </el-form>
       <el-table v-loading="dataListLoading" :data="dataList" row-key="id" border style="width: 100%;">
@@ -21,8 +21,8 @@
         <el-table-column prop="sort" label="添加时间" header-align="center" align="center"></el-table-column>
         <el-table-column :label="$t('handle')" fixed="right" header-align="center" align="center" width="200">
           <template slot-scope="scope">
-            <el-button v-if="$hasPermission('organ:index:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">{{ $t('update') }}</el-button>
-            <el-button v-if="$hasPermission('organ:index:delete')" type="text" size="small" @click="deleteHandle(scope.row.id)">{{ $t('delete') }}</el-button>
+            <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">{{ $t('update') }}</el-button>
+            <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">{{ $t('delete') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -55,7 +55,10 @@ export default {
         getDataListIsPage: true,
         deleteURL: "",
         deleteIsBatch: true
-      }
+      },
+      dataList:[
+        {id:0}
+      ]
     }
   },
   components: {

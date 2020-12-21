@@ -1,8 +1,6 @@
 <template>
   <el-card shadow="never" class="aui-card--fill">
     <p>
-      {{$hasPermission('business:report:edit')}}
-      {{$hasPermission('business:report:expor')}}
      <el-button
         type="success"
         v-if="$hasPermission('business:report:edit')"

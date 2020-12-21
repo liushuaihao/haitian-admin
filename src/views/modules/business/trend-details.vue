@@ -1,6 +1,10 @@
 <template>
   <el-card>
-    <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
+    <el-form
+      :inline="true"
+      :model="dataForm"
+      @keyup.enter.native="getDataList()"
+    >
       <el-form-item>
         <el-date-picker
           v-model="daterange"
@@ -12,7 +16,7 @@
         ></el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-select v-model="dataForm.System" placeholder="统计项">
+        <el-select v-model="dataForm.System" placeholder="分析项">
           <el-option label="全部测试项目" value="all"></el-option>
           <el-option label="心电" value="xindian"></el-option>
           <el-option label="呼吸" value="huxi"></el-option>
@@ -20,63 +24,84 @@
           <el-option label="运动及步态" value="yundong"></el-option>
           <el-option label="运动量" value="yundongliang"></el-option>
         </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">{{ $t("query") }}</el-button>
-      </el-form-item>
       </el-form-item>
     </el-form>
 
     <div class="details-box">
-
-      <div class="details-title">
-          心电趋势分析
-      </div>
-      <div v-if="dataForm.System=='xindian'||dataForm.System=='all'" class="tjx">
-        <h4>心电情况统计</h4>
-      </div>
-      <div class="analysisReport">
-        趋势分析：缓慢增加
-      </div>
-
-      <div class="details-title">
-          呼吸趋势分析
-      </div>
-      <div v-if="dataForm.System=='huxi'||dataForm.System=='all'" class="tjx">
-        <h4>呼吸情况统计</h4>
-      </div>
-      <div class="analysisReport">
-        趋势分析：缓慢增加
-      </div>
-
-      <div class="details-title">
-          步频步幅度趋势分析
-      </div>
-      <div v-if="dataForm.System=='bubinbufu'||dataForm.System=='all'" class="tjx">
-        <h4>步频步幅度情况统计</h4>
-      </div>
-      <div class="analysisReport">
-        趋势分析：缓慢增加
-      </div>
-
-      <div class="details-title">
-          运动及步态趋势分析
-      </div>
-      <div v-if="dataForm.System=='yundong'||dataForm.System=='all'" class="tjx">
-        <h4>运动及步态情况统计</h4>
-      </div>
-      <div class="analysisReport">
-        趋势分析：缓慢增加
-      </div>
-
-      <div class="details-title">
-          运动量趋势分析
-      </div>
-      <div v-if="dataForm.System=='yundongliang'||dataForm.System=='all'" class="tjx">
-        <h4>运动量情况统计</h4>
-      </div>
-      <div class="analysisReport">
-        趋势分析：缓慢增加
-      </div>
+      <template v-if="dataForm.System == 'xindian' || dataForm.System == 'all'">
+        <div>
+          <div class="details-title">
+            心电趋势分析
+          </div>
+          <div class="tjx">
+            <h4>心电情况统计</h4>
+          </div>
+          <div class="analysisReport">
+            趋势分析：缓慢增加
+          </div>
+        </div>
+      </template>
+      <template v-if="dataForm.System == 'huxi' || dataForm.System == 'all'">
+        <div>
+          <div class="details-title">
+            呼吸趋势分析
+          </div>
+          <div class="tjx">
+            <h4>呼吸情况统计</h4>
+          </div>
+          <div class="analysisReport">
+            趋势分析：缓慢增加
+          </div>
+        </div>
+      </template>
+      <template
+        v-if="dataForm.System == 'bubinbufu' || dataForm.System == 'all'"
+      >
+        <div>
+          <div class="details-title">
+            步频步幅度趋势分析
+          </div>
+          <div class="tjx">
+            <h4>步频步幅度情况统计</h4>
+          </div>
+          <div class="analysisReport">
+            趋势分析：缓慢增加
+          </div>
+        </div>
+      </template>
+      <template v-if="dataForm.System == 'yundong' || dataForm.System == 'all'">
+        <div>
+          <div class="details-title">
+            运动及步态趋势分析
+          </div>
+          <div
+            class="tjx"
+          >
+            <h4>运动及步态情况统计</h4>
+          </div>
+          <div class="analysisReport">
+            趋势分析：缓慢增加
+          </div>
+        </div>
+      </template>
+      <template
+        v-if="dataForm.System == 'yundongliang' || dataForm.System == 'all'"
+      >
+        <div>
+          <div class="details-title">
+            运动量趋势分析
+          </div>
+          <div class="tjx">
+            <h4>运动量情况统计</h4>
+          </div>
+          <div class="analysisReport">
+            趋势分析：缓慢增加
+          </div>
+        </div>
+      </template>
     </div>
   </el-card>
 </template>
@@ -85,20 +110,20 @@ import mixinViewModule from "@/mixins/view-module";
 import { addDynamicRoute } from "@/router"; // 添加动态路由
 export default {
   mixins: [mixinViewModule],
-  data () {
+  data() {
     return {
       mixinViewModuleOptions: {
         getDataListURL: "",
         getDataListIsPage: true,
         deleteURL: "",
-        deleteIsBatch: true
+        deleteIsBatch: true,
       },
       dataForm: {
         identityCard: "",
         name: "",
         mobile: "",
         id: "",
-        System: "all"
+        System: "all",
       },
       daterange: null,
       dataList: [
@@ -106,25 +131,25 @@ export default {
           id: "1111-0000-1111",
           name: "张三",
           mobile: "13012345671",
-          identityCard: "11011011123456789"
+          identityCard: "11011011123456789",
         },
         {
           id: "1111-0000-1111",
           name: "张三",
           mobile: "13012345671",
-          identityCard: "11011011123456789"
+          identityCard: "11011011123456789",
         },
         {
           id: "1111-0000-1111",
           name: "张三",
           mobile: "13012345671",
-          identityCard: "11011011123456789"
+          identityCard: "11011011123456789",
         },
         {
           id: "1111-0000-1111",
           name: "张三",
           mobile: "13012345671",
-          identityCard: "11011011123456789"
+          identityCard: "11011011123456789",
         },
         {
           id: "1111-0000-1111",
@@ -132,29 +157,29 @@ export default {
           mobile: "13012345671",
           identityCard: "11011011123456789",
           state: "完成",
-          tmti: "2019-04-05"
-        }
-      ]
+          tmti: "2019-04-05",
+        },
+      ],
     };
   },
   watch: {
-    daterange (val) {
-      this.dataForm.startDate = val[0]
-      this.dataForm.endDate = val[1]
-    }
+    daterange(val) {
+      this.dataForm.startDate = val[0];
+      this.dataForm.endDate = val[1];
+    },
   },
   methods: {
-    forwardUrl (row) {
+    forwardUrl(row) {
       var routeParams = {
         routeName: `${this.$route.name}__instance_${row.id}`,
         menuId: `${this.$route.meta.menuId}`,
         title: `${this.$route.meta.title}详情 - ${row.name}`,
         path: "business/statistic-details",
-        params: {}
+        params: {},
       };
       addDynamicRoute(routeParams, this.$router, this.$route);
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
@@ -162,17 +187,17 @@ export default {
   padding-left: 50px;
   margin-bottom: 50px;
 }
-    .tjx{
-      width: 60%;
-      margin: 20px auto 0;
-      height: 160px;
-      display: flex;
-      justify-content:center;
-      align-items:center;
-      background-color: #ccc;
-      margin-bottom: 20px;
-    }
-    .tjx-ledt{
-      margin-left: 50px;
-    }
+.tjx {
+  width: 60%;
+  margin: 20px auto 0;
+  height: 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ccc;
+  margin-bottom: 20px;
+}
+.tjx-ledt {
+  margin-left: 50px;
+}
 </style>

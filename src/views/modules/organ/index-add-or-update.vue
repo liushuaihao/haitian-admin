@@ -7,6 +7,12 @@
       <el-form-item prop="mobile" :label="$t('sms.mobile')">
         <el-input v-model="dataForm.mobile" :placeholder="$t('sms.mobile')"></el-input>
       </el-form-item>
+      <el-form-item prop="sort" label="所属地域">
+        <el-cascader
+          v-model="dataForm.sort"
+          :options="options"
+          @change="handleChange"></el-cascader>
+      </el-form-item>
     </el-form>
     <template slot="footer">
       <el-button @click="visible = false">{{ $t('cancel') }}</el-button>
@@ -26,7 +32,28 @@ export default {
         name: '',
         parentName: '',
         sort: 0
-      }
+      },
+      options: [{
+        value: 'zhinan',
+        label: '指南',
+        children: [{
+          value: 'shejiyuanze',
+          label: '设计原则',
+          children: [{
+            value: 'yizhi',
+            label: '一致'
+          }, {
+            value: 'fankui',
+            label: '反馈'
+          }, {
+            value: 'xiaolv',
+            label: '效率'
+          }, {
+            value: 'kekong',
+            label: '可控'
+          }]
+        }]
+      }]
     }
   },
   computed: {
@@ -49,6 +76,9 @@ export default {
         if (this.dataForm.id) {}
       })
     },
+    handleChange(value) {
+        console.log(value);
+      },
     // 获取信息
     getInfo () {
 
