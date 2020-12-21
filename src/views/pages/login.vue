@@ -43,6 +43,7 @@
         </div>
         <signin @typeClick="typeClick" v-if="type == 1"/>
         <forget-password @typeClick="typeClick" v-if="type == 2"/>
+        <administrator @typeClick="typeClick" v-if="type == 3"/>
     </div>
 </template>
 
@@ -54,7 +55,8 @@ import { getUUID } from '@/utils'
 export default {
   components: {
     signin: () => import('./signin'),
-    forgetPassword: () => import('./forgetPassword')
+    forgetPassword: () => import('./forgetPassword'),
+    administrator: () => import('./administrator')
   },
   data () {
     return {

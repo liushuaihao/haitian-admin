@@ -27,6 +27,11 @@
         <el-button type="primary" @click="typeClick(0)">取消</el-button>
       </div>
     </div>
+    <div class="login-box-footer">
+      <p>
+        <span @click="typeClick(3)">联系管理员</span>
+      </p>
+    </div>
   </el-card>
 </template>
 
@@ -87,7 +92,7 @@ export default {
 
 <style scoped lang="scss">
 .forgetPassword{
-  width: 400px;
+  width: 500px;
   padding: 5px 10px;
   border-radius: 6px
 }

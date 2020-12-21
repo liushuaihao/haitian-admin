@@ -1,10 +1,10 @@
 <template>
-  <div>
-    <div class="r_title">
-      <h3>联系管理员</h3>
+  <el-card class="administrator">
+    <div class="l-tab">
+      <div class="active">联系管理员</div>
     </div>
     <div class="r_form">
-      <el-form ref="form" :model="form" :rules="rules" label-width="100px" class="demo-ruleForm">
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px" class="demo-ruleForm">
         <el-form-item label="用户名：" prop="userName">
           <el-input v-model="form.userName"></el-input>
         </el-form-item>
@@ -17,11 +17,10 @@
         <el-form-item label="身份证号：" prop="identityCard">
           <el-input v-model="form.identityCard"></el-input>
         </el-form-item>
-
         <el-form-item label="密码：" prop="pass">
           <el-input v-model="form.pass"></el-input>
         </el-form-item>
-        <el-form-item label="确认密码：" prop="confirmPass">
+        <el-form-item label="再次输入密码：" prop="confirmPass">
           <el-input v-model="form.confirmPass"></el-input>
         </el-form-item>
       </el-form>
@@ -31,11 +30,13 @@
         <el-button type="primary">提交</el-button>
       </div>
       <div>
-        <el-button type="primary">取消</el-button>
+        <el-button type="primary" @click="typeClick(0)">取消</el-button>
       </div>
     </div>
-    <div class="relationTel">联系电话：010-383938</div>
-  </div>
+    <div class="relationTel">
+      <p>联系电话：010-383938</p>
+    </div>
+  </el-card>
 </template>
 
 <script>
@@ -94,20 +95,23 @@ export default {
       },
     };
   },
-
   methods: {
-
+    typeClick (type) {
+      this.$emit('typeClick', type)
+    }
   }
 };
 </script>
 
 <style scoped lang="scss">
+.administrator{
+  width: 600px;
+  padding: 5px 10px;
+  border-radius: 6px
+}
 .r_title h3 {
   text-align: center;
   line-height: 100px;
-}
-.r_form {
-  padding-left: 160px;
 }
 .r_button {
   display: flex;
