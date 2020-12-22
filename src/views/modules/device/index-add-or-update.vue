@@ -25,21 +25,21 @@
 			<el-form-item label="GPS定位">
 				<el-input v-model="dataForm.mobile"></el-input>
 			</el-form-item>
-			<div>所附带其他测量设备详情</div>
+			<p>所附带其他测量设备详情</p>
 			<el-form-item label="设备通信号">
 				<el-input v-model="dataForm.mobile"></el-input>
 			</el-form-item>
 			<el-form-item label="心电设备">
-				<i class="el-icon-check"></i>
+				<el-switch v-model="dataForm.xd"> </el-switch>
 			</el-form-item>
 			<el-form-item label="呼吸设备">
-				<i class="el-icon-check"></i>
+				<el-switch v-model="dataForm.hx"> </el-switch>
 			</el-form-item>
 			<el-form-item label="上肢设备">
-				<i class="el-icon-check"></i>
+				<el-switch v-model="dataForm.sz"> </el-switch>
 			</el-form-item>
 			<el-form-item label="下肢设备">
-				<i class="el-icon-close"></i>
+				<el-switch v-model="dataForm.xz"> </el-switch>
 			</el-form-item>
 			<el-form-item label="中控电量">
 				<el-input v-model="dataForm.mobile"></el-input>
