@@ -72,6 +72,7 @@
 </template>
 
 <script>
+import { isEmail, isMobile } from '@/utils/validate'
 export default {
   data () {
     var checkPhone = (rule, value, callback) => {
@@ -132,7 +133,61 @@ export default {
       selectedOptions: [],
     };
   },
-
+  
+  computed: {
+    dataRule () {
+      var validatePassword = (rule, value, callback) => {
+        if (!this.dataForm.id && !/\S/.test(value)) {
+          return callback(new Error(this.$t('validate.required')))
+        }
+        callback()
+      }
+      var validateConfirmPassword = (rule, value, callback) => {
+        if (!this.dataForm.id && !/\S/.test(value)) {
+          return callback(new Error(this.$t('validate.required')))
+        }
+        if (this.dataForm.password !== value) {
+          return callback(new Error(this.$t('user.validate.confirmPassword')))
+        }
+        callback()
+      }
+      var validateEmail = (rule, value, callback) => {
+        if (value && !isEmail(value)) {
+          return callback(new Error(this.$t('validate.format', { 'attr': this.$t('user.email') })))
+        }
+        callback()
+      }
+      var validateMobile = (rule, value, callback) => {
+        if (value && !isMobile(value)) {
+          return callback(new Error(this.$t('validate.format', { 'attr': this.$t('user.mobile') })))
+        }
+        callback()
+      }
+      return {
+        username: [
+          { required: true, message: this.$t('validate.required'), trigger: 'blur' }
+        ],
+        deptName: [
+          { required: true, message: this.$t('validate.required'), trigger: 'change' }
+        ],
+        password: [
+          { validator: validatePassword, trigger: 'blur' }
+        ],
+        confirmPassword: [
+          { validator: validateConfirmPassword, trigger: 'blur' }
+        ],
+        realName: [
+          { required: true, message: this.$t('validate.required'), trigger: 'blur' }
+        ],
+        email: [
+          { validator: validateEmail, trigger: 'blur' }
+        ],
+        mobile: [
+          { validator: validateMobile, trigger: 'blur' }
+        ]
+      }
+    }
+  },
   methods: {
     register: function () {
       console.log(this.form.region);

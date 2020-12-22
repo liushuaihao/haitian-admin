@@ -4,13 +4,6 @@
       <el-form :inline="true" :model="commodity" @keyup.enter.native="getDataList()">
         <!-- $hasPermission('shop:goods:save') 按钮权限配置 'shop:goods:save' 标识 -->
         <el-form-item>
-          <el-button
-            v-if="$hasPermission('shop:goods:save')"
-            type="primary"
-            @click="addOrUpdateHandle()"
-          >{{ $t("add") }}</el-button>
-        </el-form-item>
-        <el-form-item>
           <el-input v-model="commodity.id" placeholder="商品ID" clearable></el-input>
         </el-form-item>
         <el-form-item>
@@ -28,6 +21,13 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="getDataList()">{{ $t('query') }}</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            v-if="$hasPermission('shop:goods:save')"
+            type="primary"
+            @click="addOrUpdateHandle()"
+          >{{ $t("add") }}</el-button>
         </el-form-item>
       </el-form>
       <el-table
