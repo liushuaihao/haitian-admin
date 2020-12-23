@@ -11,9 +11,6 @@
         label-width="100px"
         class="demo-ruleForm"
       >
-        <el-form-item label="用户名：" prop="userName">
-          <el-input placeholder="用户名" v-model="form.userName"></el-input>
-        </el-form-item>
         <el-form-item label="姓名：" prop="name">
           <el-input placeholder="姓名" v-model="form.name"></el-input>
         </el-form-item>
@@ -22,12 +19,6 @@
         </el-form-item>
         <el-form-item label="身份证号：" prop="identityCard">
           <el-input placeholder="身份证号" v-model="form.identityCard"></el-input>
-        </el-form-item>
-        <el-form-item label="角色：" prop="region">
-          <el-select v-model="form.region" placeholder="角色">
-            <el-option label="管理员" value="管理员"></el-option>
-            <el-option label="医生" value="医生"></el-option>
-          </el-select>
         </el-form-item>
         <el-form-item label="地区：">
           <el-cascader
@@ -44,18 +35,6 @@
         </el-form-item>
         <el-form-item label="确认密码：" prop="confirmPass">
           <el-input placeholder="确认密码" v-model="form.confirmPass"></el-input>
-        </el-form-item>
-        <el-form-item label="所属机构：" v-if="form.region == '医生'">
-          <el-select v-model="form.organization" placeholder="所属机构">
-            <el-option label="机构1" value="机构1"></el-option>
-            <el-option label="机构2" value="机构2"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="所属科室：" v-if="form.region == '医生'">
-          <el-select v-model="form.administrative" placeholder="所属科室">
-            <el-option label="科室1" value="科室1"></el-option>
-            <el-option label="科室2" value="科室2"></el-option>
-          </el-select>
         </el-form-item>
       </el-form>
 
@@ -89,11 +68,9 @@ export default {
     };
     return {
       form: {
-        userName: "", // 用户名
         name: "", // 姓名
         tel: "", // 电话
         identityCard: "", // 身份证
-        region: "", // 角色
         pass: "", // 密码
         confirmPass: "", // 确认密码
         organization: "", // 所属机构
