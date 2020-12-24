@@ -54,7 +54,7 @@ import { messages } from '@/i18n'
 import { getUUID } from '@/utils'
 export default {
   components: {
-    signin: () => import('./signin'),
+    signin: () => import('./signIn'),
     forgetPassword: () => import('./forgetPassword'),
     administrator: () => import('./administrator')
   },
