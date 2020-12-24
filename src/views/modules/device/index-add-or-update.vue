@@ -61,56 +61,56 @@
 <script>
 import debounce from 'lodash/debounce'
 export default {
-	data() {
-		return {
-			visible: false,
-			dataForm: {
-				id: '',
-				sort: 0,
-				mobile: '',
-			},
-		}
-	},
-	methods: {
-		init() {
-			this.visible = true
-			this.$nextTick(() => {
-				this.$refs['dataForm'].resetFields()
-				if (this.dataForm.id) {
-				}
-			})
-		},
-		// 获取信息
-		getInfo() {},
-		// 表单提交
-		dataFormSubmitHandle: debounce(
-			function() {
-				this.$refs['dataForm'].validate(valid => {
-					if (!valid) {
-						return false
-					}
-					this.$http[!this.dataForm.id ? 'post' : 'put']('', this.dataForm)
-						.then(({ data: res }) => {
-							if (res.code !== 0) {
-								return this.$message.error(res.msg)
-							}
-							this.$message({
-								message: this.$t('prompt.success'),
-								type: 'success',
-								duration: 500,
-								onClose: () => {
-									this.visible = false
-									this.$emit('refreshDataList')
-								},
-							})
-						})
-						.catch(() => {})
-				})
-			},
-			1000,
-			{ leading: true, trailing: false }
-		),
-	},
+  data () {
+    return {
+      visible: false,
+      dataForm: {
+        id: '',
+        sort: 0,
+        mobile: '',
+      },
+    }
+  },
+  methods: {
+    init () {
+      this.visible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].resetFields()
+        if (this.dataForm.id) {
+        }
+      })
+    },
+    // 获取信息
+    getInfo () {},
+    // 表单提交
+    dataFormSubmitHandle: debounce(
+      function () {
+        this.$refs['dataForm'].validate(valid => {
+          if (!valid) {
+            return false
+          }
+          this.$http[!this.dataForm.id ? 'post' : 'put']('', this.dataForm)
+            .then(({ data: res }) => {
+              if (res.code !== 0) {
+                return this.$message.error(res.msg)
+              }
+              this.$message({
+                message: this.$t('prompt.success'),
+                type: 'success',
+                duration: 500,
+                onClose: () => {
+                  this.visible = false
+                  this.$emit('refreshDataList')
+                },
+              })
+            })
+            .catch(() => {})
+        })
+      },
+      1000,
+      { leading: true, trailing: false }
+    ),
+  },
 }
 </script>
 

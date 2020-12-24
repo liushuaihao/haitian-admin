@@ -76,9 +76,9 @@ export default {
         if (this.dataForm.id) {}
       })
     },
-    handleChange(value) {
-        console.log(value);
-      },
+    handleChange (value) {
+      console.log(value);
+    },
     // 获取信息
     getInfo () {
 

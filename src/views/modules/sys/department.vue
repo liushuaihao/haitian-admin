@@ -78,7 +78,7 @@
 import mixinViewModule from "@/mixins/view-module";
 export default {
   mixins: [mixinViewModule],
-  data() {
+  data () {
     return {
       mixinViewModuleOptions: {
         getDataListURL: "/sys/role/page",
@@ -98,7 +98,7 @@ export default {
       ],
       dialogFormVisible: false,
       dialogFormVisible2: false,
-      tnotd: "", //科室名称
+      tnotd: "", // 科室名称
       addtnotd: "",
       formLabelWidth: "120px"
     };

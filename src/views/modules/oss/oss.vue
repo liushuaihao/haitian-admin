@@ -8,9 +8,6 @@
         <el-form-item>
           <el-button type="primary" @click="uploadHandle()">{{ $t('oss.upload') }}</el-button>
         </el-form-item>
-        <el-form-item>
-          <el-button type="danger" @click="deleteHandle()">{{ $t('deleteBatch') }}</el-button>
-        </el-form-item>
       </el-form>
       <el-table
         v-loading="dataListLoading"

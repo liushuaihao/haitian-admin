@@ -110,7 +110,7 @@ import mixinViewModule from "@/mixins/view-module";
 import { addDynamicRoute } from "@/router"; // 添加动态路由
 export default {
   mixins: [mixinViewModule],
-  data() {
+  data () {
     return {
       mixinViewModuleOptions: {
         getDataListURL: "",
@@ -163,13 +163,13 @@ export default {
     };
   },
   watch: {
-    daterange(val) {
+    daterange (val) {
       this.dataForm.startDate = val[0];
       this.dataForm.endDate = val[1];
     },
   },
   methods: {
-    forwardUrl(row) {
+    forwardUrl (row) {
       var routeParams = {
         routeName: `${this.$route.name}__instance_${row.id}`,
         menuId: `${this.$route.meta.menuId}`,

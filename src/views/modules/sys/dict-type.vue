@@ -14,9 +14,6 @@
         <el-form-item>
           <el-button v-if="$hasPermission('sys:dict:save')" type="primary" @click="addOrUpdateHandle()">{{ $t('add') }}</el-button>
         </el-form-item>
-        <el-form-item>
-          <el-button v-if="$hasPermission('sys:dict:delete')" type="danger" @click="deleteHandle()">{{ $t('deleteBatch') }}</el-button>
-        </el-form-item>
       </el-form>
       <el-table
         v-loading="dataListLoading"

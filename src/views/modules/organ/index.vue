@@ -56,8 +56,8 @@ export default {
         deleteURL: "",
         deleteIsBatch: true
       },
-      dataList:[
-        {id:0}
+      dataList: [
+        {id: 0}
       ]
     }
   },

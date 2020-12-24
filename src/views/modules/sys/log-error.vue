@@ -1,11 +1,11 @@
 <template>
   <el-card shadow="never" class="aui-card--fill">
     <div class="mod-sys__log-error">
-      <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
+      <!-- <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
         <el-form-item>
           <el-button type="info" @click="exportHandle()">{{ $t('export') }}</el-button>
         </el-form-item>
-      </el-form>
+      </el-form> -->
       <el-table v-loading="dataListLoading" :data="dataList" border @sort-change="dataListSortChangeHandle" style="width: 100%;">
         <el-table-column prop="requestUri" :label="$t('logError.requestUri')" header-align="center" align="center"></el-table-column>
         <el-table-column prop="requestMethod" :label="$t('logError.requestMethod')" header-align="center" align="center"></el-table-column>

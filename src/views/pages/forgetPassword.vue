@@ -67,7 +67,7 @@ export default {
         password: "",
         confirmPassword: "",
         captcha: ""
-      }, 
+      },
       time: 60, // 发送验证码倒计时
       sendMsgDisabled: false
     };
@@ -101,10 +101,10 @@ export default {
           { min: 6, max: 12, message: "请输入6-12位密码", trigger: "blur" }
         ],
         confirmPassword: [
-          {  required: true, validator: validateConfirmPassword, trigger: 'blur' }
+          { required: true, validator: validateConfirmPassword, trigger: 'blur' }
         ],
         mobile: [
-          {  required: true, validator: validateMobile, trigger: 'blur' }
+          { required: true, validator: validateMobile, trigger: 'blur' }
         ],
         captcha: [
           { required: true, message: this.$t('validate.required'), trigger: 'blur' }
@@ -116,14 +116,14 @@ export default {
     typeClick (type) {
       this.$emit('typeClick', type)
     },
-    getCaptcha(){
+    getCaptcha () {
       let _this = this;
       _this.sendMsgDisabled = true;
-      let interval = setInterval(function() {
-        if (_this.time -- <= 0) {
-        _this.time = 60;
-        _this.sendMsgDisabled = false;
-        clearInterval(interval);
+      let interval = setInterval(function () {
+        if (_this.time-- <= 0) {
+          _this.time = 60;
+          _this.sendMsgDisabled = false;
+          clearInterval(interval);
         }
       }, 1000)
     },

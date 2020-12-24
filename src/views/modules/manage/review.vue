@@ -43,11 +43,13 @@
           fixed="right"
           header-align="center"
           align="center"
-          width="150"
+          width="200"
         >
-          <template slot-scope="scope">
-            <el-button type="text" size="small" @click="forwardUrl(scope.row)">修改</el-button>
-            <el-button type="text" size="small" @click="forwardUrl(scope.row)">删除</el-button>
+          <template>
+            <el-button type="text" size="small" @click="pass()">通过</el-button>
+            <el-button type="text" size="small" @click="turn()">拒绝</el-button>
+            <el-button type="text" size="small" @click="changed()">修改</el-button>
+            <el-button type="text" size="small" @click="remove()">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -69,7 +71,7 @@ export default {
         deleteIsBatch: true
       },
       dataForm: {
-        mobile:'',
+        mobile: '',
       },
       dataList2: [
         {
@@ -81,6 +83,16 @@ export default {
     }
   },
   components: {
+  },
+  methods: {
+    pass: function () {
+    },
+    turn: function () {
+    },
+    changed: function () {
+    },
+    remove: function () {
+    },
   }
 }
 </script>

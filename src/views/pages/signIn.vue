@@ -59,7 +59,7 @@
 <script>
 import { isEmail, isMobile } from "@/utils/validate";
 export default {
-  data() {
+  data () {
     var checkPhone = (rule, value, callback) => {
       if (!value) {
         return callback(new Error("请输入手机号"));
@@ -118,7 +118,7 @@ export default {
   },
 
   computed: {
-    dataRule() {
+    dataRule () {
       var validatePassword = (rule, value, callback) => {
         if (!this.dataForm.id && !/\S/.test(value)) {
           return callback(new Error(this.$t("validate.required")));
@@ -186,7 +186,7 @@ export default {
     }
   },
   methods: {
-    register: function() {
+    register: function () {
       let data = {
         cityId: 0,
         confirmPassword: this.form.confirmPass,
@@ -201,10 +201,10 @@ export default {
         console.log(res);
       });
     },
-    handleChange: function(value) {
+    handleChange: function (value) {
       console.log(value);
     },
-    typeClick(type) {
+    typeClick (type) {
       this.$emit("typeClick", type);
     }
   }
