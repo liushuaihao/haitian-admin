@@ -17,11 +17,11 @@
         <el-form-item>
           <el-date-picker
             v-model="daterange"
-            type="daterange"
-            value-format="yyyy-MM-dd"
+            type="datetimerange"
+            value-format="yyyy-MM-dd HH:mm:ss"
             :range-separator="$t('datePicker.range')"
-            :start-placeholder="$t('datePicker.start')"
-            :end-placeholder="$t('datePicker.end')"
+            start-placeholder="起止时间"
+            end-placeholder="结束时间"
           >
           </el-date-picker>
         </el-form-item>
@@ -37,12 +37,6 @@
         @sort-change="dataListSortChangeHandle"
         style="width: 100%;"
       >
-        <el-table-column
-          prop="zh"
-          :label="$t('updatePassword.username')"
-          header-align="center"
-          align="center"
-        ></el-table-column>
         <el-table-column
           prop="name"
           :label="$t('essential.name')"
@@ -128,7 +122,6 @@ export default {
       dataList: [
         {
           id: "1111-0000-1111",
-          zh: "123",
           name: "张三",
           age: "48",
           sex: "女",
@@ -140,7 +133,6 @@ export default {
         },
         {
           id: "1111-0000-1111",
-          zh: "bb",
           name: "李四",
           age: "53",
           sex: "女",

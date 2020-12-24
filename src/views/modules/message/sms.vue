@@ -31,7 +31,6 @@
         @selection-change="dataListSelectionChangeHandle"
         @sort-change="dataListSortChangeHandle"
         style="width: 100%;">
-        <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
         <el-table-column prop="platform" :label="$t('sms.platform')" sortable="custom" header-align="center" align="center">
           <template slot-scope="scope">
             {{ scope.row.platform === 1 ? $t('sms.platform1') : scope.row.platform === 2 ? $t('sms.platform2') : '' }}

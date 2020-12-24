@@ -31,7 +31,6 @@
         @selection-change="dataListSelectionChangeHandle"
         @sort-change="dataListSortChangeHandle"
         style="width: 100%;">
-        <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
         <el-table-column prop="username" :label="$t('user.username')" sortable="custom" header-align="center" align="center"></el-table-column>
         <el-table-column prop="deptName" :label="$t('user.deptName')" header-align="center" align="center"></el-table-column>
         <el-table-column prop="email" :label="$t('user.email')" header-align="center" align="center"></el-table-column>

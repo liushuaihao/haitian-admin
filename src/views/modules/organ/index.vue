@@ -17,7 +17,7 @@
       <el-table v-loading="dataListLoading" :data="dataList" row-key="id" border style="width: 100%;">
         <el-table-column prop="name" label="机构名称" header-align="center"></el-table-column>
         <el-table-column prop="parentName" label="所属地区" header-align="center" align="center"></el-table-column>
-        <el-table-column prop="sort" :label="$t('sms.mobile')" header-align="center" align="center" ></el-table-column>
+        <el-table-column prop="sort" label="电话" header-align="center" align="center" ></el-table-column>
         <el-table-column prop="sort" label="添加时间" header-align="center" align="center"></el-table-column>
         <el-table-column :label="$t('handle')" fixed="right" header-align="center" align="center" width="200">
           <template slot-scope="scope">

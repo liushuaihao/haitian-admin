@@ -12,61 +12,97 @@
           <el-button @click="getDataList()">{{ $t('query') }}</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button v-if="$hasPermission('sys:role:save')" type="primary" @click="addOrUpdateHandle()">{{ $t('add') }}</el-button>
+          <el-button
+            v-if="$hasPermission('sys:role:save')"
+            type="primary"
+            @click="dialogFormVisible = true"
+          >{{ $t('add') }}</el-button>
         </el-form-item>
       </el-form>
       <el-table
         v-loading="dataListLoading"
-        :data="dataList"
+        :data="dataList2"
         border
         @selection-change="dataListSelectionChangeHandle"
         @sort-change="dataListSortChangeHandle"
-        style="width: 100%;">
+        style="width: 100%;"
+      >
         <el-table-column prop="name" label="科室名称" header-align="center" align="center"></el-table-column>
-        <el-table-column prop="createDate" label="添加时间" sortable="custom" header-align="center" align="center" width="180"></el-table-column>
-        <el-table-column :label="$t('handle')" fixed="right" header-align="center" align="center" width="150">
+        <el-table-column prop="time" label="添加时间" header-align="center" align="center"></el-table-column>
+        <el-table-column
+          :label="$t('handle')"
+          fixed="right"
+          header-align="center"
+          align="center"
+          width="150"
+        >
           <template slot-scope="scope">
-            <el-button v-if="$hasPermission('sys:role:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">{{ $t('update') }}</el-button>
-            <el-button v-if="$hasPermission('sys:role:delete')" type="text" size="small" @click="deleteHandle(scope.row.id)">{{ $t('delete') }}</el-button>
+            <el-button type="text" size="small" @click="dialogFormVisible2=true">修改</el-button>
+            <el-button type="text" size="small" @click="forwardUrl(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        :current-page="page"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="limit"
-        :total="total"
-        layout="total, sizes, prev, pager, next, jumper"
-        @size-change="pageSizeChangeHandle"
-        @current-change="pageCurrentChangeHandle">
-      </el-pagination>
       <!-- 弹窗, 新增 / 修改 -->
-      <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+
+      <el-dialog title="新增" :visible.sync="dialogFormVisible">
+        <el-form>
+          <el-form-item label="科室名称" :label-width="formLabelWidth">
+            <el-col :span="10">
+              <el-input v-model="addtnotd" autocomplete="off"></el-input>
+            </el-col>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        </div>
+      </el-dialog>
+      <el-dialog title="修改" :visible.sync="dialogFormVisible2">
+        <el-form>
+          <el-form-item label="科室名称" :label-width="formLabelWidth">
+            <el-col :span="10">
+              <el-input v-model="tnotd" autocomplete="off"></el-input>
+            </el-col>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible2 = false">取 消</el-button>
+          <el-button type="primary" @click="dialogFormVisible2 = false">确 定</el-button>
+        </div>
+      </el-dialog>
     </div>
   </el-card>
 </template>
 
 <script>
-import mixinViewModule from '@/mixins/view-module'
-import AddOrUpdate from './role-add-or-update'
+import mixinViewModule from "@/mixins/view-module";
 export default {
   mixins: [mixinViewModule],
-  data () {
+  data() {
     return {
       mixinViewModuleOptions: {
-        getDataListURL: '/sys/role/page',
+        getDataListURL: "/sys/role/page",
         getDataListIsPage: true,
-        deleteURL: '/sys/role',
+        deleteURL: "/sys/role",
         deleteIsBatch: true
       },
       dataForm: {
-        office: '',
-        time:''
-      }
-    }
+        office: "",
+        time: ""
+      },
+      dataList2: [
+        {
+          name: "张三",
+          time: "2019-04-05"
+        }
+      ],
+      dialogFormVisible: false,
+      dialogFormVisible2: false,
+      tnotd: "", //科室名称
+      addtnotd: "",
+      formLabelWidth: "120px"
+    };
   },
-  components: {
-    AddOrUpdate
-  }
-}
+  components: {}
+};
 </script>

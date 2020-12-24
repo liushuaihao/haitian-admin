@@ -25,7 +25,6 @@
         @selection-change="dataListSelectionChangeHandle"
         @sort-change="dataListSortChangeHandle"
         style="width: 100%;">
-        <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
         <el-table-column prop="dictName" :label="$t('dict.dictName')" header-align="center" align="center"></el-table-column>
         <el-table-column prop="dictType" :label="$t('dict.dictType')" header-align="center" align="center">
           <template slot-scope="scope">

@@ -22,11 +22,11 @@
           <el-form-item>
             <el-date-picker
               v-model="daterange"
-              type="daterange"
-              value-format="yyyy-MM-dd"
+              type="datetimerange"
+              value-format="yyyy-MM-dd HH:mm:ss"
               :range-separator="$t('datePicker.range')"
-              :start-placeholder="$t('datePicker.start')"
-              :end-placeholder="$t('datePicker.end')"
+              start-placeholder="起止时间"
+              end-placeholder="结束时间"
             ></el-date-picker>
           </el-form-item>
           <el-form-item>

@@ -28,7 +28,6 @@
         @selection-change="dataListSelectionChangeHandle"
         @sort-change="dataListSortChangeHandle"
         style="width: 100%;">
-        <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
         <el-table-column prop="templateId" :label="$t('mail.templateId')" sortable="custom" header-align="center" align="center"></el-table-column>
         <el-table-column prop="mailFrom" :label="$t('mail.mailFrom')" header-align="center" align="center"></el-table-column>
         <el-table-column prop="mailTo" :label="$t('mail.mailTo')" header-align="center" align="center"></el-table-column>

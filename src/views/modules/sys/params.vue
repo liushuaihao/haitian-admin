@@ -16,7 +16,6 @@
         </el-form-item>
       </el-form>
       <el-table v-loading="dataListLoading" :data="dataList" border @selection-change="dataListSelectionChangeHandle" style="width: 100%;">
-        <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
         <el-table-column prop="paramCode" :label="$t('params.paramCode')" header-align="center" align="center"></el-table-column>
         <el-table-column prop="paramValue" :label="$t('params.paramValue')" header-align="center" align="center"></el-table-column>
         <el-table-column prop="remark" :label="$t('params.remark')" header-align="center" align="center"></el-table-column>
