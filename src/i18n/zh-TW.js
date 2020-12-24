@@ -367,6 +367,19 @@ t.role.createDate = '創建時間'
 t.role.menuList = '菜單授權'
 t.role.deptList = '數據授權'
 
+t.message = {}
+t.message.search = '搜索'
+t.message.add = 'a添加'
+t.message.detail = '詳情'
+t.message.delete = '刪除'
+t.message.messageName = '消息名稱'
+t.message.accepter = '接收者'
+t.message.sendTime = '發送時間'
+t.message.status = '狀態'
+t.message.edit = '操作'
+t.message.sendPeople = '發送對象'
+t.message.sendMsg = '消息內容'
+
 t.user = {}
 t.user.username = '用戶名'
 t.user.deptName = '所屬部門'

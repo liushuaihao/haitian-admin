@@ -369,6 +369,19 @@ t.role.createDate = 'Create Date'
 t.role.menuList = 'Menu Scope'
 t.role.deptList = 'Data Scope'
 
+t.message = {}
+t.message.search = 'Search'
+t.message.add = 'add'
+t.message.detail = 'Detail'
+t.message.delete = 'Delete'
+t.message.messageName = 'MessageName'
+t.message.accepter = 'Accepter'
+t.message.sendTime = 'SendTime'
+t.message.status = 'Status'
+t.message.edit = 'Edit'
+t.message.sendPeople = 'SendPeople'
+t.message.sendMsg = 'SendMsg'
+
 t.user = {}
 t.user.username = 'Username'
 t.user.deptName = 'Department'
