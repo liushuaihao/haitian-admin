@@ -35,15 +35,12 @@
 
                 <div class="login-box-footer">
                   <p>
-                    <span @click="type = 2">忘记密码</span>
-                    <span @click="type = 1">新用户注册</span>
+                    <span @click="goLink('forgetPassword')">忘记密码</span>
+                    <span @click="goLink('signIn')">新用户注册</span>
                   </p>
                 </div>
             </div>
         </div>
-        <signin @typeClick="typeClick" v-if="type == 1"/>
-        <forget-password @typeClick="typeClick" v-if="type == 2"/>
-        <administrator @typeClick="typeClick" v-if="type == 3"/>
     </div>
 </template>
 
@@ -53,11 +50,6 @@ import debounce from 'lodash/debounce'
 import { messages } from '@/i18n'
 import { getUUID } from '@/utils'
 export default {
-  components: {
-    signin: () => import('./signIn'),
-    forgetPassword: () => import('./forgetPassword'),
-    administrator: () => import('./administrator')
-  },
   data () {
     return {
       i18nMessages: messages,
@@ -139,6 +131,11 @@ export default {
 
     typeClick (type) {
       this.type = type
+    },
+    goLink(name){
+      this.$router.push({
+        name:name
+      })
     }
   }
 }

@@ -26,6 +26,24 @@ export const pageRoutes = [
     component: () => import("@/views/pages/login"),
     name: "login",
     meta: { title: "登录" },
+  },
+  {
+    path: "/signIn",
+    component: () => import("@/views/pages/signIn"),
+    name: "signIn",
+    meta: { title: "用户注册" },
+  },
+  {
+    path: "/forgetPassword",
+    component: () => import("@/views/pages/forgetPassword"),
+    name: "forgetPassword",
+    meta: { title: "找回密码" },
+  },
+  {
+    path: "/administrator",
+    component: () => import("@/views/pages/administrator"),
+    name: "administrator",
+    meta: { title: "联系管理员" },
   }
 ];
 
@@ -39,7 +57,7 @@ export const moduleRoutes = {
   children: [
     {
       path: "/home",
-      component: () => import("@/views/modules/home"),
+      component: () => import("@/views/modules/home/distribution"),
       name: "home",
       meta: { title: "首页", isTab: true },
     },

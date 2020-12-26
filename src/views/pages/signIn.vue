@@ -1,65 +1,84 @@
 <template>
-  <el-card class="signin">
-    <div class="l-tab">
-      <div class="active">用户注册</div>
-    </div>
-    <div class>
-      <el-form ref="form" :model="form" :rules="rules" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="姓名：" prop="name">
-          <el-input placeholder="姓名" v-model="form.name"></el-input>
-        </el-form-item>
-        <el-form-item label="电话：" prop="tel">
-          <el-input placeholder="电话" v-model="form.tel"></el-input>
-        </el-form-item>
-        <el-form-item label="身份证号：" prop="identityCard">
-          <el-input placeholder="身份证号" v-model="form.identityCard"></el-input>
-        </el-form-item>
-        <el-form-item label="地区：">
-          <el-cascader
-            placeholder="地区"
-            size="large"
-            :options="options"
-            v-model="selectedOptions"
-            @change="handleChange"
-          ></el-cascader>
-        </el-form-item>
+  <div id="login-main">
+    <!-- login-div-box -->
+    <img src="~@/assets/img/title.png" style="margin-bottom:30px" alt="" />
+    <el-card class="signin">
+      <div class="l-tab">
+        <div class="active">用户注册</div>
+      </div>
+      <div class>
+        <el-form ref="form" :model="form" :rules="rules" class="demo-ruleForm">
+          <el-form-item prop="name">
+            <el-input placeholder="姓名" v-model="form.name"></el-input>
+          </el-form-item>
+          <el-form-item prop="tel">
+            <el-input placeholder="电话" v-model="form.tel"></el-input>
+          </el-form-item>
+          <el-form-item prop="identityCard">
+            <el-input
+              placeholder="身份证号"
+              v-model="form.identityCard"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-cascader
+              style="width:100%"
+              placeholder="地区"
+              size="large"
+              :options="options"
+              v-model="selectedOptions"
+              @change="handleChange"
+            ></el-cascader>
+          </el-form-item>
 
-        <el-form-item label="密码：" prop="pass">
-          <el-input placeholder="密码" v-model="form.pass"></el-input>
-        </el-form-item>
-        <el-form-item label="确认密码：" prop="confirmPass">
-          <el-input placeholder="确认密码" v-model="form.confirmPass"></el-input>
-        </el-form-item>
-        <el-form-item label="所属机构：">
-          <el-select v-model="form.organization" placeholder="所属机构">
-            <el-option label="机构1" value="机构1"></el-option>
-            <el-option label="机构2" value="机构2"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="所属科室：">
-          <el-select v-model="form.administrative" placeholder="所属科室">
-            <el-option label="科室1" value="科室1"></el-option>
-            <el-option label="科室2" value="科室2"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
+          <el-form-item prop="pass">
+            <el-input placeholder="密码" v-model="form.pass"></el-input>
+          </el-form-item>
+          <el-form-item prop="confirmPass">
+            <el-input
+              placeholder="确认密码"
+              v-model="form.confirmPass"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-select
+              style="width:100%"
+              v-model="form.organization"
+              placeholder="所属机构"
+            >
+              <el-option label="机构1" value="机构1"></el-option>
+              <el-option label="机构2" value="机构2"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-select
+              style="width:100%"
+              v-model="form.administrative"
+              placeholder="所属科室"
+            >
+              <el-option label="科室1" value="科室1"></el-option>
+              <el-option label="科室2" value="科室2"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
 
-      <div class="r_button">
-        <div>
-          <el-button type="primary" @click="register()">注册</el-button>
-        </div>
-        <div>
-          <el-button type="primary" @click="typeClick(0)">取消</el-button>
+        <div class="r_button">
+          <el-button
+            @click="dataFormSubmitHandle()"
+            style="background:#409eff;color:#ffffff;border:none;"
+            class="w-percent-100"
+            >注册</el-button
+          >
         </div>
       </div>
-    </div>
-  </el-card>
+    </el-card>
+  </div>
 </template>
 
 <script>
 import { isEmail, isMobile } from "@/utils/validate";
 export default {
-  data () {
+  data() {
     var checkPhone = (rule, value, callback) => {
       if (!value) {
         return callback(new Error("请输入手机号"));
@@ -80,45 +99,45 @@ export default {
         pass: "", // 密码
         confirmPass: "", // 确认密码
         organization: "", // 所属机构
-        administrative: "" // 所属科室
+        administrative: "", // 所属科室
       },
       rules: {
         userName: [
-          { required: true, message: "请输入用户名", trigger: "blur" }
+          { required: true, message: "请输入用户名", trigger: "blur" },
         ],
         name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
         tel: [
           {
             required: true,
             validator: checkPhone,
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         identityCard: [
           { required: true, message: "请输入证件号码", trigger: "blur" },
           {
             pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/,
             message: "证件号码格式有误！",
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         pass: [
           { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 6, max: 12, message: "请输入6-12位密码", trigger: "blur" }
+          { min: 6, max: 12, message: "请输入6-12位密码", trigger: "blur" },
         ],
         confirmPass: [
           { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 6, max: 12, message: "请输入6-12位密码", trigger: "blur" }
+          { min: 6, max: 12, message: "请输入6-12位密码", trigger: "blur" },
         ],
-        region: [{ required: true }]
+        region: [{ required: true }],
       },
       options: [],
-      selectedOptions: []
+      selectedOptions: [],
     };
   },
 
   computed: {
-    dataRule () {
+    dataRule() {
       var validatePassword = (rule, value, callback) => {
         if (!this.dataForm.id && !/\S/.test(value)) {
           return callback(new Error(this.$t("validate.required")));
@@ -159,34 +178,34 @@ export default {
           {
             required: true,
             message: this.$t("validate.required"),
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         deptName: [
           {
             required: true,
             message: this.$t("validate.required"),
-            trigger: "change"
-          }
+            trigger: "change",
+          },
         ],
         password: [{ validator: validatePassword, trigger: "blur" }],
         confirmPassword: [
-          { validator: validateConfirmPassword, trigger: "blur" }
+          { validator: validateConfirmPassword, trigger: "blur" },
         ],
         realName: [
           {
             required: true,
             message: this.$t("validate.required"),
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         email: [{ validator: validateEmail, trigger: "blur" }],
-        mobile: [{ validator: validateMobile, trigger: "blur" }]
+        mobile: [{ validator: validateMobile, trigger: "blur" }],
       };
-    }
+    },
   },
   methods: {
-    register: function () {
+    register: function() {
       let data = {
         cityId: 0,
         confirmPassword: this.form.confirmPass,
@@ -195,25 +214,25 @@ export default {
         password: this.form.pass,
         realName: this.form.name,
         userType: "string",
-        username: "string"
+        username: "string",
       };
-      this.$http.post("/register", data).then(res => {
+      this.$http.post("/register", data).then((res) => {
         console.log(res);
       });
     },
-    handleChange: function (value) {
+    handleChange: function(value) {
       console.log(value);
     },
-    typeClick (type) {
+    typeClick(type) {
       this.$emit("typeClick", type);
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped lang="scss">
 .signin {
-  width: 500px;
+  width: 400px;
   padding: 5px 10px;
 }
 .r_title h3 {
@@ -228,4 +247,3 @@ export default {
   text-align: center;
 }
 </style>
-
