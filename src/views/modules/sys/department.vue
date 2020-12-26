@@ -21,14 +21,15 @@
       </el-form>
       <el-table
         v-loading="dataListLoading"
-        :data="dataList2"
+        :data="dataList"
         border
         @selection-change="dataListSelectionChangeHandle"
         @sort-change="dataListSortChangeHandle"
         style="width: 100%;"
+        ref="table"
       >
-        <el-table-column prop="name" label="科室名称" header-align="center" align="center"></el-table-column>
-        <el-table-column prop="time" label="添加时间" header-align="center" align="center"></el-table-column>
+        <el-table-column prop="deptName" label="科室名称" header-align="center" align="center"></el-table-column>
+        <el-table-column prop="createDate" label="添加时间" header-align="center" align="center"></el-table-column>
         <el-table-column
           :label="$t('handle')"
           fixed="right"
@@ -37,16 +38,29 @@
           width="150"
         >
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="dialogFormVisible2=true">修改</el-button>
-            <el-button type="text" size="small" @click="forwardUrl(scope.row)">删除</el-button>
+            <el-button
+              type="text"
+              size="small"
+              @click="dialogFormVisible2=true,modification(scope.$index,dataList)"
+            >修改</el-button>
+            <el-button type="text" size="small" @click="deleteRow(scope.$index,dataList)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        :current-page="page"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-size="limit"
+        :total="total"
+        layout="total, sizes, prev, pager, next, jumper"
+        @size-change="pageSizeChangeHandle"
+        @current-change="pageCurrentChangeHandle"
+      ></el-pagination>
       <!-- 弹窗, 新增 / 修改 -->
 
       <el-dialog title="新增" :visible.sync="dialogFormVisible">
-        <el-form>
-          <el-form-item label="科室名称" :label-width="formLabelWidth">
+        <el-form :rules="dataRule">
+          <el-form-item label="科室名称" prop="deptName" :label-width="formLabelWidth">
             <el-col :span="10">
               <el-input v-model="addtnotd" autocomplete="off"></el-input>
             </el-col>
@@ -54,20 +68,20 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+          <el-button type="primary" @click="dialogFormVisible = false,addTnotd()">确 定</el-button>
         </div>
       </el-dialog>
       <el-dialog title="修改" :visible.sync="dialogFormVisible2">
-        <el-form>
-          <el-form-item label="科室名称" :label-width="formLabelWidth">
+        <el-form :rules="dataRule">
+          <el-form-item label="科室名称" prop="deptName" :label-width="formLabelWidth">
             <el-col :span="10">
-              <el-input v-model="tnotd" autocomplete="off"></el-input>
+              <el-input v-model="tnotd.deptName" autocomplete="off"></el-input>
             </el-col>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible2 = false">取 消</el-button>
-          <el-button type="primary" @click="dialogFormVisible2 = false">确 定</el-button>
+          <el-button type="primary" @click="updates()">确 定</el-button>
         </div>
       </el-dialog>
     </div>
@@ -78,12 +92,12 @@
 import mixinViewModule from "@/mixins/view-module";
 export default {
   mixins: [mixinViewModule],
-  data () {
+  data() {
     return {
       mixinViewModuleOptions: {
-        getDataListURL: "/sys/role/page",
+        getDataListURL: "/dept/dept/page",
         getDataListIsPage: true,
-        deleteURL: "/sys/role",
+        deleteURL: "/dept/dept",
         deleteIsBatch: true
       },
       dataForm: {
@@ -98,11 +112,74 @@ export default {
       ],
       dialogFormVisible: false,
       dialogFormVisible2: false,
-      tnotd: "", // 科室名称
+      tnotd: {}, // 科室名称
       addtnotd: "",
       formLabelWidth: "120px"
     };
   },
-  components: {}
+  components: {
+    mixinViewModule
+  },
+  computed: {
+    dataRule() {
+      return {
+        deptName: [
+          {
+            required: true,
+            message: "请输入科室名称",
+            trigger: "blur"
+          }
+        ]
+      };
+    }
+  },
+  methods: {
+    //新增
+    addTnotd: function() {
+      if (this.addtnotd != "") {
+        this.$http.post("/dept/dept", { deptName: this.addtnotd }).then(res => {
+          this.getDataList();
+        }).catch(()=>{});
+      }
+    },
+    //删除
+    deleteRow: function(index, rows) {
+      // console.log(rows[index].id);
+      // console.log(id)
+      this.$http.delete("/dept/dept", { params: {ids: rows[index].id} }).then(res => {
+        console.log(res);
+      }).catch(()=>{});
+    },
+    modification: function(index, rows) {
+      console.log(rows[index]);
+      this.tnotd = {
+        createDate: rows[index].createDate,
+        creator: rows[index].creator,
+        deptName: rows[index].deptName,
+        id: rows[index].id,
+        updateDate: rows[index].updateDate,
+        updater: rows[index].updater
+      }
+      //信息
+      this.$http.get("/dept/dept", { params:{id:this.tnotd.id}}).then(res => {
+        console.log(res);
+      }).catch(()=>{});
+    },
+    // 修改
+    updates: function() {
+      this.dialogFormVisible2 = false;
+      let param = {
+        createDate: this.tnotd.createDate,
+        creator: this.tnotd.creator,
+        deptName: this.tnotd.deptName,
+        id: this.tnotd.id,
+        updateDate: this.tnotd.updateDate,
+        updater: this.tnotd.updater
+      };
+      this.$http.put("/dept/dept", { params: param }).then(res => {
+        console.log(res);
+      }).catch(()=>{});
+    }
+  }
 };
 </script>
