@@ -11,36 +11,38 @@
           ref="form"
           :model="form"
           :rules="rules"
-          label-width="120px"
           class="demo-ruleForm"
         >
-          <el-form-item label="用户名：" prop="userName">
-            <el-input v-model="form.userName"></el-input>
+          <el-form-item prop="name">
+            <el-input placeholder="姓名" v-model="form.name"></el-input>
           </el-form-item>
-          <el-form-item label="姓名：" prop="name">
-            <el-input v-model="form.name"></el-input>
+          <el-form-item prop="tel">
+            <el-input placeholder="电话" v-model="form.tel"></el-input>
           </el-form-item>
-          <el-form-item label="电话：" prop="tel">
-            <el-input v-model="form.tel"></el-input>
+          <el-form-item prop="identityCard">
+            <el-input
+              placeholder="身份证号"
+              v-model="form.identityCard"
+            ></el-input>
           </el-form-item>
-          <el-form-item label="身份证号：" prop="identityCard">
-            <el-input v-model="form.identityCard"></el-input>
+          <el-form-item prop="pass">
+            <el-input placeholder="密码" v-model="form.pass"></el-input>
           </el-form-item>
-          <el-form-item label="密码：" prop="pass">
-            <el-input v-model="form.pass"></el-input>
-          </el-form-item>
-          <el-form-item label="再次输入密码：" prop="confirmPass">
-            <el-input v-model="form.confirmPass"></el-input>
+          <el-form-item prop="confirmPass">
+            <el-input
+              placeholder="再次输入密码"
+              v-model="form.confirmPass"
+            ></el-input>
           </el-form-item>
         </el-form>
       </div>
       <div class="r_button">
-        <div>
-          <el-button type="primary">提交</el-button>
-        </div>
-        <div>
-          <el-button type="primary" @click="typeClick(0)">取消</el-button>
-        </div>
+        <el-button
+          @click="dataFormSubmitHandle()"
+          style="background:#409eff;color:#ffffff;border:none;"
+          class="w-percent-100"
+          >提交</el-button
+        >
       </div>
       <div class="relationTel">
         <p>联系电话：010-383938</p>
@@ -114,7 +116,7 @@ export default {
 
 <style scoped lang="scss">
 .administrator {
-  width: 600px;
+  width: 400px;
   padding: 5px 10px;
   border-radius: 6px;
 }
