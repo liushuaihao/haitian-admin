@@ -14,9 +14,10 @@
       label-width="100px"
     >
       <el-form-item prop="goodsName" label="服务类型">
-        <el-select v-model="dataForm.type" placeholder="请选择活动区域">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
+        <el-select v-model="dataForm.type" placeholder="服务类型">
+          <el-option label="在线服务" value="0"></el-option>
+          <el-option label="设备购买" value="1"></el-option>
+          <el-option label="设备租赁" value="2"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item prop="goodsName" label="商品名称">
@@ -45,59 +46,43 @@
         <el-row>
           <el-col :span="20">
             <div>
-              <el-card style="width:240px">
-                <el-form-item>
-                  <el-select
-                    style="width:200px"
-                    v-model="dataForm.price"
-                    placeholder="服务时长"
-                  >
-                    <el-option label="1个月" value="0"></el-option>
-                    <el-option label="3个月" value="1"></el-option>
-                    <el-option label="6个月" value="2"></el-option>
-                    <el-option label="12个月" value="3"></el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item class="el-m">
-                  <div style="width:200px">
-                    <el-input placeholder="价格" type="number" v-model="dataForm.price">
-                      <template slot="append">元</template>
-                    </el-input>
-                  </div>
-                </el-form-item>
-                <el-form-item class="el-m">
-                  <div style="width:200px">
-                    <el-input
-                      placeholder="库存"
-                      type="number"
-                      v-model="dataForm.number"
-                    ></el-input>
-                  </div>
-                </el-form-item>
+              <el-card style="width:240px" v-for="(item,index) in service" :key="index">
+                  <el-form-item prop="time">
+                    <el-select style="width:200px"  placeholder="服务时长" v-model="service.time">
+                      <el-option label="1个月" value="0"></el-option>
+                      <el-option label="3个月" value="1"></el-option>
+                      <el-option label="6个月" value="2"></el-option>
+                      <el-option label="12个月" value="3"></el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item class="el-m" prop="jiage">
+                    <div style="width:200px">
+                      <el-input placeholder="价格" type="number" v-model="service.jiage">
+                        <template slot="append">元</template>
+                      </el-input>
+                    </div>
+                  </el-form-item>
+                  <el-form-item class="el-m" prop="kucun">
+                    <div style="width:200px">
+                      <el-input placeholder="库存" type="number" v-model="service.kucun"></el-input>
+                    </div>
+                  </el-form-item>
               </el-card>
             </div>
           </el-col>
           <el-col :span="4">
-            <el-button>添加</el-button>
+            <el-button @click="addService()">添加</el-button>
           </el-col>
         </el-row>
       </el-form-item>
       <el-form-item prop="goodsName" label="商品单价">
-        <el-input
-          v-model="dataForm.price"
-          placeholder="商品单价"
-          type="number"
-        ></el-input>
+        <el-input v-model="dataForm.price" placeholder="商品单价" type="number"></el-input>
       </el-form-item>
       <el-form-item prop="goodsName" label="商品说明">
         <el-input v-model="dataForm.explain" placeholder="商品说明"></el-input>
       </el-form-item>
       <el-form-item prop="goodsName" label="库存数量">
-        <el-input
-          v-model="dataForm.quantity"
-          placeholder="库存数量"
-          type="number"
-        ></el-input>
+        <el-input v-model="dataForm.quantity" placeholder="库存数量" type="number"></el-input>
       </el-form-item>
       <el-form-item prop="content" :label="$t('mail.content')">
         <!-- 富文本编辑器, 容器 -->
@@ -110,17 +95,21 @@
           :on-success="uploadSuccessHandle"
           style="display: none;"
         >
-          <el-button ref="uploadBtn" type="primary" size="small">{{
+          <el-button ref="uploadBtn" type="primary" size="small">
+            {{
             $t("upload.button")
-          }}</el-button>
+            }}
+          </el-button>
         </el-upload>
       </el-form-item>
     </el-form>
     <template slot="footer">
       <el-button @click="visible = false">{{ $t("cancel") }}</el-button>
-      <el-button type="primary" @click="dataFormSubmitHandle()">{{
+      <el-button type="primary" @click="dataFormSubmitHandle()">
+        {{
         $t("confirm")
-      }}</el-button>
+        }}
+      </el-button>
     </template>
   </el-dialog>
 </template>
@@ -131,7 +120,7 @@ import debounce from "lodash/debounce";
 import "quill/dist/quill.snow.css";
 import Quill from "quill";
 export default {
-  data () {
+  data() {
     return {
       visible: false,
       dataForm: {
@@ -142,8 +131,9 @@ export default {
         picture: "", // 图片
         type: "", // 类型
         duration: "", // 时长
-        quantity: "", // 库存数量
+        quantity: "" // 库存数量
       },
+      service: [{time:'1',jiage:'1',kucun:'1'}],
       dialogImageUrl: "",
       dialogVisible: false,
       quillEditor: null,
@@ -160,40 +150,40 @@ export default {
         [{ color: [] }, { background: [] }],
         [{ font: [] }],
         [{ align: [] }],
-        ["clean"],
+        ["clean"]
       ],
-      uploadUrl: "",
+      uploadUrl: ""
     };
   },
   computed: {
-    dataRule () {
+    dataRule() {
       var validateContent = (rule, value, callback) => {
         if (this.quillEditor.getLength() <= 1) {
-          return callback(new Error(this.$t('validate.required')))
+          return callback(new Error(this.$t("validate.required")));
         }
-        callback()
-      }
+        callback();
+      };
       return {
         goodsName: [
           {
             required: true,
             message: this.$t("validate.required"),
-            trigger: "blur",
-          },
+            trigger: "blur"
+          }
         ],
         content: [
           {
             required: true,
             message: this.$t("validate.required"),
-            trigger: "blur",
+            trigger: "blur"
           },
-          { validator: validateContent, trigger: "blur" },
-        ],
+          { validator: validateContent, trigger: "blur" }
+        ]
       };
-    },
+    }
   },
   methods: {
-    init () {
+    init() {
       this.visible = true;
       this.$nextTick(() => {
         if (this.quillEditor) {
@@ -207,13 +197,16 @@ export default {
         }
       });
     },
+    addService() {
+      this.service.push({time:'',jiage:'',kucun:''});
+    },
     // 富文本编辑器
-    quillEditorHandle () {
+    quillEditorHandle() {
       this.quillEditor = new Quill("#J_quillEditor", {
         modules: {
-          toolbar: this.quillEditorToolbarOptions,
+          toolbar: this.quillEditorToolbarOptions
         },
-        theme: "snow",
+        theme: "snow"
       });
       // 自定义上传图片功能 (使用element upload组件)
       this.uploadUrl = `${
@@ -228,7 +221,7 @@ export default {
       });
     },
     // 上传图片之前
-    uploadBeforeUploadHandle (file) {
+    uploadBeforeUploadHandle(file) {
       if (
         file.type !== "image/jpg" &&
         file.type !== "image/jpeg" &&
@@ -240,7 +233,7 @@ export default {
       }
     },
     // 上传图片成功
-    uploadSuccessHandle (res, file, fileList) {
+    uploadSuccessHandle(res, file, fileList) {
       if (res.code !== 0) {
         return this.$message.error(res.msg);
       }
@@ -251,11 +244,11 @@ export default {
       );
     },
     // 获取信息
-    getInfo () {},
+    getInfo() {},
     // 表单提交
     dataFormSubmitHandle: debounce(
-      function () {
-        this.$refs["dataForm"].validate((valid) => {
+      function() {
+        this.$refs["dataForm"].validate(valid => {
           if (!valid) {
             return false;
           }
@@ -271,7 +264,7 @@ export default {
                 onClose: () => {
                   this.visible = false;
                   this.$emit("refreshDataList");
-                },
+                }
               });
             })
             .catch(() => {});
@@ -280,14 +273,14 @@ export default {
       1000,
       { leading: true, trailing: false }
     ),
-    handleRemove (file, fileList) {
+    handleRemove(file, fileList) {
       console.log(file, fileList);
     },
-    handlePictureCardPreview (file) {
+    handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
-    },
-  },
+    }
+  }
 };
 </script>
 
