@@ -1,23 +1,23 @@
 <template>
   <el-card shadow="never" class="aui-card--fill">
-    <el-form :inline="true" @keyup.enter.native="getDataList()" class="order">
-      <el-form-item label="订单编号">
+    <el-form :inline="true" @keyup.enter.native="getDataList()">
+      <el-form-item>
         <el-input v-model="dataForm.serial" placeholder="订单编号" clearable></el-input>
       </el-form-item>
-      <el-form-item label="用户ID">
+      <el-form-item>
         <el-input v-model="dataForm.id" placeholder="用户ID" clearable></el-input>
       </el-form-item>
-      <el-form-item label="姓名">
+      <el-form-item>
         <el-input v-model="dataForm.name" placeholder="姓名" clearable></el-input>
       </el-form-item>
-      <el-form-item label="手机号">
+      <el-form-item>
         <el-input v-model="dataForm.mobile" placeholder="手机号" clearable></el-input>
       </el-form-item>
-      <el-form-item label="身份证">
+      <el-form-item>
         <el-input v-model="dataForm.identityCard" placeholder="身份证" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button >筛选</el-button>
+        <el-button @click="getDataList()">{{ $t('query') }}</el-button>
       </el-form-item>
     </el-form>
     <el-table
