@@ -6,7 +6,7 @@
     :close-on-press-escape="false"
   >
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm">
-      <el-form-item label="科室名称" prop="addDeptName" v-if="!dataForm.id" :label-width="formLabelWidth">
+      <el-form-item label="科室名称" prop="addtnotd" v-if="!dataForm.id" :label-width="formLabelWidth">
         <el-col :span="10">
           <el-input v-model="dataForm.addtnotd"></el-input>
         </el-col>
@@ -52,7 +52,7 @@ export default {
             required: true, message: '请输入科室名称', trigger: 'blur'
           }
         ],
-        addDeptName: [
+        addtnotd: [
           {
             required: true, message: '请输入科室名称', trigger: 'blur'
           }
