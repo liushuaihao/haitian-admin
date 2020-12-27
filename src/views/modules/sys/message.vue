@@ -13,7 +13,6 @@
 				</el-form-item>
 			</el-form>
 			<el-table v-loading="dataListLoading" :data="dataList" border @selection-change="dataListSelectionChangeHandle" @sort-change="dataListSortChangeHandle" style="width: 100%;">
-				<el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
 				<el-table-column prop="messageName" :label="$t('message.messageName')" header-align="center" align="center"></el-table-column>
 				<el-table-column prop="accepter" :label="$t('message.accepter')" header-align="center" align="center"></el-table-column>
 				<el-table-column prop="createDate" :label="$t('message.sendTime')" header-align="center" align="center" width="180"></el-table-column>
