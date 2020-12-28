@@ -15,9 +15,9 @@
     >
       <el-form-item prop="goodsName" label="服务类型">
         <el-select v-model="dataForm.type" placeholder="请选择服务类型">
-          <el-option label="在线服务" value="shanghai"></el-option>
-          <el-option label="设备购买" value="beijing"></el-option>
-          <el-option label="设备租赁" value="beijing"></el-option>
+          <el-option label="在线服务" value="0"></el-option>
+          <el-option label="设备购买" value="1"></el-option>
+          <el-option label="设备租赁" value="2"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item prop="goodsName" label="商品名称">
@@ -46,12 +46,16 @@
         <el-row>
           <el-col :span="20">
             <div>
-              <el-card style="width:240px">
-                <el-form-item>
+              <el-card
+                style="width:240px"
+                v-for="(item, index) in service"
+                :key="index"
+              >
+                <el-form-item prop="time">
                   <el-select
                     style="width:200px"
-                    v-model="dataForm.price"
                     placeholder="服务时长"
+                    v-model="service.time"
                   >
                     <el-option label="1个月" value="0"></el-option>
                     <el-option label="3个月" value="1"></el-option>
@@ -59,19 +63,23 @@
                     <el-option label="12个月" value="3"></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item class="el-m">
+                <el-form-item class="el-m" prop="jiage">
                   <div style="width:200px">
-                    <el-input placeholder="价格" type="number" v-model="dataForm.price">
+                    <el-input
+                      placeholder="价格"
+                      type="number"
+                      v-model="service.jiage"
+                    >
                       <template slot="append">元</template>
                     </el-input>
                   </div>
                 </el-form-item>
-                <el-form-item class="el-m">
+                <el-form-item class="el-m" prop="kucun">
                   <div style="width:200px">
                     <el-input
                       placeholder="库存"
                       type="number"
-                      v-model="dataForm.number"
+                      v-model="service.kucun"
                     ></el-input>
                   </div>
                 </el-form-item>
@@ -79,7 +87,7 @@
             </div>
           </el-col>
           <el-col :span="4">
-            <el-button>添加</el-button>
+            <el-button @click="addService()">添加</el-button>
           </el-col>
         </el-row>
       </el-form-item>
@@ -111,17 +119,17 @@
           :on-success="uploadSuccessHandle"
           style="display: none;"
         >
-          <el-button ref="uploadBtn" type="primary" size="small">{{
-            $t("upload.button")
-          }}</el-button>
+          <el-button ref="uploadBtn" type="primary" size="small">
+            {{ $t("upload.button") }}
+          </el-button>
         </el-upload>
       </el-form-item>
     </el-form>
     <template slot="footer">
       <el-button @click="visible = false">{{ $t("cancel") }}</el-button>
-      <el-button type="primary" @click="dataFormSubmitHandle()">{{
-        $t("confirm")
-      }}</el-button>
+      <el-button type="primary" @click="dataFormSubmitHandle()">
+        {{ $t("confirm") }}
+      </el-button>
     </template>
   </el-dialog>
 </template>
@@ -132,7 +140,7 @@ import debounce from "lodash/debounce";
 import "quill/dist/quill.snow.css";
 import Quill from "quill";
 export default {
-  data () {
+  data() {
     return {
       visible: false,
       dataForm: {
@@ -145,6 +153,7 @@ export default {
         duration: "", // 时长
         quantity: "", // 库存数量
       },
+      service: [{ time: "1", jiage: "1", kucun: "1" }],
       dialogImageUrl: "",
       dialogVisible: false,
       quillEditor: null,
@@ -167,13 +176,13 @@ export default {
     };
   },
   computed: {
-    dataRule () {
+    dataRule() {
       var validateContent = (rule, value, callback) => {
         if (this.quillEditor.getLength() <= 1) {
-          return callback(new Error(this.$t('validate.required')))
+          return callback(new Error(this.$t("validate.required")));
         }
-        callback()
-      }
+        callback();
+      };
       return {
         goodsName: [
           {
@@ -194,7 +203,7 @@ export default {
     },
   },
   methods: {
-    init () {
+    init() {
       this.visible = true;
       this.$nextTick(() => {
         if (this.quillEditor) {
@@ -208,8 +217,11 @@ export default {
         }
       });
     },
+    addService() {
+      this.service.push({ time: "", jiage: "", kucun: "" });
+    },
     // 富文本编辑器
-    quillEditorHandle () {
+    quillEditorHandle() {
       this.quillEditor = new Quill("#J_quillEditor", {
         modules: {
           toolbar: this.quillEditorToolbarOptions,
@@ -229,7 +241,7 @@ export default {
       });
     },
     // 上传图片之前
-    uploadBeforeUploadHandle (file) {
+    uploadBeforeUploadHandle(file) {
       if (
         file.type !== "image/jpg" &&
         file.type !== "image/jpeg" &&
@@ -241,7 +253,7 @@ export default {
       }
     },
     // 上传图片成功
-    uploadSuccessHandle (res, file, fileList) {
+    uploadSuccessHandle(res, file, fileList) {
       if (res.code !== 0) {
         return this.$message.error(res.msg);
       }
@@ -252,10 +264,10 @@ export default {
       );
     },
     // 获取信息
-    getInfo () {},
+    getInfo() {},
     // 表单提交
     dataFormSubmitHandle: debounce(
-      function () {
+      function() {
         this.$refs["dataForm"].validate((valid) => {
           if (!valid) {
             return false;
@@ -281,10 +293,10 @@ export default {
       1000,
       { leading: true, trailing: false }
     ),
-    handleRemove (file, fileList) {
+    handleRemove(file, fileList) {
       console.log(file, fileList);
     },
-    handlePictureCardPreview (file) {
+    handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
