@@ -19,9 +19,6 @@
       <el-form-item prop="gender" :label="$t('user.gender')">
         <ren-radio-group v-model="dataForm.gender" dict-type="gender"></ren-radio-group>
       </el-form-item>
-      <el-form-item prop="email" :label="$t('user.email')">
-        <el-input v-model="dataForm.email" :placeholder="$t('user.email')"></el-input>
-      </el-form-item>
       <el-form-item prop="mobile" :label="$t('user.mobile')">
         <el-input v-model="dataForm.mobile" :placeholder="$t('user.mobile')"></el-input>
       </el-form-item>

@@ -14,9 +14,10 @@
       label-width="100px"
     >
       <el-form-item prop="goodsName" label="服务类型">
-        <el-select v-model="dataForm.type" placeholder="请选择活动区域">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
+        <el-select v-model="dataForm.type" placeholder="请选择服务类型">
+          <el-option label="在线服务" value="shanghai"></el-option>
+          <el-option label="设备购买" value="beijing"></el-option>
+          <el-option label="设备租赁" value="beijing"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item prop="goodsName" label="商品名称">

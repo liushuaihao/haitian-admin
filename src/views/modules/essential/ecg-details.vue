@@ -30,11 +30,11 @@
           </el-form-item>
           <div class="tjx">心电图</div>
           <el-form-item label="分析时段：">
-            <el-select v-model="time" placeholder="分析时段">
-              <el-option label="24小时" value="hour"></el-option>
-              <el-option label="1周" value="week"></el-option>
-              <el-option label="1个月" value="month"></el-option>
-            </el-select>
+            <el-radio-group v-model="time">
+              <el-radio :label="3">24小时</el-radio>
+              <el-radio :label="6">1周</el-radio>
+              <el-radio :label="9">1个月</el-radio>
+            </el-radio-group>
           </el-form-item>
           <div class="human">
             <el-form-item label="心率：">
