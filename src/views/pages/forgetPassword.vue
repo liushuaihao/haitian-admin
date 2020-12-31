@@ -17,7 +17,11 @@
             <el-input v-model="dataForm.mobile" placeholder="手机号"></el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input v-model="dataForm.password" placeholder="密码" type="password"></el-input>
+            <el-input
+              v-model="dataForm.password"
+              placeholder="密码"
+              type="password"
+            ></el-input>
           </el-form-item>
           <el-form-item prop="confirmPassword">
             <el-input
@@ -145,21 +149,42 @@ export default {
     },
   },
   methods: {
-    goLink(name){
+    goLink(name) {
       this.$router.push({
-        name:name
-      })
+        name: name,
+      });
     },
     getCaptcha() {
-      let _this = this;
-      _this.sendMsgDisabled = true;
-      let interval = setInterval(function() {
-        if (_this.time-- <= 0) {
-          _this.time = 60;
-          _this.sendMsgDisabled = false;
-          clearInterval(interval);
+      this.$refs["dataForm"].validateField("mobile", (valid) => {
+        if (!valid) {
+          return false;
         }
-      }, 1000);
+        console.log(this.dataForm);
+
+        // let _this = this;
+        // _this.sendMsgDisabled = true;
+        // let interval = setInterval(function() {
+        //   if (_this.time-- <= 0) {
+        //     _this.time = 60;
+        //     _this.sendMsgDisabled = false;
+
+        //     this.$http
+        //       .get("/captcha/sms", {
+        //         params: {
+        //           mobile: this.dataForm.mobile,
+        //         },
+        //       })
+        //       .then(({ data: res }) => {
+        //         if (res.code !== 0) {
+        //           return this.$message.error(res.msg);
+        //         }
+        //         this.$message.scceuss(res.msg);
+        //       })
+        //       .catch(() => {});
+        //     clearInterval(interval);
+        //   }
+        // }, 1000);
+      });
     },
     // 表单提交
     dataFormSubmitHandle: debounce(

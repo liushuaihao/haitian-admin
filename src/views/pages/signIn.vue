@@ -13,8 +13,8 @@
           :rules="dataRule"
           class="demo-ruleForm"
         >
-          <el-form-item prop="username">
-            <el-input placeholder="姓名" v-model="dataForm.username"></el-input>
+          <el-form-item prop="realName">
+            <el-input placeholder="姓名" v-model="dataForm.realName"></el-input>
           </el-form-item>
           <el-form-item prop="mobile">
             <el-input placeholder="电话" v-model="dataForm.mobile"></el-input>
@@ -48,7 +48,7 @@
           <el-form-item>
             <el-select
               style="width:100%"
-              v-model="dataForm.organization"
+              v-model="dataForm.userType"
               placeholder="所属机构"
             >
               <el-option label="机构1" value="机构1"></el-option>
@@ -58,7 +58,7 @@
           <el-form-item>
             <el-select
               style="width:100%"
-              v-model="dataForm.administrative"
+              v-model="dataForm.username"
               placeholder="所属科室"
             >
               <el-option label="科室1" value="科室1"></el-option>
@@ -84,18 +84,20 @@
 import { isEmail, isMobile } from "@/utils/validate";
 import debounce from "lodash/debounce";
 export default {
+  name: "signIn",
   data() {
     return {
       dataForm: {
-        username: "", // 姓名
-        mobile: "", // 电话
-        idCard: "", // 身份证
-        password: "", // 密码
+        cityId: 0, // 地址ID
         confirmPassword: "", // 确认密码
-        organization: "", // 所属机构
-        administrative: "", // 所属科室
+        idCard: "", // 身份证
+        mobile: "", // 电话
+        password: "", // 密码,
+        username: "", // 姓名
+        userType: "",
+        realName: "",
       },
-      options:[]
+      options: [],
     };
   },
 
@@ -137,18 +139,11 @@ export default {
         callback();
       };
       return {
-        username: [
+        realName: [
           {
             required: true,
             message: this.$t("validate.required"),
             trigger: "blur",
-          },
-        ],
-        deptName: [
-          {
-            required: true,
-            message: this.$t("validate.required"),
-            trigger: "change",
           },
         ],
         password: [
@@ -166,40 +161,23 @@ export default {
             trigger: "blur",
           },
         ],
-        realName: [
-          {
-            required: true,
-            message: this.$t("validate.required"),
-            trigger: "blur",
-          },
-        ],
-        email: [{ validator: validateEmail, trigger: "blur" }],
         mobile: [{ validator: validateMobile, trigger: "blur" }],
       };
     },
   },
   methods: {
-    register: function() {
-      let data = {
-        cityId: 0,
-        confirmPassword: this.form.confirmPass,
-        idCard: "string",
-        mobile: this.form.tel,
-        password: this.form.pass,
-        realName: this.form.name,
-        userType: "string",
-        username: "string",
-      };
-      this.$http.post("/register", data).then((res) => {
-        console.log(res);
-      });
-    },
     handleChange: function(value) {
       console.log(value);
     },
     typeClick(type) {
       this.$emit("typeClick", type);
     },
+    // // 地区
+    // getRegion() {
+    //   this.$http.get("/sys/region/tree").then((res) => {
+    //     console.log(res);
+    //   });
+    // },
     // 表单提交
     dataFormSubmitHandle: debounce(
       function() {
@@ -208,11 +186,22 @@ export default {
             return false;
           }
           console.log(this.dataForm);
+          this.$http
+            .post("/register", this.dataForm)
+            .then(({ data: res }) => {
+              if (res.code !== 0) {
+                return this.$message.error(res.msg);
+              }
+            })
+            .catch(() => {});
         });
       },
       1000,
       { leading: true, trailing: false }
     ),
+  },
+  mounted() {
+    this.getRegion();
   },
 };
 </script>

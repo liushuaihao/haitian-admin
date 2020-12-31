@@ -25,7 +25,7 @@
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       basicInformation: {
         name: "张三",
@@ -38,5 +38,6 @@ export default {
       },
     };
   },
+  methods: {},
 };
 </script>
