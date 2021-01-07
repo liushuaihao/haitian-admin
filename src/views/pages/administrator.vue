@@ -8,30 +8,30 @@
       </div>
       <div class="r_form">
         <el-form
-          ref="form"
-          :model="form"
-          :rules="rules"
+          :model="dataForm"
+          ref="dataForm"
+          :rules="dataRule"
           class="demo-ruleForm"
         >
           <el-form-item prop="name">
-            <el-input placeholder="姓名" v-model="form.name"></el-input>
+            <el-input placeholder="姓名" v-model="dataForm.name"></el-input>
           </el-form-item>
           <el-form-item prop="tel">
-            <el-input placeholder="电话" v-model="form.tel"></el-input>
+            <el-input placeholder="电话" v-model="dataForm.tel"></el-input>
           </el-form-item>
           <el-form-item prop="identityCard">
             <el-input
               placeholder="身份证号"
-              v-model="form.identityCard"
+              v-model="dataForm.identityCard"
             ></el-input>
           </el-form-item>
           <el-form-item prop="pass">
-            <el-input placeholder="密码" v-model="form.pass"></el-input>
+            <el-input placeholder="密码" v-model="dataForm.pass"></el-input>
           </el-form-item>
           <el-form-item prop="confirmPass">
             <el-input
               placeholder="再次输入密码"
-              v-model="form.confirmPass"
+              v-model="dataForm.confirmPass"
             ></el-input>
           </el-form-item>
         </el-form>
@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import debounce from "lodash/debounce";
 export default {
   data() {
     var checkPhone = (rule, value, callback) => {
@@ -67,7 +68,7 @@ export default {
       }
     };
     return {
-      form: {
+      dataForm: {
         userName: "", // 用户名
         name: "", // 姓名
         tel: "", // 电话
@@ -75,7 +76,7 @@ export default {
         pass: "", // 密码
         confirmPass: "", // 确认密码
       },
-      rules: {
+      dataRule: {
         userName: [
           { required: true, message: "请输入用户名", trigger: "blur" },
         ],
@@ -107,9 +108,26 @@ export default {
     };
   },
   methods: {
-    typeClick(type) {
-      this.$emit("typeClick", type);
-    },
+    // 表单提交
+    dataFormSubmitHandle: debounce(
+      function() {
+        this.$refs["dataForm"].validate((valid) => {
+          if (!valid) {
+            return false;
+          }
+          this.$http
+            .post("/contact", this.dataForm)
+            .then(({ data: res }) => {
+              if (res.code !== 0) {
+                return this.$message.error(res.msg);
+              }
+            })
+            .catch(() => {});
+        });
+      },
+      1000,
+      { leading: true, trailing: false }
+    ),
   },
 };
 </script>
