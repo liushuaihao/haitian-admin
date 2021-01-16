@@ -56,7 +56,7 @@ export default {
     return {
       mixinViewModuleOptions: {
         getDataListURL: '/sys/region/list',
-        deleteURL: '/sys/region'
+        deleteURL: '/sys/region/delete'
       }
     }
   },

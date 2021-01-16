@@ -72,7 +72,7 @@ export default {
   data() {
     return {
       mixinViewModuleOptions: {
-        getDataListURL: "/dept/dept/page",
+        getDataListURL: "/sys/dept/page",
         getDataListIsPage: true,
         deleteURL: "/dept/dept",
         deleteIsBatch: true
