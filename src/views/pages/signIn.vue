@@ -173,11 +173,11 @@ export default {
       this.$emit("typeClick", type);
     },
     // // 地区
-    // getRegion() {
-    //   this.$http.get("/sys/region/tree").then((res) => {
-    //     console.log(res);
-    //   });
-    // },
+    getRegion() {
+      this.$http.get("/sys/region/region").then((res) => {
+        console.log(res);
+      });
+    },
     // 表单提交
     dataFormSubmitHandle: debounce(
       function() {

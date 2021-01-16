@@ -12,25 +12,19 @@
       @keyup.enter.native="dataFormSubmitHandle()"
       label-width="120px"
     >
-      <el-form-item prop="name" :label="'机构' + $t('dept.name')">
+      <el-form-item prop="orgName" :label="'机构' + $t('dept.name')">
         <el-input
-          v-model="dataForm.name"
+          v-model="dataForm.orgName"
           :placeholder="'机构' + $t('dept.name')"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="mobile" :label="$t('sms.mobile')">
+      <el-form-item prop="telephone" :label="$t('sms.mobile')">
         <el-input
-          v-model="dataForm.mobile"
+          v-model="dataForm.telephone"
           :placeholder="$t('sms.mobile')"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="sort" label="所属地域">
-        <el-cascader
-          v-model="dataForm.sort"
-          :options="options"
-          @change="handleChange"
-        ></el-cascader>
-      </el-form-item>
+      <el-form-item prop="sort" label="所属地域"> </el-form-item>
     </el-form>
     <template slot="footer">
       <el-button @click="visible = false">{{ $t("cancel") }}</el-button>
@@ -49,53 +43,23 @@ export default {
       visible: false,
       dataForm: {
         id: "",
-        name: "",
-        parentName: "",
-        sort: 0,
+        orgName: "",
+        telephone: "",
+        cityId: null,
       },
-      options: [
-        {
-          value: "zhinan",
-          label: "指南",
-          children: [
-            {
-              value: "shejiyuanze",
-              label: "设计原则",
-              children: [
-                {
-                  value: "yizhi",
-                  label: "一致",
-                },
-                {
-                  value: "fankui",
-                  label: "反馈",
-                },
-                {
-                  value: "xiaolv",
-                  label: "效率",
-                },
-                {
-                  value: "kekong",
-                  label: "可控",
-                },
-              ],
-            },
-          ],
-        },
-      ],
     };
   },
   computed: {
     dataRule() {
       return {
-        name: [
+        orgName: [
           {
             required: true,
             message: this.$t("validate.required"),
             trigger: "blur",
           },
         ],
-        mobile: [
+        telephone: [
           {
             required: true,
             message: this.$t("validate.required"),
@@ -111,6 +75,7 @@ export default {
       this.$nextTick(() => {
         this.$refs["dataForm"].resetFields();
         if (this.dataForm.id) {
+          this.getInfo();
         }
       });
     },
@@ -118,7 +83,20 @@ export default {
       console.log(value);
     },
     // 获取信息
-    getInfo() {},
+    getInfo() {
+      this.$http
+        .get(`/sys/org/get`, { params: { id: this.dataForm.id } })
+        .then(({ data: res }) => {
+          if (res.code !== 0) {
+            return this.$message.error(res.msg);
+          }
+          this.dataForm = {
+            ...this.dataForm,
+            ...res.data,
+          };
+        })
+        .catch(() => {});
+    },
     // 表单提交
     dataFormSubmitHandle: debounce(
       function() {
@@ -126,7 +104,10 @@ export default {
           if (!valid) {
             return false;
           }
-          this.$http[!this.dataForm.id ? "post" : "put"]("", this.dataForm)
+          this.$http["post"](
+            !this.dataForm.id ? "/sys/org/add" : "/sys/org/edit",
+            this.dataForm
+          )
             .then(({ data: res }) => {
               if (res.code !== 0) {
                 return this.$message.error(res.msg);
