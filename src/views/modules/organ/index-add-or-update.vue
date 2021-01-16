@@ -24,7 +24,15 @@
           :placeholder="$t('sms.mobile')"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="sort" label="所属地域"> </el-form-item>
+      <el-form-item prop="cityId" label="所属地域">
+        <el-cascader
+          style="width:100%"
+          v-model="dataForm.cityId"
+          :options="dataList"
+          :props="propsCity"
+        ></el-cascader>
+      </el-form-item>
+      {{ dataForm.cityId }}
     </el-form>
     <template slot="footer">
       <el-button @click="visible = false">{{ $t("cancel") }}</el-button>
@@ -37,10 +45,16 @@
 
 <script>
 import debounce from "lodash/debounce";
+import { treeDataTranslate } from "@/utils";
 export default {
   data() {
     return {
       visible: false,
+      dataList: [],
+      propsCity: {
+        value: "id",
+        label: "name",
+      },
       dataForm: {
         id: "",
         orgName: "",
@@ -66,8 +80,18 @@ export default {
             trigger: "change",
           },
         ],
+        cityId: [
+          {
+            required: true,
+            message: this.$t("validate.required"),
+            trigger: "change",
+          },
+        ],
       };
     },
+  },
+  mounted() {
+    this.getDataList();
   },
   methods: {
     init() {
@@ -94,6 +118,18 @@ export default {
             ...this.dataForm,
             ...res.data,
           };
+        })
+        .catch(() => {});
+    },
+    getDataList() {
+      return this.$http
+        .get("/sys/region/tree")
+        .then(({ data: res }) => {
+          if (res.code !== 0) {
+            return this.$message.error(res.msg);
+          }
+          this.dataList = treeDataTranslate(res.data);
+          console.log(this.dataList);
         })
         .catch(() => {});
     },

@@ -1,24 +1,26 @@
-import Cookies from 'js-cookie'
-import store from '@/store'
+import Cookies from "js-cookie";
+import store from "@/store";
 
 /**
  * 权限
  * @param {*} key
  */
-export function hasPermission (key) {
-  return window.SITE_CONFIG['permissions'].indexOf(key) !== -1 || false
+export function hasPermission(key) {
+  return window.SITE_CONFIG["permissions"].indexOf(key) !== -1 || false;
 }
 
 /**
  * 获取字典数据列表
  * @param dictType  字典类型
  */
-export function getDictDataList (dictType) {
-  const type = window.SITE_CONFIG['dictList'].find((element) => (element.dictType === dictType))
+export function getDictDataList(dictType) {
+  const type = window.SITE_CONFIG["dictList"].find(
+    (element) => element.dictType === dictType
+  );
   if (type) {
-    return type.dataList
+    return type.dataList;
   } else {
-    return []
+    return [];
   }
 }
 
@@ -27,49 +29,55 @@ export function getDictDataList (dictType) {
  * @param dictType  字典类型
  * @param dictValue  字典值
  */
-export function getDictLabel (dictType, dictValue) {
-  const type = window.SITE_CONFIG['dictList'].find((element) => (element.dictType === dictType))
+export function getDictLabel(dictType, dictValue) {
+  const type = window.SITE_CONFIG["dictList"].find(
+    (element) => element.dictType === dictType
+  );
   if (type) {
-    const val = type.dataList.find((element) => (element.dictValue === dictValue.toString()))
+    const val = type.dataList.find(
+      (element) => element.dictValue === dictValue.toString()
+    );
     if (val) {
-      return val.dictLabel
+      return val.dictLabel;
     } else {
-      return dictValue
+      return dictValue;
     }
   } else {
-    return dictValue
+    return dictValue;
   }
 }
 
 /**
  * 清除登录信息
  */
-export function clearLoginInfo () {
-  store.commit('resetStore')
-  Cookies.remove('token')
-  window.SITE_CONFIG['dynamicMenuRoutesHasAdded'] = false
+export function clearLoginInfo() {
+  store.commit("resetStore");
+  Cookies.remove("token");
+  window.SITE_CONFIG["dynamicMenuRoutesHasAdded"] = false;
 }
 
 /**
  * 获取uuid
  */
-export function getUUID () {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-    return (c === 'x' ? (Math.random() * 16 | 0) : ('r&0x3' | '0x8')).toString(16)
-  })
+export function getUUID() {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    return (c === "x" ? (Math.random() * 16) | 0 : "r&0x3" | "0x8").toString(
+      16
+    );
+  });
 }
 
 /**
  * 获取svg图标(id)列表
  */
-export function getIconList () {
-  var res = []
-  var list = document.querySelectorAll('svg symbol')
+export function getIconList() {
+  var res = [];
+  var list = document.querySelectorAll("svg symbol");
   for (var i = 0; i < list.length; i++) {
-    res.push(list[i].id)
+    res.push(list[i].id);
   }
 
-  return res
+  return res;
 }
 
 /**
@@ -78,57 +86,57 @@ export function getIconList () {
  * @param {*} id
  * @param {*} pid
  */
-export function treeDataTranslate (data, id = 'id', pid = 'pid') {
-  var res = []
-  var temp = {}
+export function treeDataTranslate(data, id = "id", pid = "pid") {
+  var res = [];
+  var temp = {};
   for (var i = 0; i < data.length; i++) {
-    temp[data[i][id]] = data[i]
+    temp[data[i][id]] = data[i];
   }
   for (var k = 0; k < data.length; k++) {
     if (!temp[data[k][pid]] || data[k][id] === data[k][pid]) {
-      res.push(data[k])
-      continue
+      res.push(data[k]);
+      continue;
     }
-    if (!temp[data[k][pid]]['children']) {
-      temp[data[k][pid]]['children'] = []
+    if (!temp[data[k][pid]]["children"]) {
+      temp[data[k][pid]]["children"] = [];
     }
-    temp[data[k][pid]]['children'].push(data[k])
-    data[k]['_level'] = (temp[data[k][pid]]._level || 0) + 1
+    temp[data[k][pid]]["children"].push(data[k]);
+    data[k]["_level"] = (temp[data[k][pid]]._level || 0) + 1;
   }
-  return res
+  return res;
 }
 
-export function debounce (func, wait, immediate) {
-  let timeout, args, context, timestamp, result
+export function debounce(func, wait, immediate) {
+  let timeout, args, context, timestamp, result;
 
-  const later = function () {
+  const later = function() {
     // 据上一次触发时间间隔
-    const last = +new Date() - timestamp
+    const last = +new Date() - timestamp;
 
     // 上次被包装函数被调用时间间隔last小于设定时间间隔wait
     if (last < wait && last > 0) {
-      timeout = setTimeout(later, wait - last)
+      timeout = setTimeout(later, wait - last);
     } else {
-      timeout = null
+      timeout = null;
       // 如果设定为immediate===true，因为开始边界已经调用过了此处无需调用
       if (!immediate) {
-        result = func.apply(context, args)
-        if (!timeout) context = args = null
+        result = func.apply(context, args);
+        if (!timeout) context = args = null;
       }
     }
-  }
+  };
 
-  return function (...args) {
-    context = this
-    timestamp = +new Date()
-    const callNow = immediate && !timeout
+  return function(...args) {
+    context = this;
+    timestamp = +new Date();
+    const callNow = immediate && !timeout;
     // 如果延时不存在，重新设定延时
-    if (!timeout) timeout = setTimeout(later, wait)
+    if (!timeout) timeout = setTimeout(later, wait);
     if (callNow) {
-      result = func.apply(context, args)
-      context = args = null
+      result = func.apply(context, args);
+      context = args = null;
     }
 
-    return result
-  }
+    return result;
+  };
 }

@@ -39,16 +39,16 @@
           <el-form-item prop="password">
             <el-input placeholder="密码" v-model="dataForm.password"></el-input>
           </el-form-item>
-          <el-form-item prop="confirmPassword">
+          <!-- <el-form-item prop="confirmPassword">
             <el-input
               placeholder="确认密码"
               v-model="dataForm.confirmPassword"
             ></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item>
             <el-select
               style="width:100%"
-              v-model="dataForm.userType"
+              v-model="dataForm.orgId"
               placeholder="所属机构"
             >
               <el-option label="机构1" value="机构1"></el-option>
@@ -58,12 +58,26 @@
           <el-form-item>
             <el-select
               style="width:100%"
-              v-model="dataForm.username"
+              v-model="dataForm.deptId"
               placeholder="所属科室"
             >
               <el-option label="科室1" value="科室1"></el-option>
               <el-option label="科室2" value="科室2"></el-option>
             </el-select>
+          </el-form-item>
+
+          <el-form-item prop="captcha">
+            <el-row :gutter="20">
+              <el-col :span="14">
+                <el-input
+                  v-model="dataForm.captcha"
+                  placeholder="验证码"
+                ></el-input>
+              </el-col>
+              <el-col :span="10" class="login-captcha" style="padding:0;">
+                <img :src="captchaPath" @click="getCaptcha()" />
+              </el-col>
+            </el-row>
           </el-form-item>
         </el-form>
 
@@ -83,19 +97,25 @@
 <script>
 import { isEmail, isMobile } from "@/utils/validate";
 import debounce from "lodash/debounce";
+import { messages } from "@/i18n";
+import { getUUID } from "@/utils";
 export default {
   name: "signIn",
   data() {
     return {
+      i18nMessages: messages,
+      captchaPath: "",
       dataForm: {
-        cityId: 0, // 地址ID
-        confirmPassword: "", // 确认密码
-        idCard: "", // 身份证
-        mobile: "", // 电话
+        realName: "", //姓名
         password: "", // 密码,
-        username: "", // 姓名
-        userType: "",
-        realName: "",
+        idCard: "", // 身份证号
+        mobile: "", // 手机号
+        cityId: 0, // 所在地区
+        // confirmPassword: "", // 确认密码
+        deptId: "", // 所属科室
+        orgId: "", // 所属机构
+        uuid: "",
+        captcha: "", // 验证码
       },
       options: [],
     };
@@ -162,10 +182,25 @@ export default {
           },
         ],
         mobile: [{ validator: validateMobile, trigger: "blur" }],
+        captcha: [
+          {
+            required: true,
+            message: this.$t("validate.required"),
+            trigger: "blur",
+          },
+        ],
       };
     },
   },
+  created() {
+    this.getCaptcha();
+  },
   methods: {
+    // 获取验证码
+    getCaptcha() {
+      this.dataForm.uuid = getUUID();
+      this.captchaPath = `${window.SITE_CONFIG["apiURL"]}/captcha?uuid=${this.dataForm.uuid}`;
+    },
     handleChange: function(value) {
       console.log(value);
     },
@@ -190,6 +225,7 @@ export default {
             .post("/register", this.dataForm)
             .then(({ data: res }) => {
               if (res.code !== 0) {
+                this.getCaptcha();
                 return this.$message.error(res.msg);
               }
             })
@@ -201,7 +237,7 @@ export default {
     ),
   },
   mounted() {
-    this.getRegion();
+    // this.getRegion();
   },
 };
 </script>

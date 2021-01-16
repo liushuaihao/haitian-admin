@@ -1,22 +1,28 @@
 <template>
   <el-card shadow="never" class="aui-card--fill">
     <div class="mod-sys__role">
-      <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
+      <el-form
+        :inline="true"
+        :model="dataForm"
+        @keyup.enter.native="getDataList()"
+      >
         <el-form-item>
-          <el-input v-model="dataForm.office" placeholder="科室搜索" clearable></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-input v-model="dataForm.time" placeholder="时间搜索" clearable></el-input>
+          <el-input
+            v-model="dataForm.deptName"
+            placeholder="科室搜索"
+            clearable
+          ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="getDataList()">{{ $t("query") }}</el-button>
         </el-form-item>
         <el-form-item>
           <el-button
-            v-if="$hasPermission('sys:role:save')"
+            v-if="$hasPermission('dept:dept:save')"
             type="primary"
             @click="addOrUpdateHandle()"
-          >{{ $t("add") }}</el-button>
+            >{{ $t("add") }}</el-button
+          >
         </el-form-item>
       </el-form>
       <el-table
@@ -28,8 +34,18 @@
         style="width: 100%;"
         ref="table"
       >
-        <el-table-column prop="deptName" label="科室名称" header-align="center" align="center"></el-table-column>
-        <el-table-column prop="createDate" label="添加时间" header-align="center" align="center"></el-table-column>
+        <el-table-column
+          prop="deptName"
+          label="科室名称"
+          header-align="center"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="createDate"
+          label="添加时间"
+          header-align="center"
+          align="center"
+        ></el-table-column>
         <el-table-column
           :label="$t('handle')"
           fixed="right"
@@ -41,11 +57,17 @@
             <el-button
               type="text"
               size="small"
-              @click="
-                addOrUpdateHandle(scope.row.id)
-              "
-            >修改</el-button>
-            <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
+              v-if="$hasPermission('dept:dept:update')"
+              @click="addOrUpdateHandle(scope.row.id)"
+              >修改</el-button
+            >
+            <el-button
+              type="text"
+              size="small"
+              v-if="$hasPermission('dept:dept:delete')"
+              @click="deleteHandle(scope.row.id)"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -59,7 +81,11 @@
         @current-change="pageCurrentChangeHandle"
       ></el-pagination>
       <!-- 弹窗, 新增 / 修改 -->
-      <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+      <add-or-update
+        v-if="addOrUpdateVisible"
+        ref="addOrUpdate"
+        @refreshDataList="getDataList"
+      ></add-or-update>
     </div>
   </el-card>
 </template>
@@ -72,21 +98,21 @@ export default {
   data() {
     return {
       mixinViewModuleOptions: {
-        getDataListURL: "/dept/dept/page",
+        getDataListURL: "/sys/dept/page",
         getDataListIsPage: true,
-        deleteURL: "/dept/dept",
-        deleteIsBatch: true
+        deleteURL: "/sys/dept/delete",
+        deleteIsBatch: true,
       },
       dataForm: {
         office: "",
-        time: ""
+        time: "",
       },
       tnotd: {}, // 科室名称
     };
   },
   components: {
     mixinViewModule,
-    AddOrUpdate
+    AddOrUpdate,
   },
 };
 </script>

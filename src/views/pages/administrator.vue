@@ -13,26 +13,20 @@
           :rules="dataRule"
           class="demo-ruleForm"
         >
-          <el-form-item prop="name">
-            <el-input placeholder="姓名" v-model="dataForm.name"></el-input>
+          <el-form-item prop="realName">
+            <el-input placeholder="姓名" v-model="dataForm.realName"></el-input>
           </el-form-item>
-          <el-form-item prop="tel">
-            <el-input placeholder="电话" v-model="dataForm.tel"></el-input>
+          <el-form-item prop="mobile">
+            <el-input placeholder="电话" v-model="dataForm.mobile"></el-input>
           </el-form-item>
-          <el-form-item prop="identityCard">
+          <el-form-item prop="idCard">
             <el-input
               placeholder="身份证号"
-              v-model="dataForm.identityCard"
+              v-model="dataForm.idCard"
             ></el-input>
           </el-form-item>
-          <el-form-item prop="pass">
-            <el-input placeholder="密码" v-model="dataForm.pass"></el-input>
-          </el-form-item>
-          <el-form-item prop="confirmPass">
-            <el-input
-              placeholder="再次输入密码"
-              v-model="dataForm.confirmPass"
-            ></el-input>
+          <el-form-item prop="password">
+            <el-input placeholder="密码" v-model="dataForm.password"></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -69,26 +63,21 @@ export default {
     };
     return {
       dataForm: {
-        userName: "", // 用户名
-        name: "", // 姓名
-        tel: "", // 电话
-        identityCard: "", // 身份证
-        pass: "", // 密码
-        confirmPass: "", // 确认密码
+        realName: "", // 姓名
+        mobile: "", // 电话
+        idCard: "", // 身份证
+        password: "", // 密码
       },
       dataRule: {
-        userName: [
-          { required: true, message: "请输入用户名", trigger: "blur" },
-        ],
-        name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
-        tel: [
+        realName: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+        mobile: [
           {
             required: true,
             validator: checkPhone,
             trigger: "blur",
           },
         ],
-        identityCard: [
+        idCard: [
           { required: true, message: "请输入证件号码", trigger: "blur" },
           {
             pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/,
@@ -96,11 +85,7 @@ export default {
             trigger: "blur",
           },
         ],
-        pass: [
-          { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 6, max: 12, message: "请输入6-12位密码", trigger: "blur" },
-        ],
-        confirmPass: [
+        password: [
           { required: true, message: "请输入密码", trigger: "blur" },
           { min: 6, max: 12, message: "请输入6-12位密码", trigger: "blur" },
         ],
@@ -121,6 +106,11 @@ export default {
               if (res.code !== 0) {
                 return this.$message.error(res.msg);
               }
+              this.$message.success("提交成功");
+
+              this.$nextTick(() => {
+                this.$refs["dataForm"].resetFields();
+              });
             })
             .catch(() => {});
         });

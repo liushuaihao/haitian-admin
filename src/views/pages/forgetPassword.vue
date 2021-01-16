@@ -23,13 +23,13 @@
               type="password"
             ></el-input>
           </el-form-item>
-          <el-form-item prop="confirmPassword">
+          <!-- <el-form-item prop="confirmPassword">
             <el-input
               v-model="dataForm.confirmPassword"
               type="confirmPassword"
               placeholder="确认密码"
             ></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item prop="captcha">
             <el-row>
               <el-col :span="14">
@@ -89,7 +89,6 @@ export default {
       dataForm: {
         mobile: "",
         password: "",
-        confirmPassword: "",
         captcha: "",
       },
       time: 60, // 发送验证码倒计时
@@ -150,41 +149,39 @@ export default {
   },
   methods: {
     goLink(name) {
-      this.$router.push({
-        name: name,
-      });
+      window.open("#/" + name);
     },
     getCaptcha() {
-      this.$refs["dataForm"].validateField("mobile", (valid) => {
-        if (!valid) {
-          return false;
-        }
-        console.log(this.dataForm);
-
-        // let _this = this;
-        // _this.sendMsgDisabled = true;
-        // let interval = setInterval(function() {
-        //   if (_this.time-- <= 0) {
-        //     _this.time = 60;
-        //     _this.sendMsgDisabled = false;
-
-        //     this.$http
-        //       .get("/captcha/sms", {
-        //         params: {
-        //           mobile: this.dataForm.mobile,
-        //         },
-        //       })
-        //       .then(({ data: res }) => {
-        //         if (res.code !== 0) {
-        //           return this.$message.error(res.msg);
-        //         }
-        //         this.$message.scceuss(res.msg);
-        //       })
-        //       .catch(() => {});
-        //     clearInterval(interval);
-        //   }
-        // }, 1000);
-      });
+      if (this.dataForm.mobile) {
+        let _this = this;
+        _this.sendMsgDisabled = true;
+        let interval = setInterval(function() {
+          if (_this.time-- <= 0) {
+            _this.time = 60;
+            _this.sendMsgDisabled = false;
+            clearInterval(interval);
+          }
+        }, 1000);
+        _this.$http
+          .get("/sms/captcha", {
+            params: {
+              mobile: _this.dataForm.mobile,
+              channel: 1,
+            },
+          })
+          .then(({ data: res }) => {
+            if (res.code !== 0) {
+              _this.time = 60;
+              _this.sendMsgDisabled = false;
+              clearInterval(interval);
+              return _this.$message.error(res.msg);
+            }
+            _this.$message.scceuss(res.msg);
+          })
+          .catch(() => {});
+      } else {
+        return _this.$message.error("请输入手机号");
+      }
     },
     // 表单提交
     dataFormSubmitHandle: debounce(
@@ -194,6 +191,19 @@ export default {
             return false;
           }
           console.log(this.dataForm);
+          this.$http
+            .post("/retrievePassword", this.dataForm)
+            .then(({ data: res }) => {
+              if (res.code !== 0) {
+                return this.$message.error(res.msg);
+              }
+              this.$message.success("提交成功");
+
+              this.$nextTick(() => {
+                this.$refs["dataForm"].resetFields();
+              });
+            })
+            .catch(() => {});
         });
       },
       1000,

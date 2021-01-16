@@ -6,24 +6,38 @@
     :close-on-press-escape="false"
   >
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm">
-      <el-form-item label="科室名称" prop="addtnotd" v-if="!dataForm.id" :label-width="formLabelWidth">
+      <el-form-item
+        label="科室名称"
+        prop="addtnotd"
+        v-if="!dataForm.id"
+        :label-width="formLabelWidth"
+      >
         <el-col :span="10">
           <el-input v-model="dataForm.addtnotd"></el-input>
         </el-col>
       </el-form-item>
-      <el-form-item label="科室名称" prop="deptName" v-if="dataForm.id" :label-width="formLabelWidth">
+      <el-form-item
+        label="科室名称"
+        prop="deptName"
+        v-if="dataForm.id"
+        :label-width="formLabelWidth"
+      >
         <el-col :span="10">
           <el-input v-model="dataForm.deptName"></el-input>
         </el-col>
       </el-form-item>
     </el-form>
     <template slot="footer" v-if="!dataForm.id">
-      <el-button @click="visible = false">{{ $t('cancel') }}</el-button>
-      <el-button type="primary" @click="addTnotd()">{{ $t('confirm') }}</el-button>
+      <el-button @click="visible = false">{{ $t("cancel") }}</el-button>
+      <el-button type="primary" @click="addTnotd()">{{
+        $t("confirm")
+      }}</el-button>
     </template>
     <template slot="footer" v-if="dataForm.id">
-      <el-button @click="visible = false">{{ $t('cancel') }}</el-button>
-      <el-button type="primary" @click="updates()">{{ $t('confirm') }}</el-button>
+      <el-button @click="visible = false">{{ $t("cancel") }}</el-button>
+      <el-button type="primary" @click="updates()">{{
+        $t("confirm")
+      }}</el-button>
     </template>
   </el-dialog>
 </template>
@@ -39,7 +53,7 @@ export default {
       dataForm: {
         id: "",
         deptName: "",
-        addtnotd: ""
+        addtnotd: "",
       },
       formLabelWidth: "120px",
     };
@@ -49,16 +63,20 @@ export default {
       return {
         deptName: [
           {
-            required: true, message: '请输入科室名称', trigger: 'blur'
-          }
+            required: true,
+            message: "请输入科室名称",
+            trigger: "blur",
+          },
         ],
         addtnotd: [
           {
-            required: true, message: '请输入科室名称', trigger: 'blur'
-          }
-        ]
+            required: true,
+            message: "请输入科室名称",
+            trigger: "blur",
+          },
+        ],
       };
-    }
+    },
   },
   methods: {
     //新增
@@ -66,8 +84,8 @@ export default {
       this.visible = false;
       if (this.dataForm.addtnotd != "") {
         this.$http
-          .post("/dept/dept", { deptName: this.dataForm.addtnotd })
-          .then(res => {
+          .post("/sys/dept/add", { deptName: this.dataForm.addtnotd })
+          .then((res) => {
             this.$emit("refreshDataList");
           })
           .catch(() => {});
@@ -76,8 +94,8 @@ export default {
     modification: function() {
       //   信息
       this.$http
-        .get(`/dept/dept/${this.dataForm.id}`)
-        .then(res => {
+        .get(`/sys/dept/get?id=${this.dataForm.id}`)
+        .then((res) => {
           console.log(res);
           let dataList = res.data.data;
           this.dataForm.deptName = dataList.deptName;
@@ -89,12 +107,12 @@ export default {
       this.visible = false;
       let param = {
         deptName: this.dataForm.deptName,
-        id: this.dataForm.id
+        id: this.dataForm.id,
       };
       this.$http
-        .put("/dept/dept", { id: param.id, deptName: param.deptName })
-        .then(res => {
-            this.$emit("refreshDataList");
+        .put("/sys/dept/edit", { id: param.id, deptName: param.deptName })
+        .then((res) => {
+          this.$emit("refreshDataList");
         })
         .catch(() => {});
     },
@@ -103,8 +121,8 @@ export default {
       this.$nextTick(() => {
         this.modification();
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

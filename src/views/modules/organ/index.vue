@@ -18,9 +18,12 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="getDataList()">{{ $t("query") }}</el-button>
-          <el-button type="primary" @click="addOrUpdateHandle()">{{
-            $t("add")
-          }}</el-button>
+          <el-button
+            v-if="$hasPermission('dept:org:save')"
+            type="primary"
+            @click="addOrUpdateHandle()"
+            >{{ $t("add") }}</el-button
+          >
         </el-form-item>
       </el-form>
       <el-table
@@ -64,12 +67,14 @@
             <el-button
               type="text"
               size="small"
+              v-if="$hasPermission('dept:org:update')"
               @click="addOrUpdateHandle(scope.row.id)"
               >{{ $t("update") }}</el-button
             >
             <el-button
               type="text"
               size="small"
+              v-if="$hasPermission('dept:org:delete')"
               @click="deleteHandle(scope.row.id)"
               >{{ $t("delete") }}</el-button
             >
