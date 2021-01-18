@@ -38,12 +38,11 @@
         style="width: 100%;"
       >
         <el-table-column
-          prop="name"
-          :label="$t('essential.name')"
+          prop="realName"
+          label="姓名"
           header-align="center"
           align="center"
         ></el-table-column>
-
         <el-table-column
           prop="age"
           label="年龄"
@@ -51,43 +50,51 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="sex"
+          prop="gender"
           :label="$t('user.gender')"
+          header-align="center"
+          align="center"
+        >
+          <template slot-scope="scope">{{
+            $getDictLabel("gender", scope.row.gender)
+          }}</template>
+        </el-table-column>
+        <el-table-column
+          prop="mobile"
+          :label="$t('user.mobile')"
+          min-width="110px"
+          header-align="center"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="idCard"
+          label="身份证号"
+          min-width="200px"
           header-align="center"
           align="center"
         ></el-table-column>
 
         <el-table-column
-          prop="mobile"
-          :label="$t('essential.mobile')"
-          header-align="center"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="identityCard"
-          :label="$t('essential.identityCard')"
-          header-align="center"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="j"
+          prop="userType"
           label="角色"
-          header-align="center"
           align="center"
+          width="80"
         ></el-table-column>
         <el-table-column
-          prop="q"
+          prop="cityName"
           label="所属区域"
           header-align="center"
+          min-width="140px"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="tmti"
-          label="添加时间"
+          prop="createDate"
+          :label="$t('user.createDate')"
+          sortable="custom"
           header-align="center"
           align="center"
-        >
-        </el-table-column>
+          width="180"
+        ></el-table-column>
       </el-table>
       <el-pagination
         :current-page="page"
@@ -107,52 +114,31 @@ import mixinViewModule from "@/mixins/view-module";
 import { addDynamicRoute } from "@/router"; // 添加动态路由
 export default {
   mixins: [mixinViewModule],
-  data () {
+  data() {
     return {
       mixinViewModuleOptions: {
-        getDataListURL: "",
+        getDataListURL: "/sys/user/search",
         getDataListIsPage: true,
-        deleteURL: "",
-        deleteIsBatch: true,
       },
       daterange: null,
       dataForm: {
         mobile: "",
       },
-      dataList: [
-        {
-          id: "1111-0000-1111",
-          name: "张三",
-          age: "48",
-          sex: "女",
-          mobile: "13012345671",
-          identityCard: "50110111234567890",
-          j: "医生",
-          q: "山东省泰安市",
-          tmti: "2018-01-05", // 最近时间
-        },
-        {
-          id: "1111-0000-1111",
-          name: "李四",
-          age: "53",
-          sex: "女",
-          mobile: "13012345671",
-          identityCard: "50110111234567890",
-          j: "患者",
-          q: "北京",
-          tmti: "2018-01-05", // 最近时间
-        }
-      ],
     };
   },
   watch: {
-    daterange (val) {
-      this.dataForm.startDate = val[0];
-      this.dataForm.endDate = val[1];
+    daterange(val) {
+      if (val) {
+        this.dataForm.beginTime = val[0];
+        this.dataForm.endTime = val[1];
+      } else {
+        this.dataForm.beginTime = undefined;
+        this.dataForm.endTime = undefined;
+      }
     },
   },
   methods: {
-    forwardUrl (row) {
+    forwardUrl(row) {
       var routeParams = {
         routeName: `${this.$route.name}__instance_${row.id}`,
         menuId: `${this.$route.meta.menuId}`,

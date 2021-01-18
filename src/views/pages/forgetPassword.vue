@@ -23,13 +23,13 @@
               type="password"
             ></el-input>
           </el-form-item>
-          <!-- <el-form-item prop="confirmPassword">
+          <el-form-item prop="confirmPassword">
             <el-input
               v-model="dataForm.confirmPassword"
               type="confirmPassword"
               placeholder="确认密码"
             ></el-input>
-          </el-form-item> -->
+          </el-form-item>
           <el-form-item prop="captcha">
             <el-row>
               <el-col :span="14">

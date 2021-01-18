@@ -19,10 +19,9 @@ import renRegionTree from "@/components/ren-region-tree";
 import { hasPermission, getDictLabel } from "@/utils";
 import htmlToPdf from "@/utils/htmlToPdf";
 import cloneDeep from "lodash/cloneDeep";
-
 import echarts from "echarts";
 import china from "echarts/map/json/china.json";
-
+import "babel-polyfill";
 import BaiduMap from "vue-baidu-map";
 
 Vue.use(BaiduMap, {

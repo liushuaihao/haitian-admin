@@ -1,27 +1,40 @@
 <template>
   <el-card shadow="never" class="aui-card--fill">
     <div class="mod-sys__role">
-      <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
+      <!-- <el-form
+        :inline="true"
+        :model="dataForm"
+        @keyup.enter.native="getDataList()"
+      >
         <el-form-item>
-          <el-input v-model="dataForm.mobile" placeholder="手机号" clearable></el-input>
+          <el-input
+            v-model="dataForm.mobile"
+            placeholder="手机号"
+            clearable
+          ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="getDataList()">{{ $t('query') }}</el-button>
+          <el-button @click="getDataList()">{{ $t("query") }}</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button v-if="$hasPermission('sys:role:save')" type="primary" @click="addOrUpdateHandle()">{{ $t('add') }}</el-button>
+          <el-button
+            v-if="$hasPermission('sys:role:save')"
+            type="primary"
+            @click="addOrUpdateHandle()"
+            >{{ $t("add") }}</el-button
+          >
         </el-form-item>
-      </el-form>
+      </el-form> -->
       <el-table
         v-loading="dataListLoading"
-        :data="dataList2"
+        :data="dataList"
         border
         @selection-change="dataListSelectionChangeHandle"
         @sort-change="dataListSortChangeHandle"
         style="width: 100%;"
       >
         <el-table-column
-          prop="name"
+          prop="realName"
           label="姓名"
           header-align="center"
           align="center"
@@ -33,11 +46,28 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="identityCard"
+          prop="idCard"
           label="身份证号"
           header-align="center"
           align="center"
         ></el-table-column>
+        <el-table-column
+          prop="status"
+          label="状态"
+          header-align="center"
+          align="center"
+        >
+          <!-- status	0待审核 1通过 2拒绝 -->
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.status === 0" size="small"> 待审核</el-tag>
+            <el-tag v-if="scope.row.status === 1" size="small" type="success"
+              >通过</el-tag
+            >
+            <el-tag v-if="scope.row.status === 2" size="small" type="danger"
+              >拒绝</el-tag
+            >
+          </template>
+        </el-table-column>
         <el-table-column
           :label="$t('handle')"
           fixed="right"
@@ -45,54 +75,97 @@
           align="center"
           width="200"
         >
-          <template>
-            <el-button type="text" size="small" @click="pass()">通过</el-button>
-            <el-button type="text" size="small" @click="turn()">拒绝</el-button>
-            <el-button type="text" size="small" @click="changed()">修改</el-button>
-            <el-button type="text" size="small" @click="remove()">删除</el-button>
+          <template slot-scope="scope">
+            <el-button
+              type="text"
+              size="small"
+              v-if="scope.row.status === 0"
+              @click="status(scope.row.id, '1')"
+              >通过</el-button
+            >
+            <el-button
+              type="text"
+              size="small"
+              v-if="scope.row.status === 0"
+              @click="status(scope.row.id, '2')"
+              >拒绝</el-button
+            >
+            <el-button
+              type="text"
+              size="small"
+              v-if="$hasPermission('dept:dept:delete')"
+              @click="deleteHandle(scope.row.id)"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        :current-page="page"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-size="limit"
+        :total="total"
+        layout="total, sizes, prev, pager, next, jumper"
+        @size-change="pageSizeChangeHandle"
+        @current-change="pageCurrentChangeHandle"
+      ></el-pagination>
       <!-- 弹窗, 新增 / 修改 -->
     </div>
   </el-card>
 </template>
 
 <script>
-import mixinViewModule from '@/mixins/view-module'
+import mixinViewModule from "@/mixins/view-module";
 export default {
   mixins: [mixinViewModule],
-  data () {
+  data() {
     return {
       mixinViewModuleOptions: {
-        getDataListURL: '/sys/role/page',
+        getDataListURL: "/manage/review/page",
         getDataListIsPage: true,
-        deleteURL: '/sys/role',
-        deleteIsBatch: true
+        deleteURL: "/manage/review/delete",
+        deleteIsBatch: true,
       },
       dataForm: {
-        mobile: '',
+        mobile: "",
       },
-      dataList2: [
-        {
-          name: "张三",
-          mobile: "16601285208",
-          identityCard: "41102419991221771X"
-        }
-      ]
-    }
+    };
   },
-  components: {
-  },
+  components: {},
   methods: {
-    pass: function () {
+    status: function(id, status) {
+      this.$confirm(
+        this.$t("prompt.info", { handle: status == 1 ? "同意" : "拒绝" }),
+        this.$t("prompt.title"),
+        {
+          confirmButtonText: this.$t("confirm"),
+          cancelButtonText: this.$t("cancel"),
+          type: "warning",
+        }
+      )
+        .then((res) => {
+          this.$http
+            .post("/manage/review/approve", {
+              id: id,
+              status: status,
+            })
+            .then(({ data: res }) => {
+              console.log(this.$t("prompt.success"));
+              if (res.code !== 0) {
+                return this.$message.error(res.msg);
+              }
+              this.$message({
+                message: this.$t("prompt.success"),
+                type: "success",
+                duration: 500,
+                onClose: () => {
+                  this.query();
+                },
+              });
+            });
+        })
+        .catch(() => {});
     },
-    turn: function () {
-    },
-    changed: function () {
-    },
-    remove: function () {
-    },
-  }
-}
+  },
+};
 </script>

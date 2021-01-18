@@ -26,12 +26,16 @@
             ></el-input>
           </el-form-item>
           <el-form-item>
+            <!-- <ren-region-tree
+              v-model="dataForm.cityId"
+              placeholder="选择区域"
+            ></ren-region-tree> -->
             <el-cascader
-              style="width:100%"
-              placeholder="地区"
-              size="large"
-              :options="options"
-              v-model="dataForm.selectedOptions"
+              style="width:100%;"
+              v-model="dataForm.cityId"
+              placeholder="选择区域"
+              :options="regionTree"
+              :props="optionsProps"
               @change="handleChange"
             ></el-cascader>
           </el-form-item>
@@ -39,30 +43,38 @@
           <el-form-item prop="password">
             <el-input placeholder="密码" v-model="dataForm.password"></el-input>
           </el-form-item>
-          <!-- <el-form-item prop="confirmPassword">
+          <el-form-item prop="confirmPassword">
             <el-input
               placeholder="确认密码"
               v-model="dataForm.confirmPassword"
             ></el-input>
-          </el-form-item> -->
-          <el-form-item>
-            <el-select
-              style="width:100%"
-              v-model="dataForm.orgId"
-              placeholder="所属机构"
-            >
-              <el-option label="机构1" value="机构1"></el-option>
-              <el-option label="机构2" value="机构2"></el-option>
-            </el-select>
           </el-form-item>
-          <el-form-item>
+          <el-form-item prop="deptId">
             <el-select
               style="width:100%"
               v-model="dataForm.deptId"
               placeholder="所属科室"
             >
-              <el-option label="科室1" value="科室1"></el-option>
-              <el-option label="科室2" value="科室2"></el-option>
+              <el-option
+                v-for="dept in deptList"
+                :key="dept.id"
+                :label="dept.deptName"
+                :value="dept.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item prop="orgId">
+            <el-select
+              style="width:100%"
+              v-model="dataForm.orgId"
+              placeholder="所属机构"
+            >
+              <el-option
+                v-for="organ in organList"
+                :key="organ.id"
+                :label="organ.orgName"
+                :value="organ.id"
+              ></el-option>
             </el-select>
           </el-form-item>
 
@@ -95,6 +107,7 @@
 </template>
 
 <script>
+import { treeDataTranslate } from "@/utils";
 import { isEmail, isMobile } from "@/utils/validate";
 import debounce from "lodash/debounce";
 import { messages } from "@/i18n";
@@ -118,6 +131,14 @@ export default {
         captcha: "", // 验证码
       },
       options: [],
+      deptList: [],
+      organList: [],
+      optionsProps: {
+        value: "id",
+        label: "name",
+        children: "children",
+      },
+      regionTree: [],
     };
   },
 
@@ -193,16 +214,69 @@ export default {
     },
   },
   created() {
+    this.themeColorChangeHandle("default");
     this.getCaptcha();
+    this.getDeptList();
+    this.getOrganList();
+    this.regionTreeList();
   },
   methods: {
+    // 获取角色列表 科室管理
+    getDeptList() {
+      return this.$http
+        .get("/sys/dept/list")
+        .then(({ data: res }) => {
+          if (res.code !== 0) {
+            return this.$message.error(res.msg);
+          }
+          this.deptList = res.data;
+        })
+        .catch(() => {});
+    },
+    // 获取角色列表 科室管理
+    getOrganList() {
+      return this.$http
+        .get("/sys/org/list")
+        .then(({ data: res }) => {
+          if (res.code !== 0) {
+            return this.$message.error(res.msg);
+          }
+          this.organList = res.data;
+        })
+        .catch(() => {});
+    },
+    handleChange(value) {
+      this.dataForm.cityId = value[value.length - 1];
+    },
+    regionTreeList() {
+      this.$http
+        .get("/sys/region/tree")
+        .then(({ data: res }) => {
+          if (res.code !== 0) {
+            return this.$message.error(res.msg);
+          }
+          let regionTree = treeDataTranslate(res.data);
+          this.regionTree = this.delateChildren(regionTree);
+          console.log(this.regionTree);
+        })
+        .catch(() => {});
+    },
+    delateChildren(arr) {
+      if (arr.length) {
+        for (let i in arr) {
+          if (arr[i].children.length) {
+            this.delateChildren(arr[i].children);
+          } else {
+            delete arr[i].children;
+          }
+        }
+      }
+      return arr;
+    },
     // 获取验证码
     getCaptcha() {
       this.dataForm.uuid = getUUID();
       this.captchaPath = `${window.SITE_CONFIG["apiURL"]}/captcha?uuid=${this.dataForm.uuid}`;
-    },
-    handleChange: function(value) {
-      console.log(value);
     },
     typeClick(type) {
       this.$emit("typeClick", type);
@@ -235,6 +309,35 @@ export default {
       1000,
       { leading: true, trailing: false }
     ),
+
+    themeColorChangeHandle(val) {
+      var styleList = [
+        {
+          id: "J_elementTheme",
+          url: `${
+            process.env.BASE_URL
+          }element-theme/${val}/index.css?t=${new Date().getTime()}`,
+        },
+        {
+          id: "J_auiTheme",
+          url: `${
+            process.env.BASE_URL
+          }element-theme/${val}/aui.css?t=${new Date().getTime()}`,
+        },
+      ];
+      for (var i = 0; i < styleList.length; i++) {
+        var el = document.querySelector(`#${styleList[i].id}`);
+        if (el) {
+          el.href = styleList[i].url;
+          continue;
+        }
+        el = document.createElement("link");
+        el.id = styleList[i].id;
+        el.href = styleList[i].url;
+        el.rel = "stylesheet";
+        document.querySelector("head").appendChild(el);
+      }
+    },
   },
   mounted() {
     // this.getRegion();

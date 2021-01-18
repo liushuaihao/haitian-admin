@@ -14,7 +14,11 @@
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input placeholder="所属地区" v-model="dataForm.cityId"></el-input>
+          <ren-region-tree
+            v-model="dataForm.cityId"
+            placeholder="选择区域"
+            :dept-name.sync="dataForm.cityName"
+          ></ren-region-tree>
         </el-form-item>
         <el-form-item>
           <el-button @click="getDataList()">{{ $t("query") }}</el-button>
@@ -39,7 +43,7 @@
           header-align="center"
         ></el-table-column>
         <el-table-column
-          prop="cityId"
+          prop="fullName"
           label="所属地区"
           header-align="center"
           align="center"
@@ -105,6 +109,7 @@
 <script>
 import mixinViewModule from "@/mixins/view-module";
 import AddOrUpdate from "./index-add-or-update";
+import { treeDataTranslate } from "@/utils";
 export default {
   mixins: [mixinViewModule],
   data() {
@@ -116,10 +121,13 @@ export default {
         deleteIsBatch: true,
       },
       dataList: [],
+      cityList: [],
     };
   },
   components: {
     AddOrUpdate,
   },
+  created() {},
+  methods: {},
 };
 </script>

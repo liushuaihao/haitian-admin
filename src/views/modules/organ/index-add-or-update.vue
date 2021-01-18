@@ -25,14 +25,18 @@
         ></el-input>
       </el-form-item>
       <el-form-item prop="cityId" label="所属地域">
-        <el-cascader
+        <ren-region-tree
+          v-model="dataForm.cityId"
+          placeholder="选择区域"
+          :parent-name.sync="dataForm.cityName"
+        ></ren-region-tree>
+        <!-- <el-cascader
           style="width:100%"
           v-model="dataForm.cityId"
           :options="dataList"
           :props="propsCity"
-        ></el-cascader>
+        ></el-cascader> -->
       </el-form-item>
-      {{ dataForm.cityId }}
     </el-form>
     <template slot="footer">
       <el-button @click="visible = false">{{ $t("cancel") }}</el-button>
@@ -91,7 +95,7 @@ export default {
     },
   },
   mounted() {
-    this.getDataList();
+    // this.getDataList();
   },
   methods: {
     init() {
