@@ -21,7 +21,7 @@ export default {
       order: "", // 排序，asc／desc
       orderField: "", // 排序，字段
       page: 1, // 当前页码
-      limit: 10, // 每页数
+      limit: 20, // 每页数
       total: 0, // 总条数
       dataListLoading: false, // 数据列表，loading状态
       dataListSelections: [], // 数据列表，多选项

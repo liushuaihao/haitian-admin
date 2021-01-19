@@ -12,7 +12,7 @@ export const pageRoutes = [
     component: () => import("@/views/pages/404"),
     name: "404",
     meta: { title: "404未找到" },
-    beforeEnter (to, from, next) {
+    beforeEnter(to, from, next) {
       // 拦截处理特殊业务场景
       // 如果, 重定向路由包含__双下划线, 为临时添加路由
       if (/__.*/.test(to.redirectedFrom)) {
@@ -44,7 +44,7 @@ export const pageRoutes = [
     component: () => import("@/views/pages/administrator"),
     name: "administrator",
     meta: { title: "联系管理员" },
-  }
+  },
 ];
 
 // 模块路由(基于主入口布局页面)
@@ -64,7 +64,7 @@ export const moduleRoutes = {
   ],
 };
 
-export function addDynamicRoute (routeParams, router) {
+export function addDynamicRoute(routeParams, router) {
   // 组装路由名称, 并判断是否已添加, 如是: 则直接跳转
   var routeName = routeParams.routeName;
   var dynamicRoute = window.SITE_CONFIG["dynamicRoutes"].filter(
@@ -102,11 +102,6 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log(to);
-  console.log(
-    window.SITE_CONFIG["dynamicMenuRoutesHasAdded"] ||
-      fnCurrentRouteIsPageRoute(to, pageRoutes)
-  );
   // 添加动态(菜单)路由
   // 已添加或者当前路由为页面路由, 可直接访问
   if (
@@ -148,7 +143,7 @@ router.beforeEach((to, from, next) => {
  * @param {*} route 当前路由
  * @param {*} pageRoutes 页面路由
  */
-function fnCurrentRouteIsPageRoute (route, pageRoutes = []) {
+function fnCurrentRouteIsPageRoute(route, pageRoutes = []) {
   var temp = [];
   for (var i = 0; i < pageRoutes.length; i++) {
     if (route.path === pageRoutes[i].path) {
@@ -166,7 +161,7 @@ function fnCurrentRouteIsPageRoute (route, pageRoutes = []) {
  * @param {*} menuList 菜单列表
  * @param {*} routes 递归创建的动态(菜单)路由
  */
-function fnAddDynamicMenuRoutes (menuList = [], routes = []) {
+function fnAddDynamicMenuRoutes(menuList = [], routes = []) {
   var temp = [];
   for (var i = 0; i < menuList.length; i++) {
     if (menuList[i].children && menuList[i].children.length >= 1) {

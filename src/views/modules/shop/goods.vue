@@ -7,7 +7,7 @@
         @keyup.enter.native="getDataList()"
       >
         <!-- $hasPermission('shop:goods:save') 按钮权限配置 'shop:goods:save' 标识 -->
-        <el-form-item>
+        <!-- <el-form-item>
           <el-input
             v-model="dataForm.id"
             placeholder="商品ID"
@@ -35,10 +35,10 @@
               :value="item.value"
             ></el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item>
+        </el-form-item> -->
+        <!-- <el-form-item>
           <el-button @click="getDataList()">{{ $t("query") }}</el-button>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
           <el-button
             v-if="$hasPermission('shop:goods:save')"
@@ -85,7 +85,21 @@
           label="商品类型"
           header-align="center"
           align="center"
-        ></el-table-column>
+        >
+          <template slot-scope="scope">
+            <div>
+              {{
+                scope.row.goodsType == 0
+                  ? "在线服务"
+                  : scope.row.goodsType == 1
+                  ? "设备租赁"
+                  : scope.row.goodsType == 2
+                  ? "设备购买"
+                  : ""
+              }}
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="stock"
           label="库存"
@@ -99,11 +113,21 @@
           align="center"
           width="150"
         >
-          <template>
+          <template slot-scope="scope">
             <!-- slot-scope="scope" -->
             <!-- <el-button type="text" size="small" @click="forwardUrl(scope.row)">详情</el-button> -->
-            <el-button type="text" size="small">修改</el-button>
-            <el-button type="text" size="small">删除</el-button>
+            <el-button
+              type="text"
+              @click="addOrUpdateHandle(scope.row.id)"
+              size="small"
+              >修改</el-button
+            >
+            <el-button
+              type="text"
+              @click="deleteHandle(scope.row.id)"
+              size="small"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -141,7 +165,7 @@ export default {
       mixinViewModuleOptions: {
         getDataListURL: "/shop/goods/page",
         getDataListIsPage: true,
-        deleteURL: "",
+        deleteURL: "/shop/goods/delete",
         deleteIsBatch: true,
       },
       type: [

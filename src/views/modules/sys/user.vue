@@ -146,7 +146,12 @@
           width="150"
         >
           <template slot-scope="scope">
-            <el-button type="text" size="small">重置密码</el-button>
+            <el-button
+              type="text"
+              size="small"
+              @click="resetHandle(scope.row.id)"
+              >重置密码</el-button
+            >
             <el-button
               v-if="$hasPermission('sys:user:update')"
               type="text"
@@ -232,6 +237,37 @@ export default {
     AddOrUpdate,
   },
   methods: {
+    // 重置密码
+    resetHandle(id) {
+      this.$confirm(
+        this.$t("prompt.info", { handle: "重置密码" }),
+        this.$t("prompt.title"),
+        {
+          confirmButtonText: this.$t("confirm"),
+          cancelButtonText: this.$t("cancel"),
+          type: "warning",
+        }
+      )
+        .then(() => {
+          this.$http
+            .post("/sys/user/reset", { id })
+            .then(({ data: res }) => {
+              if (res.code !== 0) {
+                return this.$message.error(res.msg);
+              }
+              this.$message({
+                message: this.$t("prompt.success"),
+                type: "success",
+                duration: 500,
+                onClose: () => {
+                  this.query();
+                },
+              });
+            })
+            .catch(() => {});
+        })
+        .catch(() => {});
+    },
     regionTreeList() {
       this.$http
         .get("/sys/region/tree")
@@ -241,7 +277,6 @@ export default {
           }
           let regionTree = treeDataTranslate(res.data);
           this.regionTree = this.delateChildren(regionTree);
-          console.log(this.regionTree);
         })
         .catch(() => {});
     },

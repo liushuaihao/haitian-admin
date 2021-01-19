@@ -79,23 +79,29 @@
             <el-button
               type="text"
               size="small"
-              v-if="scope.row.status === 0"
+              v-if="
+                scope.row.status === 0 &&
+                  $hasPermission('review:review:approve')
+              "
               @click="status(scope.row.id, '1')"
               >通过</el-button
             >
             <el-button
               type="text"
               size="small"
-              v-if="scope.row.status === 0"
+              v-if="
+                scope.row.status === 0 &&
+                  $hasPermission('review:review:approve')
+              "
               @click="status(scope.row.id, '2')"
               >拒绝</el-button
             >
             <el-button
               type="text"
               size="small"
-              v-if="$hasPermission('dept:dept:delete')"
-              @click="deleteHandle(scope.row.id)"
-              >删除</el-button
+              v-if="$hasPermission('review:review:info')"
+              @click="addOrUpdateHandle(scope.row.id)"
+              >查看</el-button
             >
           </template>
         </el-table-column>
@@ -110,12 +116,18 @@
         @current-change="pageCurrentChangeHandle"
       ></el-pagination>
       <!-- 弹窗, 新增 / 修改 -->
+      <add-or-update
+        v-if="addOrUpdateVisible"
+        ref="addOrUpdate"
+        @refreshDataList="getDataList"
+      ></add-or-update>
     </div>
   </el-card>
 </template>
 
 <script>
 import mixinViewModule from "@/mixins/view-module";
+import AddOrUpdate from "./review-add-or-update";
 export default {
   mixins: [mixinViewModule],
   data() {
@@ -131,7 +143,9 @@ export default {
       },
     };
   },
-  components: {},
+  components: {
+    AddOrUpdate,
+  },
   methods: {
     status: function(id, status) {
       this.$confirm(
