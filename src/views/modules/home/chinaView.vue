@@ -1,7 +1,6 @@
 <template>
   <el-card shadow="never" class="aui-card--fill flex-center">
     <div
-      v-if="isShow"
       class="mod-home_distribution"
       id="myChartChina"
       :style="{ width: '100%' }"
@@ -11,7 +10,7 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       title: "",
       dataList: [],
@@ -20,15 +19,15 @@ export default {
     };
   },
   // 钩子函数  不了解的话 建议看看 vue的生命周期
-  mounted () {
+  mounted() {
     this.chart();
   },
   methods: {
-    chart () {
+    chart() {
       //   let that = this;
       // 基于准备好的dom，初始化echarts实例
       var myChartContainer = document.getElementById("myChartChina");
-      var resizeMyChartContainer = function () {
+      var resizeMyChartContainer = function() {
         myChartContainer.style.width = document.body.offsetWidth / 1.3 + "px"; // 页面一半的大小
         myChartContainer.style.height =
           " calc(calc(100vh - 50px - 38px - 70px) - 2px)"; // 页面一半的大小
@@ -109,21 +108,21 @@ export default {
       };
 
       myChartChina.setOption(optionMap);
-      window.addEventListener("resize", function () {
+      window.addEventListener("resize", function() {
         resizeMyChartContainer();
         myChartChina.resize();
       });
     },
   },
-  beforeDestroy () {
+  beforeDestroy() {
     window.removeEventListener("resize", this.chart);
   },
-  activated () {
+  activated() {
     this.isShow = true;
   },
-  deactivated () {
+  deactivated() {
     this.isShow = false;
-  }
+  },
 };
 </script>
 

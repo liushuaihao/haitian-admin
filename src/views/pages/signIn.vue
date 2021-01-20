@@ -17,7 +17,7 @@
             <el-input placeholder="姓名" v-model="dataForm.realName"></el-input>
           </el-form-item>
           <el-form-item prop="mobile">
-            <el-input placeholder="电话" v-model="dataForm.mobile"></el-input>
+            <el-input placeholder="手机号" v-model="dataForm.mobile"></el-input>
           </el-form-item>
           <el-form-item prop="idCard">
             <el-input
@@ -41,13 +41,33 @@
           </el-form-item>
 
           <el-form-item prop="password">
-            <el-input placeholder="密码" v-model="dataForm.password"></el-input>
+            <el-input
+              show-password
+              placeholder="密码"
+              v-model="dataForm.password"
+            ></el-input>
           </el-form-item>
           <el-form-item prop="confirmPassword">
             <el-input
+              show-password
               placeholder="确认密码"
               v-model="dataForm.confirmPassword"
             ></el-input>
+          </el-form-item>
+
+          <el-form-item prop="orgId">
+            <el-select
+              style="width:100%"
+              v-model="dataForm.orgId"
+              placeholder="所属机构"
+            >
+              <el-option
+                v-for="organ in organList"
+                :key="organ.id"
+                :label="organ.orgName"
+                :value="organ.id"
+              ></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item prop="deptId">
             <el-select
@@ -63,21 +83,6 @@
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item prop="orgId">
-            <el-select
-              style="width:100%"
-              v-model="dataForm.orgId"
-              placeholder="所属机构"
-            >
-              <el-option
-                v-for="organ in organList"
-                :key="organ.id"
-                :label="organ.orgName"
-                :value="organ.id"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-
           <el-form-item prop="captcha">
             <el-row :gutter="20">
               <el-col :span="14">

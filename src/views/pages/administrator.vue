@@ -17,7 +17,7 @@
             <el-input placeholder="姓名" v-model="dataForm.realName"></el-input>
           </el-form-item>
           <el-form-item prop="mobile">
-            <el-input placeholder="电话" v-model="dataForm.mobile"></el-input>
+            <el-input placeholder="手机号" v-model="dataForm.mobile"></el-input>
           </el-form-item>
           <el-form-item prop="idCard">
             <el-input
@@ -26,7 +26,19 @@
             ></el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input placeholder="密码" v-model="dataForm.password"></el-input>
+            <el-input
+              placeholder="密码"
+              show-password
+              v-model="dataForm.password"
+            ></el-input>
+          </el-form-item>
+          <el-form-item prop="confirmPassword">
+            <el-input
+              v-model="dataForm.confirmPassword"
+              show-password
+              type="confirmPassword"
+              placeholder="确认密码"
+            ></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -67,16 +79,39 @@ export default {
         mobile: "", // 电话
         idCard: "", // 身份证
         password: "", // 密码
+        confirmPassword: "",
       },
-      dataRule: {
+    };
+  },
+  computed: {
+    dataRule() {
+      var validatePassword = (rule, value, callback) => {
+        if (!this.dataForm.id && !/\S/.test(value)) {
+          return callback(new Error(this.$t("validate.required")));
+        }
+        callback();
+      };
+      var validateConfirmPassword = (rule, value, callback) => {
+        if (!this.dataForm.id && !/\S/.test(value)) {
+          return callback(new Error(this.$t("validate.required")));
+        }
+        if (this.dataForm.password !== value) {
+          return callback(new Error(this.$t("user.validate.confirmPassword")));
+        }
+        callback();
+      };
+      var validateMobile = (rule, value, callback) => {
+        if (value && !isMobile(value)) {
+          return callback(
+            new Error(
+              this.$t("validate.format", { attr: this.$t("user.mobile") })
+            )
+          );
+        }
+        callback();
+      };
+      return {
         realName: [{ required: true, message: "请输入姓名", trigger: "blur" }],
-        mobile: [
-          {
-            required: true,
-            validator: checkPhone,
-            trigger: "blur",
-          },
-        ],
         idCard: [
           { required: true, message: "请输入证件号码", trigger: "blur" },
           {
@@ -86,11 +121,21 @@ export default {
           },
         ],
         password: [
-          { required: true, message: "请输入密码", trigger: "blur" },
+          { required: true, validator: validatePassword, trigger: "blur" },
           { min: 6, max: 12, message: "请输入6-12位密码", trigger: "blur" },
         ],
-      },
-    };
+        confirmPassword: [
+          {
+            required: true,
+            validator: validateConfirmPassword,
+            trigger: "blur",
+          },
+        ],
+        mobile: [
+          { required: true, validator: validateMobile, trigger: "blur" },
+        ],
+      };
+    },
   },
   methods: {
     // 表单提交

@@ -16,6 +16,8 @@
         <el-input
           v-model="dataForm.realName"
           :placeholder="$t('user.realName')"
+          maxlength="10"
+          show-word-limit
         ></el-input>
       </el-form-item>
       <el-form-item prop="gender" :label="$t('user.gender')">
@@ -26,12 +28,19 @@
       </el-form-item>
       <el-form-item prop="mobile" :label="$t('user.mobile')">
         <el-input
-          v-model="dataForm.mobile"
+          v-model.trim.number="dataForm.mobile"
           :placeholder="$t('user.mobile')"
+          maxlength="11"
+          show-word-limit
         ></el-input>
       </el-form-item>
       <el-form-item prop="idCard" label="身份证号">
-        <el-input v-model="dataForm.idCard" placeholder="身份证号"></el-input>
+        <el-input
+          v-model.trim="dataForm.idCard"
+          placeholder="身份证号"
+          maxlength="20"
+          show-word-limit
+        ></el-input>
       </el-form-item>
       <el-form-item prop="userType" label="角色" class="role-list">
         <el-select
@@ -47,22 +56,12 @@
         </el-select>
       </el-form-item>
       <el-form-item
-        prop="deptId"
-        label="所属科室"
-        v-if="dataForm.userType == 1"
-        class="role-list"
-      >
-        <el-select v-model="dataForm.deptId" placeholder="所属科室">
-          <el-option
-            v-for="dept in deptList"
-            :key="dept.id"
-            :label="dept.deptName"
-            :value="dept.id"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item
-        v-if="dataForm.userType == 1"
+        v-if="
+          dataForm.userType == 1 ||
+            dataForm.userType == 2 ||
+            dataForm.userType == '患者' ||
+            dataForm.userType == '医生'
+        "
         prop="orgId"
         label="所属机构"
         class="role-list"
@@ -73,6 +72,26 @@
             :key="organ.id"
             :label="organ.orgName"
             :value="organ.id"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item
+        prop="deptId"
+        label="所属科室"
+        v-if="
+          dataForm.userType == 1 ||
+            dataForm.userType == 2 ||
+            dataForm.userType == '患者' ||
+            dataForm.userType == '医生'
+        "
+        class="role-list"
+      >
+        <el-select v-model="dataForm.deptId" placeholder="所属科室">
+          <el-option
+            v-for="dept in deptList"
+            :key="dept.id"
+            :label="dept.deptName"
+            :value="dept.id"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -93,13 +112,20 @@
         ></el-cascader>
       </el-form-item>
       <el-form-item prop="address" label="详细地址">
-        <el-input v-model="dataForm.address" placeholder="详细地址"></el-input>
+        <el-input
+          v-model="dataForm.address"
+          placeholder="详细地址"
+          maxlength="50"
+          show-word-limit
+        ></el-input>
       </el-form-item>
       <el-form-item prop="introduce" label="个人介绍">
         <el-input
           type="textarea"
           v-model="dataForm.introduce"
           placeholder="个人介绍"
+          maxlength="500"
+          show-word-limit
         ></el-input>
       </el-form-item>
     </el-form>
@@ -183,17 +209,65 @@ export default {
             trigger: "blur",
           },
         ],
-        mobile: [{ validator: validateMobile, trigger: "blur" }],
-        idCard: [{ validator: validateIdCard, trigger: "blur" }],
+        mobile: [
+          {
+            required: true,
+            validator: validateMobile,
+            trigger: "blur",
+          },
+        ],
+        idCard: [
+          {
+            required: true,
+            validator: validateIdCard,
+            trigger: "blur",
+          },
+        ],
+        userType: [
+          {
+            required: true,
+            message: this.$t("validate.required"),
+            trigger: "change",
+          },
+        ],
+        cityId: [
+          {
+            required: true,
+            message: this.$t("validate.required"),
+            trigger: "change",
+          },
+        ],
+        address: [
+          {
+            required: true,
+            message: this.$t("validate.required"),
+            trigger: "blur",
+          },
+        ],
+        orgId: [
+          {
+            required: true,
+            message: this.$t("validate.required"),
+            trigger: "change",
+          },
+        ],
+        deptId: [
+          {
+            required: true,
+            message: this.$t("validate.required"),
+            trigger: "change",
+          },
+        ],
       };
     },
   },
   methods: {
     init() {
       this.visible = true;
-      this.dataForm.deptId = "";
       this.$nextTick(() => {
         this.$refs["dataForm"].resetFields();
+        this.$set(this.dataForm, "deptId", "");
+        this.$set(this.dataForm, "orgId", "");
         this.roleIdListDefault = [];
         Promise.all([this.getDeptList(), this.getOrganList()]).then(() => {
           if (this.dataForm.id) {

@@ -20,12 +20,14 @@
             <el-input
               v-model="dataForm.password"
               placeholder="密码"
+              show-password
               type="password"
             ></el-input>
           </el-form-item>
           <el-form-item prop="confirmPassword">
             <el-input
               v-model="dataForm.confirmPassword"
+              show-password
               type="confirmPassword"
               placeholder="确认密码"
             ></el-input>
@@ -166,7 +168,7 @@ export default {
           .get("/sms/captcha", {
             params: {
               mobile: _this.dataForm.mobile,
-              channel: 1,
+              channel: 2, //1 注册 2 找回密码 3 修改手机号,
             },
           })
           .then(({ data: res }) => {

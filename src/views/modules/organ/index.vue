@@ -14,11 +14,15 @@
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <ren-region-tree
+          <el-cascader
+            style="width:100%;"
             v-model="dataForm.cityId"
             placeholder="选择区域"
-            :dept-name.sync="dataForm.cityName"
-          ></ren-region-tree>
+            :options="regionTree"
+            :props="optionsProps"
+            @change="handleChange"
+            clearable
+          ></el-cascader>
         </el-form-item>
         <el-form-item>
           <el-button @click="getDataList()">{{ $t("query") }}</el-button>
@@ -101,6 +105,8 @@
         v-if="addOrUpdateVisible"
         ref="addOrUpdate"
         @refreshDataList="getDataList"
+        :regionTree="regionTree"
+        :optionsProps="optionsProps"
       ></add-or-update>
     </div>
   </el-card>
@@ -121,13 +127,49 @@ export default {
         deleteIsBatch: true,
       },
       dataList: [],
-      cityList: [],
+      regionTree: [],
+      optionsProps: {
+        value: "id",
+        label: "name",
+        children: "children",
+      },
     };
   },
   components: {
     AddOrUpdate,
   },
-  created() {},
-  methods: {},
+  created() {
+    this.regionTreeList();
+  },
+  methods: {
+    handleChange(value) {
+      this.dataForm.cityId = value[value.length - 1];
+    },
+    regionTreeList() {
+      this.$http
+        .get("/sys/region/tree")
+        .then(({ data: res }) => {
+          if (res.code !== 0) {
+            return this.$message.error(res.msg);
+          }
+          let regionTree = treeDataTranslate(res.data);
+          this.regionTree = this.delateChildren(regionTree);
+          console.log(this.regionTree);
+        })
+        .catch(() => {});
+    },
+    delateChildren(arr) {
+      if (arr.length) {
+        for (let i in arr) {
+          if (arr[i].children.length) {
+            this.delateChildren(arr[i].children);
+          } else {
+            delete arr[i].children;
+          }
+        }
+      }
+      return arr;
+    },
+  },
 };
 </script>

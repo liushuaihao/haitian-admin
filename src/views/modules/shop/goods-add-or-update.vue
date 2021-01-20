@@ -404,8 +404,6 @@ export default {
   methods: {
     init() {
       this.visible = true;
-      this.galleryFileList = [];
-      this.dataForm.picUrl = [];
       this.$nextTick(() => {
         if (this.quillEditor) {
           this.quillEditor.deleteText(0, this.quillEditor.getLength());
@@ -413,11 +411,16 @@ export default {
           this.quillEditorHandle();
         }
         this.$refs["dataForm"].resetFields();
+        this.galleryFileList = [];
+        this.dataForm.picUrl = [];
+        this.$set(this.dataForm, "deptId", "");
+        this.$set(this.dataForm, "orgId", "");
         Promise.all([
           this.getDeptList(),
           this.getOrganList(),
           this.getDoctorList(),
         ]).then(() => {
+          console.log(this.dataForm.id);
           if (this.dataForm.id) {
             this.getInfo();
           }

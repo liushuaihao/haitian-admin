@@ -25,17 +25,15 @@
         ></el-input>
       </el-form-item>
       <el-form-item prop="cityId" label="所属地域">
-        <ren-region-tree
+        <el-cascader
+          style="width:100%;"
           v-model="dataForm.cityId"
           placeholder="选择区域"
-          :parent-name.sync="dataForm.cityName"
-        ></ren-region-tree>
-        <!-- <el-cascader
-          style="width:100%"
-          v-model="dataForm.cityId"
-          :options="dataList"
-          :props="propsCity"
-        ></el-cascader> -->
+          :options="regionTree"
+          :props="optionsProps"
+          @change="handleChange"
+          clearable
+        ></el-cascader>
       </el-form-item>
     </el-form>
     <template slot="footer">
@@ -51,14 +49,20 @@
 import debounce from "lodash/debounce";
 import { treeDataTranslate } from "@/utils";
 export default {
+  props: {
+    regionTree: {
+      type: Array,
+      default: () => [],
+    },
+    optionsProps: {
+      type: Object,
+      default: () => {},
+    },
+  },
   data() {
     return {
       visible: false,
       dataList: [],
-      propsCity: {
-        value: "id",
-        label: "name",
-      },
       dataForm: {
         id: "",
         orgName: "",
@@ -107,8 +111,9 @@ export default {
         }
       });
     },
+
     handleChange(value) {
-      console.log(value);
+      this.dataForm.cityId = value[value.length - 1];
     },
     // 获取信息
     getInfo() {
