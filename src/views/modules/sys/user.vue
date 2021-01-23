@@ -198,7 +198,7 @@ export default {
   data() {
     return {
       mixinViewModuleOptions: {
-        getDataListURL: "/sys/user/page",
+        getDataListURL: "/sys/user/list",
         getDataListIsPage: true,
         deleteURL: "/sys/user/delete",
         deleteIsBatch: true,
@@ -250,7 +250,7 @@ export default {
       )
         .then(() => {
           this.$http
-            .post("/sys/user/reset", { id })
+            .post("/sys/user/resetPassword", { id })
             .then(({ data: res }) => {
               if (res.code !== 0) {
                 return this.$message.error(res.msg);

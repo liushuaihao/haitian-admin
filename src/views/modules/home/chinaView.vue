@@ -3,7 +3,10 @@
     <div
       class="mod-home_distribution"
       id="myChartChina"
-      :style="{ width: '100%' }"
+      :style="{
+        width: '100%',
+        height: '90vh',
+      }"
     ></div>
   </el-card>
 </template>
@@ -29,8 +32,7 @@ export default {
       var myChartContainer = document.getElementById("myChartChina");
       var resizeMyChartContainer = function() {
         myChartContainer.style.width = document.body.offsetWidth / 1.3 + "px"; // 页面一半的大小
-        myChartContainer.style.height =
-          " calc(calc(100vh - 50px - 38px - 70px) - 2px)"; // 页面一半的大小
+        myChartContainer.style.height = `90vh`; // 页面一半的大小
       };
       resizeMyChartContainer();
       var myChartChina = this.$echarts.init(myChartContainer);

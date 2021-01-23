@@ -54,7 +54,7 @@
         ></el-table-column>
         <el-table-column
           prop="telephone"
-          label="电话"
+          label="手机号"
           header-align="center"
           align="center"
         ></el-table-column>
@@ -121,7 +121,7 @@ export default {
   data() {
     return {
       mixinViewModuleOptions: {
-        getDataListURL: "/sys/org/page",
+        getDataListURL: "/sys/org/list",
         getDataListIsPage: true,
         deleteURL: "/sys/org/delete",
         deleteIsBatch: true,

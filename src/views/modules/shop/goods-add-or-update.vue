@@ -1,73 +1,103 @@
 <template>
-  <el-dialog
+  <!-- <el-dialog
     :visible.sync="visible"
     :title="!dataForm.id ? $t('add') : $t('update')"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     width="1000px"
     :close="closeVisible"
-  >
+  > -->
+  <el-card class="content-goods">
     <!-- {{ dataForm }} -->
     <el-form
       :model="dataForm"
       :rules="dataRule"
       ref="dataForm"
-      @keyup.enter.native="dataFormSubmitHandle()"
       label-width="100px"
     >
       <el-form-item prop="goodsType" label="商品类型">
-        <el-select v-model="dataForm.goodsType" placeholder="商品类型">
+        <el-select
+          v-model="dataForm.goodsType"
+          style="width:250px"
+          placeholder="商品类型"
+          clearable
+        >
           <el-option label="在线服务" value="0"></el-option>
           <el-option label="设备租赁" value="1"></el-option>
           <el-option label="设备购买" value="2"></el-option>
         </el-select>
       </el-form-item>
+
       <el-form-item prop="goodsName" label="商品名称">
         <el-input
           v-model="dataForm.goodsName"
           type="textarea"
           maxlength="60"
+          style="width:500px;min-height: 40px;overflow: hidden;"
           show-word-limit
           placeholder="商品名称"
+          clearable
         ></el-input>
       </el-form-item>
 
-      <el-form-item prop="doctorId" label="医生" class="role-list">
-        <el-select v-model="dataForm.doctorId" placeholder="医生">
-          <el-option
-            v-for="doctor in doctorList"
-            :key="doctor.id"
-            :label="doctor.realName"
-            :value="doctor.id"
-          ></el-option>
-        </el-select>
-      </el-form-item>
+      <el-row v-if="dataForm.goodsType == 0">
+        <el-col :span="8">
+          <el-form-item prop="orgId" label="所属机构" class="role-list">
+            <el-select
+              v-model="dataForm.orgId"
+              style="width:250px"
+              placeholder="所属机构"
+              @change="orgChange"
+              clearable
+            >
+              <el-option
+                v-for="organ in organList"
+                :key="organ.id"
+                :label="organ.orgName"
+                :value="organ.id"
+              ></el-option>
+            </el-select> </el-form-item
+        ></el-col>
+        <el-col :span="8"
+          ><el-form-item prop="deptId" label="所属科室" class="role-list">
+            <el-select
+              v-model="dataForm.deptId"
+              style="width:250px"
+              placeholder="所属科室"
+              @change="orgChange"
+              clearable
+            >
+              <el-option
+                v-for="dept in deptList"
+                :key="dept.id"
+                :label="dept.deptName"
+                :value="dept.id"
+              ></el-option>
+            </el-select> </el-form-item
+        ></el-col>
+        <el-col :span="8"
+          ><el-form-item prop="doctorId" label="医生" class="role-list">
+            <el-select
+              v-model="dataForm.doctorId"
+              style="width:250px"
+              placeholder="医生"
+              clearable
+            >
+              <el-option
+                v-for="doctor in doctorList"
+                :key="doctor.id"
+                :label="doctor.realName"
+                :value="doctor.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
 
-      <el-form-item prop="deptId" label="所属科室" class="role-list">
-        <el-select v-model="dataForm.deptId" placeholder="所属科室">
-          <el-option
-            v-for="dept in deptList"
-            :key="dept.id"
-            :label="dept.deptName"
-            :value="dept.id"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item prop="orgId" label="所属机构" class="role-list">
-        <el-select v-model="dataForm.orgId" placeholder="所属机构">
-          <el-option
-            v-for="organ in organList"
-            :key="organ.id"
-            :label="organ.orgName"
-            :value="organ.id"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-
-      <el-form-item prop="goodsName" label="商品图片">
+      <el-form-item prop="picUrl" label="商品图片">
         <el-upload
           style="border: none;"
-          :limit="10"
+          :limit="9"
           list-type="picture-card"
           :action="uploadUrl"
           :file-list="galleryFileList"
@@ -81,163 +111,216 @@
         >
           <i class="el-icon-plus"></i>
         </el-upload>
+        <span style="color:#999999;font-size:14px"
+          >建议尺寸800*800像素，最多上传9张</span
+        >
         <el-dialog :visible.sync="dialogVisible">
           <img width="100%" :src="dialogImageUrl" alt />
         </el-dialog>
       </el-form-item>
-      <el-form-item prop="pkgList" label="套餐详情">
-        <el-row v-for="(item, index) in dataForm.pkgList" :key="index">
-          <el-col :span="20">
-            <div>
-              <el-card style="width:400px;margin-bottom:20px">
-                <el-form-item
-                  label="套餐名称"
-                  :prop="'pkgList.' + index + '.pkgName'"
-                  :rules="{
-                    required: true,
-                    message: '套餐名称不能为空',
-                    trigger: 'change',
-                  }"
+      <el-form-item
+        v-if="dataForm.goodsType == 2 ? false : true"
+        prop="pkgList"
+        :label="(dataForm.goodsType == 0 ? '服务' : '设备') + '时长'"
+      >
+        <el-button type="primary" style="margin-bottom:15px" @click="addPkg()"
+          >添加</el-button
+        >
+        <el-table :data="dataForm.pkgList" border>
+          <el-table-column
+            :label="(dataForm.goodsType == 0 ? '服务' : '设备') + '时长'"
+          >
+            <template slot-scope="scope">
+              <el-form-item
+                class="el-m"
+                :prop="'pkgList.' + scope.$index + '.pkgName'"
+                :rules="dataRule.pkgName"
+              >
+                <el-select
+                  style="width:100%"
+                  v-model="scope.row.pkgName"
+                  placeholder="套餐名称"
+                  clearable
                 >
-                  <el-select
-                    style="width:100%"
-                    v-model="item.pkgName"
-                    placeholder="套餐名称"
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
                   >
-                    <el-option
-                      v-for="item in options"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    >
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item
-                  label="价格"
-                  class="el-m"
-                  :prop="'pkgList.' + index + '.pkgPrice'"
-                  :rules="{
-                    required: true,
-                    message: '价格不能为空',
-                    trigger: 'blur',
-                  }"
-                >
-                  <div style="width:100%">
-                    <el-input-number
-                      style="width:100%"
-                      placeholder="价格"
-                      v-model="item.pkgPrice"
-                      controls-position="right"
-                      :min="0"
-                      :max="99999999"
-                      :precision="2"
-                    >
-                      <template slot="append">元</template>
-                    </el-input-number>
-                  </div>
-                </el-form-item>
-                <el-form-item
-                  label="库存"
-                  class="el-m"
-                  :prop="'pkgList.' + index + '.pkgStock'"
-                  :rules="{
-                    required: true,
-                    message: '库存不能为空',
-                    trigger: 'blur',
-                  }"
-                >
-                  <div style="width:100%">
-                    <el-input-number
-                      style="width:100%"
-                      placeholder="库存"
-                      v-model="item.pkgStock"
-                      controls-position="right"
-                      :precision="0"
-                      :min="0"
-                      :max="99999999"
-                    ></el-input-number>
-                  </div>
-                </el-form-item>
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </template>
+          </el-table-column>
 
-                <el-form-item
-                  label="押金"
-                  class="el-m"
-                  :prop="'pkgList.' + index + '.deposit'"
-                  :rules="{
-                    required: true,
-                    message: '押金不能为空',
-                    trigger: 'blur',
-                  }"
-                >
-                  <div style="width:100%">
-                    <el-input-number
-                      style="width:100%"
-                      placeholder="押金"
-                      v-model="item.deposit"
-                      controls-position="right"
-                      :min="0"
-                      :max="99999999"
-                      :precision="2"
-                    ></el-input-number>
-                  </div>
-                </el-form-item>
+          <el-table-column label="价格(元)" align="center">
+            <template slot-scope="scope">
+              <el-form-item
+                class="el-m"
+                :prop="'pkgList.' + scope.$index + '.pkgPrice'"
+                :rules="dataRule.pkgPrice"
+                clearable
+              >
+                <el-input-number
+                  class="yuan_input"
+                  style="width:100%"
+                  placeholder="价格"
+                  v-model="scope.row.pkgPrice"
+                  controls-position="right"
+                  :min="0"
+                  :max="99999999"
+                  :precision="2"
+                ></el-input-number>
+              </el-form-item>
+            </template>
+          </el-table-column>
 
-                <el-form-item
-                  label="运费"
-                  class="el-m"
-                  :prop="'pkgList.' + index + '.transit'"
-                  :rules="{
-                    required: true,
-                    message: '运费不能为空',
-                    trigger: 'blur',
-                  }"
-                >
-                  <div style="width:100%">
-                    <el-input-number
-                      style="width:100%"
-                      placeholder="运费"
-                      v-model="item.transit"
-                      controls-position="right"
-                      :min="0"
-                      :max="99999999"
-                      :precision="2"
-                    ></el-input-number>
-                  </div>
-                </el-form-item>
-              </el-card>
-            </div>
-          </el-col>
-          <el-col :span="4">
-            <el-form-item>
-              <el-button type="text" @click="addPkg()">添加</el-button>
-              <el-button
-                type="text"
-                v-if="dataForm.pkgList.length > 1"
-                @click="deletePkg(index)"
+          <el-table-column label="库存" align="center">
+            <template slot-scope="scope">
+              <el-form-item
+                class="el-m"
+                :prop="'pkgList.' + scope.$index + '.pkgStock'"
+                :rules="dataRule.pkgStock"
+              >
+                <el-input-number
+                  style="width:100%"
+                  placeholder="库存"
+                  v-model="scope.row.pkgStock"
+                  controls-position="right"
+                  :precision="0"
+                  :min="0"
+                  :max="99999999"
+                  clearable
+                ></el-input-number>
+              </el-form-item>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            label="押金(元)"
+            v-if="dataForm.goodsType == 0 ? false : true"
+            align="center"
+          >
+            <template slot-scope="scope">
+              <el-form-item
+                class="el-m"
+                :prop="'pkgList.' + scope.$index + '.deposit'"
+                :rules="dataRule.deposit"
+              >
+                <el-input-number
+                  class="yuan_input"
+                  style="width:100%"
+                  placeholder="押金"
+                  v-model="scope.row.deposit"
+                  controls-position="right"
+                  :min="0"
+                  :max="99999999"
+                  :precision="2"
+                  clearable
+                ></el-input-number>
+              </el-form-item>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            label="运费(元)"
+            align="center"
+            v-if="dataForm.goodsType == 0 ? false : true"
+          >
+            <template slot-scope="scope">
+              <el-form-item
+                class="el-m"
+                :prop="'pkgList.' + scope.$index + '.transit'"
+                :rules="dataRule.transit"
+              >
+                <el-input-number
+                  class="yuan_input"
+                  style="width:100%"
+                  placeholder="运费"
+                  v-model="scope.row.transit"
+                  controls-position="right"
+                  :min="0"
+                  :max="99999999"
+                  :precision="2"
+                  clearable
+                ></el-input-number>
+              </el-form-item>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            :label="$t('handle')"
+            fixed="right"
+            header-align="center"
+            align="center"
+            width="150"
+            v-if="dataForm.pkgList.length > 1"
+          >
+            <template slot-scope="scope">
+              <el-button type="text" @click="deletePkg(scope.$index)"
                 >删除</el-button
               >
-            </el-form-item>
-          </el-col>
-        </el-row>
+            </template>
+          </el-table-column>
+        </el-table>
       </el-form-item>
-      <!-- <el-form-item prop="goodsName" label="商品单价">
-        <el-input
-          v-model="dataForm.price"
-          placeholder="商品单价"
-          type="number"
-        ></el-input>
-      </el-form-item>
-      <el-form-item prop="goodsName" label="商品说明">
-        <el-input v-model="dataForm.explain" placeholder="商品说明"></el-input>
-      </el-form-item>
-      <el-form-item prop="goodsName" label="库存数量">
-        <el-input
-          v-model="dataForm.quantity"
-          placeholder="库存数量"
-          type="number"
-        ></el-input>
-      </el-form-item> -->
+
+      <template v-if="dataForm.goodsType == 2 ? true : false">
+        <div>
+          <el-form-item
+            :prop="'pkgList.' + 0 + '.pkgPrice'"
+            :rules="dataRule.pkgPrice"
+            label="商品价格"
+          >
+            <el-input-number
+              class="yuan_input"
+              style="width:250px"
+              placeholder="价格"
+              v-model="dataForm.pkgList[0].pkgPrice"
+              controls-position="right"
+              :min="0"
+              :max="99999999"
+              :precision="2"
+              clearable
+            ></el-input-number>
+          </el-form-item>
+          <el-form-item
+            :prop="'pkgList.' + 0 + '.pkgStock'"
+            :rules="dataRule.pkgStock"
+            label="库存"
+          >
+            <el-input-number
+              style="width:250px"
+              placeholder="库存"
+              v-model="dataForm.pkgList[0].pkgStock"
+              controls-position="right"
+              :precision="0"
+              :min="0"
+              :max="99999999"
+              clearable
+            ></el-input-number>
+          </el-form-item>
+          <el-form-item
+            :prop="'pkgList.' + 0 + '.transit'"
+            :rules="dataRule.transit"
+            label="运费"
+          >
+            <el-input-number
+              class="yuan_input"
+              style="width:250px"
+              placeholder="运费"
+              v-model="dataForm.pkgList[0].transit"
+              controls-position="right"
+              :min="0"
+              :max="99999999"
+              :precision="2"
+              clearable
+            ></el-input-number>
+          </el-form-item>
+        </div>
+      </template>
+
       <el-form-item prop="detail" :label="'商品详情'">
         <!-- 富文本编辑器, 容器 -->
         <div id="J_quillEdito"></div>
@@ -255,13 +338,15 @@
         </el-upload>
       </el-form-item>
     </el-form>
-    <template slot="footer">
-      <el-button @click="visible = false">{{ $t("cancel") }}</el-button>
-      <el-button type="primary" @click="dataFormSubmitHandle()">
+    <div class="goods-footer">
+      <el-button class="f_l" @click="closeCurrentTab">{{
+        $t("cancel")
+      }}</el-button>
+      <el-button class="f_l" type="primary" @click="dataFormSubmitHandle()">
         {{ $t("confirm") }}
       </el-button>
-    </template>
-  </el-dialog>
+    </div>
+  </el-card>
 </template>
 
 <script>
@@ -275,6 +360,7 @@ export default {
       visible: false,
       dataForm: {
         id: "",
+        goodsType: "0",
         goodsName: "",
         picUrl: [], // 图片
         doctorId: "", // 医生id
@@ -284,7 +370,7 @@ export default {
         pkgList: [
           {
             deposit: "", //	押金
-            pkgName: "", //	套餐名称
+            pkgName: "1", //	套餐名称
             pkgPrice: "", //	套餐价格
             pkgStock: "", //	套餐库存
             transit: "", //	运费
@@ -382,13 +468,40 @@ export default {
             trigger: "change",
           },
         ],
-        pkgList: [
+        pkgName: [
           {
             required: true,
-            message: this.$t("validate.required"),
+            message: "套餐名称不能为空",
+            trigger: "change",
+          },
+        ],
+        pkgPrice: [
+          {
+            required: true,
+            message: "价格不能为空",
             trigger: "blur",
           },
-          { validator: validateContent, trigger: "blur" },
+        ],
+        pkgStock: [
+          {
+            required: true,
+            message: "库存不能为空",
+            trigger: "blur",
+          },
+        ],
+        deposit: [
+          {
+            required: true,
+            message: "押金不能为空",
+            trigger: "blur",
+          },
+        ],
+        transit: [
+          {
+            required: true,
+            message: "运费不能为空",
+            trigger: "blur",
+          },
         ],
         detail: [
           {
@@ -401,7 +514,14 @@ export default {
       };
     },
   },
+  created() {
+    this.dataForm.id = this.$route.params.id;
+    this.init();
+  },
   methods: {
+    orgChange() {
+      this.getDoctorList();
+    },
     init() {
       this.visible = true;
       this.$nextTick(() => {
@@ -411,18 +531,33 @@ export default {
           this.quillEditorHandle();
         }
         this.$refs["dataForm"].resetFields();
-        this.galleryFileList = [];
-        this.dataForm.picUrl = [];
-        this.$set(this.dataForm, "deptId", "");
-        this.$set(this.dataForm, "orgId", "");
-        Promise.all([
-          this.getDeptList(),
-          this.getOrganList(),
-          this.getDoctorList(),
-        ]).then(() => {
+        Promise.all([this.getDeptList(), this.getOrganList()]).then(() => {
           console.log(this.dataForm.id);
           if (this.dataForm.id) {
             this.getInfo();
+          } else {
+            this.dataForm = {
+              goodsType: "0",
+              goodsName: undefined,
+              picUrl: [], // 图片
+              doctorId: undefined, // 医生id
+              orgId: undefined, // 机构
+              deptId: undefined, // 科室
+              detail: undefined, // 详情
+              pkgList: [
+                {
+                  deposit: undefined, //	押金
+                  pkgName: "1", //	套餐名称
+                  pkgPrice: undefined, //	套餐价格
+                  pkgStock: undefined, //	套餐库存
+                  transit: undefined, //	运费
+                },
+              ],
+            };
+            this.galleryFileList = [];
+            this.$set(this.dataForm, "deptId", "");
+            this.$set(this.dataForm, "orgId", "");
+            this.$set(this.dataForm, "doctorId", "");
           }
         });
       });
@@ -444,21 +579,33 @@ export default {
         transit: "", //	运费
       });
     },
-    getDoctorList() {
-      return this.$http
-        .get("/sys/user/page?userType=1&page=1&limit=1000")
-        .then(({ data: res }) => {
-          if (res.code !== 0) {
-            return this.$message.error(res.msg);
-          }
-          this.doctorList = res.data.list;
-        })
-        .catch(() => {});
+    getDoctorList(val = true) {
+      let orgId = this.dataForm.orgId;
+      let deptId = this.dataForm.deptId;
+      if (orgId && deptId) {
+        this.$http
+          .get("/sys/user/searchDoctor", {
+            params: {
+              orgId: orgId,
+              deptId: deptId,
+            },
+          })
+          .then(({ data: res }) => {
+            if (res.code !== 0) {
+              return this.$message.error(res.msg);
+            }
+            this.doctorList = res.data;
+            if (val) {
+              this.$set(this.dataForm, "doctorId", "");
+            }
+          })
+          .catch(() => {});
+      }
     },
     // 获取 科室管理
     getDeptList() {
       return this.$http
-        .get("/sys/dept/list")
+        .get("/sys/dept/list/all")
         .then(({ data: res }) => {
           if (res.code !== 0) {
             return this.$message.error(res.msg);
@@ -470,7 +617,7 @@ export default {
     // 获取 机构管理
     getOrganList() {
       return this.$http
-        .get("/sys/org/list")
+        .get("/sys/org/list/all")
         .then(({ data: res }) => {
           if (res.code !== 0) {
             return this.$message.error(res.msg);
@@ -525,7 +672,7 @@ export default {
     // 获取信息
     getInfo() {
       this.$http
-        .get(`/shop/goods/get?id=${this.dataForm.id}`)
+        .get(`/shop/goods/getGoodsDetail?id=${this.dataForm.id}`)
         .then(({ data: res }) => {
           if (res.code !== 0) {
             return this.$message.error(res.msg);
@@ -534,22 +681,26 @@ export default {
             ...this.dataForm,
             ...res.data,
           };
-          this.$nextTick(() => {
-            if (this.dataForm.extendAttrs) {
+          this.quillEditor.root.innerHTML = this.dataForm.detail;
+          this.galleryFileList = [];
+          for (var i = 0; i < this.dataForm.picUrl.length; i++) {
+            this.galleryFileList.push({
+              url: this.dataForm.picUrl[i],
+            });
+          }
+          if (this.dataForm.extendAttrs) {
+            this.dataForm.deptId = this.dataForm.extendAttrs.deptId; // 科室
+            this.dataForm.orgId = this.dataForm.extendAttrs.orgId; // 机构
+            this.$nextTick(() => {
+              this.getDoctorList(false);
+              this.$set(
+                this.dataForm,
+                "doctorId",
+                this.dataForm.extendAttrs.doctorId
+              );
               this.dataForm.doctorId = this.dataForm.extendAttrs.doctorId; // 医生id
-              this.dataForm.orgId = this.dataForm.extendAttrs.orgId; // 机构
-              this.dataForm.deptId = this.dataForm.extendAttrs.deptId; // 科室
-            }
-            this.quillEditor.root.innerHTML = this.dataForm.detail;
-            this.galleryFileList = [];
-            for (var i = 0; i < this.dataForm.picUrl.length; i++) {
-              this.galleryFileList.push({
-                url: this.dataForm.picUrl[i],
-              });
-            }
-          });
-
-          console.log(this.dataForm);
+            });
+          }
         })
         .catch(() => {});
     },
@@ -560,19 +711,39 @@ export default {
           if (!valid) {
             return false;
           }
+          // 在线服务 0
+          let orgId =
+              this.dataForm.goodsType == 0 ? this.dataForm.orgId : undefined, // 机构
+            deptId =
+              this.dataForm.goodsType == 0 ? this.dataForm.deptId : undefined, // 科室
+            doctorId =
+              this.dataForm.goodsType == 0 ? this.dataForm.doctorId : undefined; // 医生id
+          let dataForm = {
+            id: this.dataForm.id,
+            goodsType: this.dataForm.goodsType,
+            goodsName: this.dataForm.goodsName,
+            picUrl: this.dataForm.picUrl, // 图片
+            detail: this.dataForm.detail, // 详情
+            pkgList: this.dataForm.pkgList,
+            orgId: orgId,
+            deptId: deptId,
+            doctorId: doctorId,
+          };
+
           this.$http["post"](
-            !this.dataForm.id ? "/shop/goods/add" : "/shop/goods/edit",
-            this.dataForm
+            !this.dataForm.id ? "/shop/goods/add" : "/shop/goods/updateGoods",
+            dataForm
           )
             .then(({ data: res }) => {
               if (res.code !== 0) {
                 return this.$message.error(res.msg);
               }
               this.$message({
-                message: this.$t("prompt.success"),
+                message: !this.dataForm.id ? "添加成功" : "修改成功",
                 type: "success",
                 duration: 500,
                 onClose: () => {
+                  this.closeCurrentTab();
                   this.visible = false;
                   this.$emit("refreshDataList");
                 },
@@ -605,7 +776,7 @@ export default {
     uploadOverrun: function() {
       this.$message({
         type: "error",
-        message: "上传文件个数超出限制!最多上传10张图片!",
+        message: "上传文件个数超出限制!最多上传9张图片!",
       });
     },
     handlePictureCardPreview(file) {
@@ -619,11 +790,29 @@ export default {
       }
       this.dataForm.picUrl.push(res.data.src);
     },
+
+    // 关闭当前窗口
+    closeCurrentTab(data) {
+      var tabName = this.$store.state.contentTabsActiveName;
+      this.$store.state.contentTabs = this.$store.state.contentTabs.filter(
+        (item) => item.name !== tabName
+      );
+      if (this.$store.state.contentTabs.length <= 0) {
+        this.$store.state.sidebarMenuActiveName = this.$store.state.contentTabsActiveName =
+          "home";
+        return false;
+      }
+      if (tabName === this.$store.state.contentTabsActiveName) {
+        this.$router.push({
+          name: "shop-goods",
+        });
+      }
+    },
   },
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scope>
 .mod-sys__dept {
   .dept-list {
     .el-input__inner,
@@ -633,6 +822,39 @@ export default {
   }
 }
 .el-m {
-  margin-top: 15px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.content-goods {
+  position: relative;
+}
+.goods-footer {
+  width: 100%;
+  overflow: hidden;
+  .f_l {
+    float: right !important;
+    margin-left: 20px;
+  }
+}
+.yuan_input {
+  .el-input-number__decrease,
+  .el-input-number__increase {
+    display: none !important;
+  }
+  ::before {
+    content: "元";
+    position: absolute;
+    width: 40px;
+    right: 1px;
+    bottom: 1px;
+    top: auto;
+    left: auto;
+    border-right: none;
+    border-left: 1px solid #dcdfe6;
+    border-radius: 0 0 4px;
+    text-align: center;
+    background-color: #f5f7fa;
+    color: #909399;
+  }
 }
 </style>

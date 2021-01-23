@@ -98,7 +98,7 @@ export default {
   data() {
     return {
       mixinViewModuleOptions: {
-        getDataListURL: "/sys/dept/page",
+        getDataListURL: "/sys/dept/list",
         getDataListIsPage: true,
         deleteURL: "/sys/dept/delete",
         deleteIsBatch: true,

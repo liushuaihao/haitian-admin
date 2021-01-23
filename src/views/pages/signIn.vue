@@ -14,14 +14,23 @@
           class="demo-ruleForm"
         >
           <el-form-item prop="realName">
-            <el-input placeholder="姓名" v-model="dataForm.realName"></el-input>
+            <el-input
+              placeholder="姓名"
+              v-model="dataForm.realName"
+              clearable
+            ></el-input>
           </el-form-item>
           <el-form-item prop="mobile">
-            <el-input placeholder="手机号" v-model="dataForm.mobile"></el-input>
+            <el-input
+              placeholder="手机号"
+              v-model="dataForm.mobile"
+              clearable
+            ></el-input>
           </el-form-item>
           <el-form-item prop="idCard">
             <el-input
               placeholder="身份证号"
+              clearable
               v-model="dataForm.idCard"
             ></el-input>
           </el-form-item>
@@ -37,6 +46,7 @@
               :options="regionTree"
               :props="optionsProps"
               @change="handleChange"
+              clearable
             ></el-cascader>
           </el-form-item>
 
@@ -44,6 +54,7 @@
             <el-input
               show-password
               placeholder="密码"
+              clearable
               v-model="dataForm.password"
             ></el-input>
           </el-form-item>
@@ -51,6 +62,7 @@
             <el-input
               show-password
               placeholder="确认密码"
+              clearable
               v-model="dataForm.confirmPassword"
             ></el-input>
           </el-form-item>
@@ -58,6 +70,7 @@
           <el-form-item prop="orgId">
             <el-select
               style="width:100%"
+              clearable
               v-model="dataForm.orgId"
               placeholder="所属机构"
             >
@@ -72,6 +85,7 @@
           <el-form-item prop="deptId">
             <el-select
               style="width:100%"
+              clearable
               v-model="dataForm.deptId"
               placeholder="所属科室"
             >
@@ -89,6 +103,7 @@
                 <el-input
                   v-model="dataForm.captcha"
                   placeholder="验证码"
+                  clearable
                 ></el-input>
               </el-col>
               <el-col :span="10" class="login-captcha" style="padding:0;">
@@ -229,7 +244,7 @@ export default {
     // 获取角色列表 科室管理
     getDeptList() {
       return this.$http
-        .get("/sys/dept/list")
+        .get("/sys/dept/list/all")
         .then(({ data: res }) => {
           if (res.code !== 0) {
             return this.$message.error(res.msg);
@@ -241,7 +256,7 @@ export default {
     // 获取角色列表 科室管理
     getOrganList() {
       return this.$http
-        .get("/sys/org/list")
+        .get("/sys/org/list/all")
         .then(({ data: res }) => {
           if (res.code !== 0) {
             return this.$message.error(res.msg);
@@ -285,12 +300,6 @@ export default {
     },
     typeClick(type) {
       this.$emit("typeClick", type);
-    },
-    // // 地区
-    getRegion() {
-      this.$http.get("/sys/region/region").then((res) => {
-        console.log(res);
-      });
     },
     // 表单提交
     dataFormSubmitHandle: debounce(

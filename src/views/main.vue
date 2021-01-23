@@ -93,7 +93,7 @@ export default {
     // 获取当前管理员信息
     getUserInfo() {
       return this.$http
-        .get("/sys/user/info")
+        .get("/sys/user/getLoginUserDetail")
         .then(({ data: res }) => {
           if (res.code !== 0) {
             return this.$message.error(res.msg);

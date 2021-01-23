@@ -18,6 +18,7 @@
           :placeholder="$t('user.realName')"
           maxlength="10"
           show-word-limit
+          clearable
         ></el-input>
       </el-form-item>
       <el-form-item prop="gender" :label="$t('user.gender')">
@@ -32,6 +33,7 @@
           :placeholder="$t('user.mobile')"
           maxlength="11"
           show-word-limit
+          clearable
         ></el-input>
       </el-form-item>
       <el-form-item prop="idCard" label="身份证号">
@@ -39,11 +41,13 @@
           v-model.trim="dataForm.idCard"
           placeholder="身份证号"
           maxlength="20"
+          clearable
           show-word-limit
         ></el-input>
       </el-form-item>
       <el-form-item prop="userType" label="角色" class="role-list">
         <el-select
+          clearable
           v-model="dataForm.userType"
           :placeholder="$t('user.roleIdList')"
         >
@@ -66,7 +70,7 @@
         label="所属机构"
         class="role-list"
       >
-        <el-select v-model="dataForm.orgId" placeholder="所属机构">
+        <el-select clearable v-model="dataForm.orgId" placeholder="所属机构">
           <el-option
             v-for="organ in organList"
             :key="organ.id"
@@ -86,7 +90,7 @@
         "
         class="role-list"
       >
-        <el-select v-model="dataForm.deptId" placeholder="所属科室">
+        <el-select clearable v-model="dataForm.deptId" placeholder="所属科室">
           <el-option
             v-for="dept in deptList"
             :key="dept.id"
@@ -102,6 +106,7 @@
           :parent-name.sync="dataForm.cityName"
         ></ren-region-tree> -->
         <el-cascader
+          clearable
           v-if="visible"
           style="width:250px;"
           v-model="dataForm.cityId"
@@ -113,6 +118,7 @@
       </el-form-item>
       <el-form-item prop="address" label="详细地址">
         <el-input
+          clearable
           v-model="dataForm.address"
           placeholder="详细地址"
           maxlength="50"
@@ -121,6 +127,7 @@
       </el-form-item>
       <el-form-item prop="introduce" label="个人介绍">
         <el-input
+          clearable
           type="textarea"
           v-model="dataForm.introduce"
           placeholder="个人介绍"
@@ -279,7 +286,7 @@ export default {
     // 获取角色列表 科室管理
     getDeptList() {
       return this.$http
-        .get("/sys/dept/list")
+        .get("/sys/dept/list/all")
         .then(({ data: res }) => {
           if (res.code !== 0) {
             return this.$message.error(res.msg);
@@ -291,7 +298,7 @@ export default {
     // 获取角色列表 科室管理
     getOrganList() {
       return this.$http
-        .get("/sys/org/list")
+        .get("/sys/org/list/all")
         .then(({ data: res }) => {
           if (res.code !== 0) {
             return this.$message.error(res.msg);
@@ -303,7 +310,7 @@ export default {
     // 获取信息
     getInfo() {
       this.$http
-        .get(`/sys/user/get?id=${this.dataForm.id}`)
+        .get(`/sys/user/getUserDetail?id=${this.dataForm.id}`)
         .then(({ data: res }) => {
           if (res.code !== 0) {
             return this.$message.error(res.msg);
@@ -340,7 +347,7 @@ export default {
           }
           this.$http
             .post(
-              this.insert ? "/sys/user/add" : "/sys/user/edit",
+              !this.dataForm.id ? "/sys/user" : "/sys/user/updateUser",
               this.dataForm
             )
             .then(({ data: res }) => {

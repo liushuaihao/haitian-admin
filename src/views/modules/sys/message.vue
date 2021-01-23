@@ -8,20 +8,21 @@
       >
         <el-form-item>
           <el-input
-            v-model="dataForm.name"
+            v-model="dataForm.noticeTitle"
             :placeholder="$t('message.messageName')"
             clearable
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="getDataList()">{{
-            $t("message.search")
-          }}</el-button>
+          <el-button @click="getDataList()">{{ $t("query") }}</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="addOrUpdateHandle()">{{
-            $t("message.add")
-          }}</el-button>
+          <el-button
+            type="primary"
+            v-if="$hasPermission('sys:message:save')"
+            @click="addOrUpdateHandle()"
+            >{{ $t("message.add") }}</el-button
+          >
         </el-form-item>
       </el-form>
       <el-table
@@ -33,27 +34,27 @@
         style="width: 100%;"
       >
         <el-table-column
-          prop="messageName"
+          prop="noticeTitle"
           :label="$t('message.messageName')"
           header-align="center"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="accepter"
+          prop="noticeObject"
           :label="$t('message.accepter')"
           header-align="center"
           align="center"
-        ></el-table-column>
+        >
+          <template slot-scope="scope">
+            <div>
+              <span>{{ options[scope.row.noticeObject].label }}</span>
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="createDate"
+          sortable="custom"
           :label="$t('message.sendTime')"
-          header-align="center"
-          align="center"
-          width="180"
-        ></el-table-column>
-        <el-table-column
-          prop="status"
-          :label="$t('message.status')"
           header-align="center"
           align="center"
           width="180"
@@ -68,12 +69,14 @@
             <el-button
               type="text"
               size="small"
+              v-if="$hasPermission('sys:message:info')"
               @click="addOrUpdateHandle(scope.row.id)"
               >{{ $t("message.detail") }}</el-button
             >
             <el-button
               type="text"
               size="small"
+              v-if="$hasPermission('sys:message:delete')"
               @click="deleteHandle(scope.row.id)"
               >{{ $t("message.delete") }}</el-button
             >
@@ -108,34 +111,27 @@ export default {
   data() {
     return {
       mixinViewModuleOptions: {
-        getDataListURL: "/sys/message/page",
+        getDataListURL: "notice/list",
         getDataListIsPage: true,
-        deleteURL: "/sys/message",
+        deleteURL: "/notice/delete",
         deleteIsBatch: true,
       },
-      dataForm: {
-        name: "",
-      },
-      dataList: [
+      options: [
         {
-          id: 1,
-          messageName: "活动",
-          accepter: "患者及家属",
-          createDate: "2020-12-24",
-          status: "未读",
-          message: "123",
-          sendPeople: "2",
-          sendMsg: "消息內容",
+          value: "0",
+          label: "所有用户",
         },
         {
-          id: 2,
-          messageName: "通知",
-          accepter: "患者",
-          createDate: "2020-12-24",
-          status: "已读",
-          message: "123",
-          sendPeople: "2",
-          sendMsg: "消息內容",
+          value: "1",
+          label: "医生",
+        },
+        {
+          value: "2",
+          label: "患者",
+        },
+        {
+          value: "3",
+          label: "患者及家属",
         },
       ],
     };

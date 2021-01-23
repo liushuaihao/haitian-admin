@@ -41,7 +41,7 @@
         ></el-table-column>
         <el-table-column
           prop="mobile"
-          label="电话"
+          label="手机号"
           header-align="center"
           align="center"
         ></el-table-column>
@@ -133,7 +133,7 @@ export default {
   data() {
     return {
       mixinViewModuleOptions: {
-        getDataListURL: "/manage/review/page",
+        getDataListURL: "/manage/review/list",
         getDataListIsPage: true,
         deleteURL: "/manage/review/delete",
         deleteIsBatch: true,

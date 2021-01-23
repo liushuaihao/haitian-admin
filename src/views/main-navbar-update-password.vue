@@ -118,7 +118,7 @@ export default {
             return false;
           }
           this.$http
-            .post("/sys/user/password", this.dataForm)
+            .post("/sys/user/updatePassword", this.dataForm)
             .then(({ data: res }) => {
               if (res.code !== 0) {
                 return this.$message.error(res.msg);

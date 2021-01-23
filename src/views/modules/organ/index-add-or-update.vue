@@ -118,7 +118,7 @@ export default {
     // 获取信息
     getInfo() {
       this.$http
-        .get(`/sys/org/get`, { params: { id: this.dataForm.id } })
+        .get(`/sys/org/getOrgDetail`, { params: { id: this.dataForm.id } })
         .then(({ data: res }) => {
           if (res.code !== 0) {
             return this.$message.error(res.msg);
@@ -150,7 +150,7 @@ export default {
             return false;
           }
           this.$http["post"](
-            !this.dataForm.id ? "/sys/org/add" : "/sys/org/edit",
+            !this.dataForm.id ? "/sys/org/add" : "/sys/org/updateOrg",
             this.dataForm
           )
             .then(({ data: res }) => {

@@ -15,12 +15,14 @@
       <el-form-item prop="name" :label="$t('role.name')">
         <el-input
           v-model="dataForm.name"
+          clearable
           :placeholder="$t('role.name')"
         ></el-input>
       </el-form-item>
       <el-form-item prop="remark" :label="$t('role.remark')">
         <el-input
           v-model="dataForm.remark"
+          clearable
           :placeholder="$t('role.remark')"
         ></el-input>
       </el-form-item>
@@ -136,7 +138,7 @@ export default {
     // 获取信息
     getInfo() {
       this.$http
-        .get(`/sys/role/get?id=${this.dataForm.id}`)
+        .get(`/sys/role/getRoleDetail?id=${this.dataForm.id}`)
         .then(({ data: res }) => {
           if (res.code !== 0) {
             return this.$message.error(res.msg);
@@ -164,7 +166,7 @@ export default {
             ...this.$refs.menuListTree.getCheckedKeys(),
           ];
           this.$http["post"](
-            !this.dataForm.id ? "/sys/role/add" : "/sys/role/edit",
+            !this.dataForm.id ? "/sys/role/add" : "/sys/role/updateRole",
             this.dataForm
           )
             .then(({ data: res }) => {

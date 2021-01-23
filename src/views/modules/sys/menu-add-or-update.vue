@@ -13,7 +13,11 @@
       label-width="120px"
     >
       <el-form-item prop="type" :label="$t('menu.type')" size="mini">
-        <el-radio-group v-model="dataForm.type" :disabled="!!dataForm.id">
+        <el-radio-group
+          v-model="dataForm.type"
+          :disabled="!!dataForm.id"
+          clearable
+        >
           <el-radio :label="0">{{ $t("menu.type0") }}</el-radio>
           <el-radio :label="1">{{ $t("menu.type1") }}</el-radio>
         </el-radio-group>
@@ -22,6 +26,7 @@
         <el-input
           v-model="dataForm.name"
           :placeholder="$t('menu.name')"
+          clearable
         ></el-input>
       </el-form-item>
       <el-form-item
@@ -34,6 +39,7 @@
           ref="menuListPopover"
           placement="bottom-start"
           trigger="click"
+          clearable
         >
           <el-tree
             :data="menuList"
@@ -52,6 +58,7 @@
           v-popover:menuListPopover
           :readonly="true"
           :placeholder="$t('menu.parentName')"
+          clearable
         >
           <i
             v-if="dataForm.pid !== '0'"
@@ -69,6 +76,7 @@
         <el-input
           v-model="dataForm.url"
           :placeholder="$t('menu.url')"
+          clearable
         ></el-input>
       </el-form-item>
       <el-form-item prop="sort" :label="$t('menu.sort')">
@@ -76,11 +84,13 @@
           v-model="dataForm.sort"
           controls-position="right"
           :min="0"
+          clearable
           :label="$t('menu.sort')"
         ></el-input-number>
       </el-form-item>
       <el-form-item prop="permissions" :label="$t('menu.permissions')">
         <el-input
+          clearable
           v-model="dataForm.permissions"
           :placeholder="$t('menu.permissionsTips')"
         ></el-input>
@@ -97,6 +107,7 @@
           placement="bottom-start"
           trigger="click"
           popper-class="mod-sys__menu-icon-popover"
+          clearable
         >
           <div class="mod-sys__menu-icon-inner">
             <div class="mod-sys__menu-icon-list">
@@ -208,7 +219,7 @@ export default {
     // 获取信息
     getInfo() {
       this.$http
-        .get(`/sys/menu/get`, { params: { id: this.dataForm.id } })
+        .get(`/sys/menu/getMenuDetail`, { params: { id: this.dataForm.id } })
         .then(({ data: res }) => {
           if (res.code !== 0) {
             return this.$message.error(res.msg);
@@ -248,7 +259,7 @@ export default {
             return false;
           }
           this.$http["post"](
-            !this.dataForm.id ? "/sys/menu/add" : "/sys/menu/edit",
+            !this.dataForm.id ? "/sys/menu/add" : "/sys/menu/updateMenu",
             this.dataForm
           )
             .then(({ data: res }) => {

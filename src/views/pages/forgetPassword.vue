@@ -14,7 +14,11 @@
           class="demo-ruleForm"
         >
           <el-form-item prop="mobile">
-            <el-input v-model="dataForm.mobile" placeholder="手机号"></el-input>
+            <el-input
+              v-model="dataForm.mobile"
+              placeholder="手机号"
+              clearable
+            ></el-input>
           </el-form-item>
           <el-form-item prop="password">
             <el-input
@@ -22,6 +26,7 @@
               placeholder="密码"
               show-password
               type="password"
+              clearable
             ></el-input>
           </el-form-item>
           <el-form-item prop="confirmPassword">
@@ -29,6 +34,7 @@
               v-model="dataForm.confirmPassword"
               show-password
               type="confirmPassword"
+              clearable
               placeholder="确认密码"
             ></el-input>
           </el-form-item>
@@ -38,6 +44,7 @@
                 <el-input
                   v-model="dataForm.captcha"
                   placeholder="验证码"
+                  clearable
                 ></el-input>
               </el-col>
               <el-col :span="8" :offset="2" style="padding:0;">

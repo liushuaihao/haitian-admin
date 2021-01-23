@@ -11,6 +11,7 @@
         prop="addtnotd"
         v-if="!dataForm.id"
         :label-width="formLabelWidth"
+        clearable
       >
         <el-col :span="10">
           <el-input v-model="dataForm.addtnotd"></el-input>
@@ -21,6 +22,7 @@
         prop="deptName"
         v-if="dataForm.id"
         :label-width="formLabelWidth"
+        clearable
       >
         <el-col :span="10">
           <el-input v-model="dataForm.deptName"></el-input>
@@ -94,7 +96,7 @@ export default {
     modification: function() {
       //   信息
       this.$http
-        .get(`/sys/dept/get?id=${this.dataForm.id}`)
+        .get(`/sys/dept/getDeptDetail?id=${this.dataForm.id}`)
         .then((res) => {
           console.log(res);
           let dataList = res.data.data;
@@ -110,7 +112,7 @@ export default {
         id: this.dataForm.id,
       };
       this.$http
-        .put("/sys/dept/edit", { id: param.id, deptName: param.deptName })
+        .put("/sys/dept/updateDept", { id: param.id, deptName: param.deptName })
         .then((res) => {
           this.$emit("refreshDataList");
         })

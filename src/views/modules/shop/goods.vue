@@ -7,9 +7,9 @@
         @keyup.enter.native="getDataList()"
       >
         <!-- $hasPermission('shop:goods:save') 按钮权限配置 'shop:goods:save' 标识 -->
-        <!-- <el-form-item>
+        <el-form-item>
           <el-input
-            v-model="dataForm.id"
+            v-model="dataForm.goodsId"
             placeholder="商品ID"
             clearable
           ></el-input>
@@ -25,7 +25,7 @@
           <el-select
             class="selects"
             clearable
-            v-model="dataForm.type"
+            v-model="dataForm.goodsType"
             placeholder="商品类型"
           >
             <el-option
@@ -35,16 +35,16 @@
               :value="item.value"
             ></el-option>
           </el-select>
-        </el-form-item> -->
-        <!-- <el-form-item>
+        </el-form-item>
+        <el-form-item>
           <el-button @click="getDataList()">{{ $t("query") }}</el-button>
-        </el-form-item> -->
+        </el-form-item>
         <el-form-item>
           <el-button
             v-if="$hasPermission('shop:goods:save')"
             type="primary"
-            @click="addOrUpdateHandle()"
-            >{{ $t("add") }}</el-button
+            @click="addGoods()"
+            >添加商品</el-button
           >
         </el-form-item>
       </el-form>
@@ -64,7 +64,7 @@
         ></el-table-column>
         <el-table-column
           prop="picUrl"
-          label="图片"
+          label="商品图片"
           header-align="center"
           align="center"
         >
@@ -118,12 +118,14 @@
             <!-- <el-button type="text" size="small" @click="forwardUrl(scope.row)">详情</el-button> -->
             <el-button
               type="text"
-              @click="addOrUpdateHandle(scope.row.id)"
+              v-if="$hasPermission('shop:goods:update')"
+              @click="addGoods(scope.row.id)"
               size="small"
               >修改</el-button
             >
             <el-button
               type="text"
+              v-if="$hasPermission('shop:goods:delete')"
               @click="deleteHandle(scope.row.id)"
               size="small"
               >删除</el-button
@@ -154,7 +156,7 @@
 <script>
 import mixinViewModule from "@/mixins/view-module";
 import AddOrUpdate from "./goods-add-or-update.vue";
-// import { addDynamicRoute } from "@/router"; // 添加动态路由
+import { addDynamicRoute } from "@/router"; // 添加动态路由
 export default {
   components: {
     AddOrUpdate,
@@ -163,8 +165,9 @@ export default {
   data() {
     return {
       mixinViewModuleOptions: {
-        getDataListURL: "/shop/goods/page",
+        getDataListURL: "/shop/goods/list",
         getDataListIsPage: true,
+        activatedIsNeed: true,
         deleteURL: "/shop/goods/delete",
         deleteIsBatch: true,
       },
@@ -185,6 +188,16 @@ export default {
     };
   },
   methods: {
+    addGoods(id) {
+      var routeParams = {
+        routeName: `${this.$route.name}__instance_${id ? id : "add"}`,
+        menuId: `${this.$route.meta.menuId}`,
+        title: `${id ? "修改商品" : "添加商品"}`,
+        path: "shop/goods-add-or-update",
+        params: { id: id },
+      };
+      addDynamicRoute(routeParams, this.$router, this.$route);
+    },
     // forwardUrl (row) {
     //   let type = row.type;
     //   var routeParams = {

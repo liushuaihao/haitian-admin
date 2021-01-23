@@ -2,22 +2,42 @@
   <el-card shadow="never" class="aui-card--fill">
     <el-form :inline="true" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.serial" placeholder="订单编号" clearable></el-input>
+        <el-input
+          v-model="dataForm.serial"
+          placeholder="订单编号"
+          clearable
+        ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="dataForm.id" placeholder="用户ID" clearable></el-input>
+        <el-input
+          v-model="dataForm.id"
+          placeholder="用户ID"
+          clearable
+        ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="dataForm.name" placeholder="姓名" clearable></el-input>
+        <el-input
+          v-model="dataForm.name"
+          placeholder="姓名"
+          clearable
+        ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="dataForm.mobile" placeholder="手机号" clearable></el-input>
+        <el-input
+          v-model="dataForm.mobile"
+          placeholder="手机号"
+          clearable
+        ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="dataForm.identityCard" placeholder="身份证" clearable></el-input>
+        <el-input
+          v-model="dataForm.identityCard"
+          placeholder="身份证"
+          clearable
+        ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button @click="getDataList()">{{ $t('query') }}</el-button>
+        <el-button @click="getDataList()">{{ $t("query") }}</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -28,14 +48,36 @@
       @sort-change="dataListSortChangeHandle"
       style="width: 100%;"
     >
-      <el-table-column prop="order" label="订单号" header-align="center" align="center"></el-table-column>
-      <el-table-column prop="name" label="姓名" header-align="center" align="center"></el-table-column>
-      <el-table-column prop="mobile" label="电话" header-align="center" align="center"></el-table-column>
-      <el-table-column prop="status" label="状态" header-align="center" align="center">
+      <el-table-column
+        prop="order"
+        label="订单号"
+        header-align="center"
+        align="center"
+      ></el-table-column>
+      <el-table-column
+        prop="name"
+        label="姓名"
+        header-align="center"
+        align="center"
+      ></el-table-column>
+      <el-table-column
+        prop="mobile"
+        label="手机号"
+        header-align="center"
+        align="center"
+      ></el-table-column>
+      <el-table-column
+        prop="status"
+        label="状态"
+        header-align="center"
+        align="center"
+      >
         <template slot-scope="scope">
           <div>
-            <el-tag v-if="scope.row.status === '已下单'">{{scope.row.status}}</el-tag>
-            <el-tag v-else>{{scope.row.status}}</el-tag>
+            <el-tag v-if="scope.row.status === '已下单'">{{
+              scope.row.status
+            }}</el-tag>
+            <el-tag v-else>{{ scope.row.status }}</el-tag>
           </div>
         </template>
       </el-table-column>
@@ -67,7 +109,7 @@
       >
         <template slot-scope="scope">
           <div v-if="scope.row.status === '已付款'">
-            {{'微信支付'}}
+            {{ "微信支付" }}
           </div>
         </template>
       </el-table-column>
@@ -78,10 +120,18 @@
         width="150"
       >
         <template slot-scope="scope">
-          <el-button style="color:#E6A23C" type="text" size="small" @click="sipping(scope.row)" v-if="scope.row.status === '已付款'">
-           发货
+          <el-button
+            style="color:#E6A23C"
+            type="text"
+            size="small"
+            @click="sipping(scope.row)"
+            v-if="scope.row.status === '已付款'"
+          >
+            发货
           </el-button>
-          <el-button type="text" size="small" @click="forwardUrl(scope.row)">详情</el-button>
+          <el-button type="text" size="small" @click="forwardUrl(scope.row)"
+            >详情</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -104,20 +154,20 @@ import mixinViewModule from "@/mixins/view-module";
 import { addDynamicRoute } from "@/router"; // 添加动态路由
 export default {
   mixins: [mixinViewModule],
-  data () {
+  data() {
     return {
       mixinViewModuleOptions: {
         getDataListURL: "",
         getDataListIsPage: true,
         deleteURL: "",
-        deleteIsBatch: true
+        deleteIsBatch: true,
       },
       dataForm: {
         serial: "",
         id: "",
         name: "",
         mobile: "",
-        identityCard: ""
+        identityCard: "",
       },
       dataList: [
         {
@@ -126,7 +176,7 @@ export default {
           mobile: "13012345671",
           status: "已下单",
           heart: "60", // 心率值
-          tmti: "2019-04-05" // 最近时间
+          tmti: "2019-04-05", // 最近时间
         },
         {
           order: "00002",
@@ -134,7 +184,7 @@ export default {
           mobile: "13012345671",
           status: "已下单",
           heart: "70",
-          tmti: "2019-04-06"
+          tmti: "2019-04-06",
         },
         {
           order: "00003",
@@ -142,7 +192,7 @@ export default {
           mobile: "13012345671",
           status: "已付款",
           heart: "60",
-          tmti: "2019-04-07"
+          tmti: "2019-04-07",
         },
         {
           order: "00004",
@@ -150,7 +200,7 @@ export default {
           mobile: "13012345671",
           status: "已下单",
           heart: "80",
-          tmti: "2019-04-08"
+          tmti: "2019-04-08",
         },
         {
           order: "00005",
@@ -158,53 +208,54 @@ export default {
           mobile: "13012345671",
           status: "已下单",
           heart: "50",
-          tmti: "2019-04-09"
-        }
+          tmti: "2019-04-09",
+        },
       ],
       states: [
         {
           value: "选项1",
-          label: "全部"
+          label: "全部",
         },
         {
           value: "选项2",
-          label: "已下单"
+          label: "已下单",
         },
         {
           value: "选项3",
-          label: "已付款"
-        }
-      ]
+          label: "已付款",
+        },
+      ],
     };
   },
   methods: {
     // 发货
-    sipping (id) {
-      this.$confirm('订单发货', '发货', {
-        confirmButtonText: this.$t('confirm'),
-        cancelButtonText: this.$t('cancel'),
-        type: 'warning'
-      }).then(() => {
-      }).catch(() => {})
+    sipping(id) {
+      this.$confirm("订单发货", "发货", {
+        confirmButtonText: this.$t("confirm"),
+        cancelButtonText: this.$t("cancel"),
+        type: "warning",
+      })
+        .then(() => {})
+        .catch(() => {});
     },
-    forwardUrl (row) {
+    forwardUrl(row) {
       var routeParams = {
         routeName: `${this.$route.name}__instance_${row.id}`,
         menuId: `${this.$route.meta.menuId}`,
         title: `${this.$route.meta.title}详情 - ${row.name}`,
         path: "shop/order-details",
-        params: {}
+        params: {},
       };
       addDynamicRoute(routeParams, this.$router, this.$route);
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
-.selects{
-  margin-bottom:20px !important;
+.selects {
+  margin-bottom: 20px !important;
 }
-.order>div{
-margin-right: 30px;
+.order > div {
+  margin-right: 30px;
 }
 </style>

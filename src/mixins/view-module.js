@@ -70,6 +70,12 @@ export default {
           this.total = this.mixinViewModuleOptions.getDataListIsPage
             ? res.data.total
             : 0;
+          const num = Math.ceil(this.total / this.limit);
+          if (res.data.list.length === 0 && res.data.total > 0) {
+            this.page = num;
+            this.query();
+            return false;
+          }
         })
         .catch(() => {
           this.dataListLoading = false;

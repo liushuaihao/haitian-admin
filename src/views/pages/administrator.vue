@@ -14,15 +14,24 @@
           class="demo-ruleForm"
         >
           <el-form-item prop="realName">
-            <el-input placeholder="姓名" v-model="dataForm.realName"></el-input>
+            <el-input
+              placeholder="姓名"
+              v-model="dataForm.realName"
+              clearable
+            ></el-input>
           </el-form-item>
           <el-form-item prop="mobile">
-            <el-input placeholder="手机号" v-model="dataForm.mobile"></el-input>
+            <el-input
+              placeholder="手机号"
+              v-model="dataForm.mobile"
+              clearable
+            ></el-input>
           </el-form-item>
           <el-form-item prop="idCard">
             <el-input
               placeholder="身份证号"
               v-model="dataForm.idCard"
+              clearable
             ></el-input>
           </el-form-item>
           <el-form-item prop="password">
@@ -30,6 +39,7 @@
               placeholder="密码"
               show-password
               v-model="dataForm.password"
+              clearable
             ></el-input>
           </el-form-item>
           <el-form-item prop="confirmPassword">
@@ -37,6 +47,7 @@
               v-model="dataForm.confirmPassword"
               show-password
               type="confirmPassword"
+              clearable
               placeholder="确认密码"
             ></el-input>
           </el-form-item>
