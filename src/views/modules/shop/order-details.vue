@@ -1,28 +1,28 @@
 <template>
   <div>
-    <el-card shadow="never" class="aui-card--fill">
+    <el-card
+      v-loading="loading"
+      shadow="never"
+      class="aui-card--fill"
+      v-if="this.dataForm"
+    >
       <div class="title">基本信息</div>
       <el-divider></el-divider>
-      <el-table
-        v-loading="dataListLoading"
-        :data="baseData"
-        border
-        style="width: 100%"
-      >
+      <el-table :data="baseData" border style="width: 100%">
         <el-table-column
-          prop="orderNum"
+          prop="id"
           label="订单编号"
           header-align="center"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="userID"
+          prop="userId"
           label="用户ID"
           header-align="center"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="name"
+          prop="realName"
           label="姓名"
           header-align="center"
           align="center"
@@ -31,48 +31,68 @@
           <template slot-scope="scope">
             <div>
               <span>订单总额：</span>
-              <span>{{ scope.row.amount.totalPrice | formatPrice }}</span>
+              <span>{{ scope.row.amount | formatPrice }}</span>
             </div>
-            <div>
+            <div v-if="scope.row.deposit">
+              <span>押金金额：</span>
+              <span>{{ scope.row.deposit | formatPrice }}</span>
+            </div>
+
+            <div v-if="scope.row.transit">
               <span>运费金额：</span>
-              <span> + {{ scope.row.amount.payPrice | formatPrice }}</span>
+              <span> + {{ scope.row.transit | formatPrice }}</span>
             </div>
-            <div>
+            <div v-if="status != 0 && status != 3">
               <span>实付金额：</span>
               <span style="color: red">{{
-                scope.row.amount.realPrice | formatPrice
+                scope.row.amountTotal | formatPrice
               }}</span>
             </div>
           </template>
         </el-table-column>
         <el-table-column
-          prop="payType"
+          prop="payChannel"
           label="支付方式"
           header-align="center"
           align="center"
+          v-if="status != 0 && status != 3"
         >
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.status === 1">微信支付</el-tag>
-            <el-tag v-else>支付宝支付</el-tag>
+            <el-tag v-if="scope.row.payChannel == 0" type="success"
+              >微信支付</el-tag
+            >
+            <el-tag v-if="scope.row.payChannel == 1">支付宝支付</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="订单状态" header-align="center" align="center">
           <template slot-scope="scope">
-            {{ scope.row.status === 1 ? "已完成" : "未完成" }}
+            <el-tag
+              :type="
+                scope.row.orderStatus == 2
+                  ? 'success'
+                  : scope.row.orderStatus == 3
+                  ? 'danger'
+                  : ''
+              "
+            >
+              {{ orderStatus[scope.row.orderStatus] }}</el-tag
+            >
           </template>
         </el-table-column>
       </el-table>
       <div class="title">商品信息</div>
       <el-divider></el-divider>
       <el-table
-        v-loading="dataListLoading"
-        :data="goodsData.list"
+        :data="goodsData.goodsList"
+        v-if="goodsData.goodsList.length"
         border
         style="width: 100%"
       >
         <el-table-column label="商品图片" header-align="center" align="center">
-          <template>
-            <div class="imgCont"></div>
+          <template slot-scope="scope">
+            <div class="imgCont">
+              <img :src="scope.row.picUrl" alt="" />
+            </div>
           </template>
         </el-table-column>
         <el-table-column
@@ -86,191 +106,249 @@
           label="商品类型"
           header-align="center"
           align="center"
-        ></el-table-column>
+        >
+          <template slot-scope="scope">
+            {{ goodsType[scope.row.goodsType] }}
+          </template>
+        </el-table-column>
         <el-table-column label="单价" header-align="center" align="center">
           <template slot-scope="scope">
-            {{ scope.row.price | formatPrice }}
+            <!-- {{ scope.row.pkgPrice }} -->
+            {{ scope.row.pkgPrice | formatPrice }}
           </template>
         </el-table-column>
         <el-table-column label="押金" header-align="center" align="center">
-          <template slot-scope="scope">
-            {{ scope.row.cashPladge | formatPrice }}
+          <template slot-scope="scope" v-if="scope.row.deposit">
+            {{ scope.row.deposit | formatPrice }}
           </template>
         </el-table-column>
         <el-table-column
-          prop="count"
+          prop="num"
           label="购买数量"
           header-align="center"
           align="center"
         ></el-table-column>
         <el-table-column label="商品总价" header-align="center" align="center">
           <template slot-scope="scope">
-            {{ scope.row.totalPrice | formatPrice }}
+            {{ scope.row.amount | formatPrice }}
           </template>
         </el-table-column>
       </el-table>
       <div class="sumCont">
         <div>
-          <span>买家留言：</span>
-          <span>{{ goodsData.buyMsg || "无" }}</span>
+          <span></span>
+          <span></span>
         </div>
         <div>
           <span>总计金额：</span>
-          <span>{{ goodsData.totalPrice }}</span>
+          <span>{{ goodsData.amountTotal | formatPrice }}</span>
         </div>
       </div>
-      <div class="title">收获信息</div>
+      <div class="title">收货人信息</div>
       <el-divider></el-divider>
-      <el-table
-        v-loading="dataListLoading"
-        :data="getGoodsData"
-        border
-        style="width: 100%"
-      >
+      <el-table :data="getGoodsData" border style="width: 100%">
         <el-table-column
-          prop="name"
+          prop="receiverName"
           label="收货人"
           header-align="center"
           align="center"
           width="200"
         ></el-table-column>
         <el-table-column
-          prop="tel"
+          prop="receiverMobile"
           label="收货电话"
           header-align="center"
           align="center"
           width="200"
         ></el-table-column>
         <el-table-column
-          prop="addr"
+          prop="receiverAddress"
           label="收货地址"
           header-align="center"
           align="center"
         ></el-table-column>
       </el-table>
-      <div class="title">付款信息</div>
-      <el-divider></el-divider>
-      <el-table
-        v-loading="dataListLoading"
-        :data="payMoneyData"
-        border
-        style="width: 100%"
-      >
-        <el-table-column label="应付金额" header-align="center" align="center">
-          <template slot-scope="scope">
-            {{ scope.row.needPayMoney | formatPrice }}
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="payType"
-          label="支付方式"
-          header-align="center"
-          align="center"
-        ></el-table-column>
-        <el-table-column label="付款状态" header-align="center" align="center">
-          <template slot-scope="scope">
-            <el-tag v-if="scope.row.payStatus === 1">已付款</el-tag>
-            <el-tag v-else>未付款</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="payTime"
-          label="付款时间"
-          header-align="center"
-          align="center"
-        ></el-table-column>
-      </el-table>
-      <div class="title">发货信息</div>
-      <el-divider></el-divider>
-      <el-table
-        v-loading="dataListLoading"
-        :data="sendGoodsData"
-        border
-        style="width: 100%"
-      >
-        <el-table-column label="发货状态" header-align="center" align="center">
-          <template slot-scope="scope">
-            <el-tag v-if="scope.row.sendStatus === 1">已发货</el-tag>
-            <el-tag v-else>未发货</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="sendTime"
-          label="发货时间"
-          header-align="center"
-          align="center"
-        ></el-table-column>
-      </el-table>
+      <template v-if="status != 0 && status != 3">
+        <div>
+          <div class="title">付款信息</div>
+          <el-divider></el-divider>
+          <el-table :data="payMoneyData" border style="width: 100%">
+            <el-table-column
+              label="应付金额"
+              header-align="center"
+              align="center"
+            >
+              <template slot-scope="scope">
+                {{ scope.row.amountTotal | formatPrice }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="payChannel"
+              label="支付方式"
+              header-align="center"
+              align="center"
+            >
+              <template slot-scope="scope">
+                <el-tag v-if="scope.row.payChannel == 0" type="success"
+                  >微信支付</el-tag
+                >
+                <el-tag v-if="scope.row.payChannel == 1">支付宝支付</el-tag>
+              </template></el-table-column
+            >
+            <el-table-column
+              label="付款状态"
+              header-align="center"
+              align="center"
+            >
+              <template slot-scope="scope">
+                <el-tag v-if="scope.row.payStatus === 1" type="success"
+                  >已付款</el-tag
+                >
+                <el-tag v-else>未付款</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="payTime"
+              label="付款时间"
+              header-align="center"
+              align="center"
+            ></el-table-column>
+          </el-table>
+        </div>
+      </template>
+      <template>
+        <div v-if="status == 2">
+          <div class="title">发货信息</div>
+          <el-divider></el-divider>
+          <el-table :data="sendGoodsData" border style="width: 100%">
+            <el-table-column
+              label="发货状态"
+              header-align="center"
+              align="center"
+            >
+              <template slot-scope="scope">
+                <el-tag type="success" v-if="scope.row.transStatus === 1"
+                  >已发货</el-tag
+                >
+                <el-tag v-else>未发货</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="transTime"
+              label="发货时间"
+              header-align="center"
+              align="center"
+            ></el-table-column>
+          </el-table>
+        </div>
+      </template>
     </el-card>
   </div>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-      baseData: [
-        {
-          orderNum: 202003264479623,
-          userID: 1001,
-          name: "张三",
-          amount: { totalPrice: 4000, payPrice: 50, realPrice: 4500 },
-          payType: "微信支付",
-          status: 1,
-        },
-      ],
-      goodsData: {
-        buyMsg: "",
-        list: [
-          {
-            img: "",
-            goodsName: "中控设备租赁3个月",
-            goodsType: "设备租赁",
-            price: 500,
-            cashPladge: 500,
-            count: 2,
-            totalPrice: 1000,
-          },
-          {
-            img: "",
-            goodsName: "上颖运动模块",
-            goodsType: "设备购买",
-            price: 1000,
-            cashPladge: 0,
-            count: 2,
-            totalPrice: 2000,
-          },
-        ],
-        totalPrice: 4000,
+      loading: true,
+      goodsType: {
+        0: "在线服务",
+        1: "设备租赁",
+        2: "设备购买",
       },
-      getGoodsData: [
-        { name: "张三", tel: "15035555981", addr: "北京市丰台区四环西路19号" },
-      ],
-      payMoneyData: [
-        {
-          needPayMoney: 4050,
-          payType: "微信支付",
-          payStatus: 1,
-          payTime: "2020-10-20 19:43:32",
-        },
-      ],
-      sendGoodsData: [{ sendStatus: 1, sendTime: "2020-12-23 23:43:12" }],
+      status: "0",
+      orderStatus: {
+        0: "已下单",
+        1: "已付款",
+        2: "已完成",
+        3: "已取消",
+      },
+      baseData: [],
+      goodsData: {
+        goodsList: [],
+        amountTotal: "",
+      },
+      getGoodsData: [],
+      payMoneyData: [],
+      sendGoodsData: [],
+      dataForm: {
+        id: "",
+        goodsList: [],
+      },
     };
   },
+  created() {
+    this.dataForm.id = this.$route.params.id;
+    this.init();
+  },
   methods: {
-    retu: function () {
-      this.$router.go(-1);
+    init() {
+      this.$nextTick(() => {
+        this.getInfo();
+      });
+    },
+    // 获取信息
+    getInfo() {
+      this.$http
+        .get(`/shop/order/getOrderDetail?id=${this.dataForm.id}`)
+        .then(({ data: res }) => {
+          if (res.code !== 0) {
+            return this.$message.error(res.msg);
+          }
+          this.dataForm = {
+            ...this.dataForm,
+            ...res.data,
+          };
+          this.status = res.data.orderStatus;
+          // 基本信息
+          this.$set(this.baseData, 0, {
+            id: res.data.id,
+            userId: res.data.userId,
+            realName: res.data.realName,
+            amount: res.data.amount,
+            deposit: res.data.deposit,
+            transit: res.data.transit,
+            amountTotal: res.data.amountTotal,
+            payChannel: res.data.payChannel,
+            orderStatus: res.data.orderStatus,
+          });
+          // 商品信息
+          this.$set(this.goodsData, "goodsList", res.data.goodsList);
+          this.$set(this.goodsData, "amountTotal", res.data.amountTotal);
+          // 收货信息
+          this.$set(this.getGoodsData, 0, {
+            receiverAddress: res.data.receiverAddress, //收货地址
+            receiverMobile: res.data.receiverMobile, //收货电话
+            receiverName: res.data.receiverName, //收货人
+          });
+          // 付款信息
+          this.$set(this.payMoneyData, 0, {
+            amountTotal: res.data.amountTotal, // 应付金额
+            payChannel: res.data.payChannel, //支付方式 0微信 1支付宝	string
+            payStatus: res.data.payStatus, //支付状态0 未支付 1已支付	string
+            payTime: res.data.payTime, //付款时间	string
+          });
+          //发货信息
+          this.$set(this.sendGoodsData, 0, {
+            transStatus: res.data.transStatus, //发货状态 0未发货 1已发货	string
+            transTime: res.data.transTime, //发货时间
+          });
+          this.loading = false;
+        })
+        .catch(() => {});
     },
   },
 
   filters: {
-    formatPrice (price) {
-      return "￥ " + price.toFixed(2);
+    formatPrice(price) {
+      if (price) {
+        return "￥ " + price.toFixed(2);
+      }
     },
   },
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
 .btn {
   margin-top: 20px !important;
 }
@@ -279,9 +357,10 @@ export default {
   margin-bottom: -10px;
 }
 .imgCont {
-  width: 40px;
-  height: 40px;
-  background-color: #ccc;
+  img {
+    width: 80px;
+    height: 80px;
+  }
 }
 .sumCont {
   display: flex;

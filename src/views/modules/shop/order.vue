@@ -3,21 +3,21 @@
     <el-form :inline="true" @keyup.enter.native="getDataList()">
       <el-form-item>
         <el-input
-          v-model="dataForm.serial"
+          v-model="dataForm.orderId"
           placeholder="订单编号"
           clearable
         ></el-input>
       </el-form-item>
       <el-form-item>
         <el-input
-          v-model="dataForm.id"
+          v-model="dataForm.userId"
           placeholder="用户ID"
           clearable
         ></el-input>
       </el-form-item>
       <el-form-item>
         <el-input
-          v-model="dataForm.name"
+          v-model="dataForm.realName"
           placeholder="姓名"
           clearable
         ></el-input>
@@ -31,10 +31,36 @@
       </el-form-item>
       <el-form-item>
         <el-input
-          v-model="dataForm.identityCard"
+          v-model="dataForm.idCard"
           placeholder="身份证"
           clearable
         ></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-select
+          v-model="dataForm.orderStatus"
+          style="width:250px"
+          placeholder="订单状态"
+          clearable
+        >
+          <el-option
+            v-for="(key, item, index) in orderStatus"
+            :key="index"
+            :label="key"
+            :value="item"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-date-picker
+          v-model="daterange"
+          type="datetimerange"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          :range-separator="$t('datePicker.range')"
+          start-placeholder="起止时间"
+          end-placeholder="结束时间"
+        >
+        </el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">{{ $t("query") }}</el-button>
@@ -49,13 +75,13 @@
       style="width: 100%;"
     >
       <el-table-column
-        prop="order"
+        prop="id"
         label="订单号"
         header-align="center"
         align="center"
       ></el-table-column>
       <el-table-column
-        prop="name"
+        prop="realName"
         label="姓名"
         header-align="center"
         align="center"
@@ -67,54 +93,55 @@
         align="center"
       ></el-table-column>
       <el-table-column
-        prop="status"
+        prop="orderStatus"
         label="状态"
         header-align="center"
         align="center"
       >
         <template slot-scope="scope">
           <div>
-            <el-tag v-if="scope.row.status === '已下单'">{{
-              scope.row.status
-            }}</el-tag>
-            <el-tag v-else>{{ scope.row.status }}</el-tag>
+            <!-- 0已下单、1已付款、2已完成、3已取消 -->
+            <el-tag v-if="scope.row.orderStatus == 0">已下单</el-tag>
+            <el-tag v-if="scope.row.orderStatus == 1">已付款</el-tag>
+            <el-tag v-if="scope.row.orderStatus == 2" type="success"
+              >已完成</el-tag
+            >
+            <el-tag v-if="scope.row.orderStatus == 3" type="danger"
+              >已取消</el-tag
+            >
           </div>
         </template>
       </el-table-column>
       <el-table-column
-        prop="tmti"
+        prop="createDate"
         label="下单时间"
-        sortable="custom"
         header-align="center"
         align="center"
       >
-        <!-- <template slot-scope="scope">
-            <el-tag v-if="scope.row.status === 1" size="small">{{ $t('mail.status1') }}</el-tag>
-            <el-tag v-else size="small" type="danger">{{ $t('mail.status0') }}</el-tag>
-        </template>-->
       </el-table-column>
       <el-table-column
-        prop="tmti"
+        prop="payTime"
         label="支付时间"
-        sortable="custom"
         header-align="center"
         align="center"
       >
       </el-table-column>
       <el-table-column
         label="支付方式"
+        prop="payChannel"
         header-align="center"
         align="center"
         width="150"
       >
         <template slot-scope="scope">
-          <div v-if="scope.row.status === '已付款'">
-            {{ "微信支付" }}
-          </div>
+          <!--  0微信 1支付宝 -->
+          <el-tag v-if="scope.row.payChannel == 0" type="success">微信</el-tag>
+          <el-tag v-if="scope.row.payChannel == 1">支付宝</el-tag>
         </template>
       </el-table-column>
       <el-table-column
         :label="$t('handle')"
+        fixed="right"
         header-align="center"
         align="center"
         width="150"
@@ -124,12 +151,18 @@
             style="color:#E6A23C"
             type="text"
             size="small"
-            @click="sipping(scope.row)"
-            v-if="scope.row.status === '已付款'"
+            @click="updateTransStatus(scope.row.id)"
+            v-if="
+              scope.row.orderStatus == 1 && $hasPermission('shop:order:update')
+            "
           >
             发货
           </el-button>
-          <el-button type="text" size="small" @click="forwardUrl(scope.row)"
+          <el-button
+            type="text"
+            size="small"
+            @click="forwardUrl(scope.row)"
+            v-if="$hasPermission('shop:order:info')"
             >详情</el-button
           >
         </template>
@@ -157,94 +190,73 @@ export default {
   data() {
     return {
       mixinViewModuleOptions: {
-        getDataListURL: "",
+        getDataListURL: "/shop/order/list",
         getDataListIsPage: true,
+        activatedIsNeed: true,
         deleteURL: "",
         deleteIsBatch: true,
       },
-      dataForm: {
-        serial: "",
-        id: "",
-        name: "",
-        mobile: "",
-        identityCard: "",
+      daterange: null,
+      orderStatus: {
+        0: "已下单",
+        1: "已付款",
+        2: "已完成",
+        3: "已取消",
       },
-      dataList: [
-        {
-          order: "00001",
-          name: "张三",
-          mobile: "13012345671",
-          status: "已下单",
-          heart: "60", // 心率值
-          tmti: "2019-04-05", // 最近时间
-        },
-        {
-          order: "00002",
-          name: "张三",
-          mobile: "13012345671",
-          status: "已下单",
-          heart: "70",
-          tmti: "2019-04-06",
-        },
-        {
-          order: "00003",
-          name: "张三",
-          mobile: "13012345671",
-          status: "已付款",
-          heart: "60",
-          tmti: "2019-04-07",
-        },
-        {
-          order: "00004",
-          name: "张三",
-          mobile: "13012345671",
-          status: "已下单",
-          heart: "80",
-          tmti: "2019-04-08",
-        },
-        {
-          order: "00005",
-          name: "张三",
-          mobile: "13012345671",
-          status: "已下单",
-          heart: "50",
-          tmti: "2019-04-09",
-        },
-      ],
-      states: [
-        {
-          value: "选项1",
-          label: "全部",
-        },
-        {
-          value: "选项2",
-          label: "已下单",
-        },
-        {
-          value: "选项3",
-          label: "已付款",
-        },
-      ],
     };
+  },
+
+  watch: {
+    daterange(val) {
+      if (val) {
+        this.dataForm.beginTime = val[0];
+        this.dataForm.endTime = val[1];
+      } else {
+        this.dataForm.beginTime = undefined;
+        this.dataForm.endTime = undefined;
+      }
+    },
   },
   methods: {
     // 发货
-    sipping(id) {
+    updateTransStatus(id) {
       this.$confirm("订单发货", "发货", {
         confirmButtonText: this.$t("confirm"),
         cancelButtonText: this.$t("cancel"),
         type: "warning",
       })
-        .then(() => {})
+        .then(() => {
+          this.$http
+            .post("/shop/order/updateTransStatus", {
+              id: id,
+            })
+            .then(({ data: res }) => {
+              if (res.code !== 0) {
+                return this.$message.error(res.msg);
+              }
+
+              this.$message({
+                message: "发货成功",
+                type: "success",
+                duration: 500,
+                onClose: () => {
+                  this.getDataList();
+                },
+              });
+            })
+            .catch(() => {});
+        })
         .catch(() => {});
     },
     forwardUrl(row) {
       var routeParams = {
         routeName: `${this.$route.name}__instance_${row.id}`,
         menuId: `${this.$route.meta.menuId}`,
-        title: `${this.$route.meta.title}详情 - ${row.name}`,
+        title: `${this.$route.meta.title}详情`,
         path: "shop/order-details",
-        params: {},
+        params: {
+          id: row.id,
+        },
       };
       addDynamicRoute(routeParams, this.$router, this.$route);
     },

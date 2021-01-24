@@ -16,12 +16,16 @@
         <el-input
           v-model="dataForm.orgName"
           :placeholder="'机构' + $t('dept.name')"
+          maxlength="30"
+          show-word-limit
         ></el-input>
       </el-form-item>
       <el-form-item prop="telephone" :label="$t('sms.mobile')">
         <el-input
           v-model="dataForm.telephone"
           :placeholder="$t('sms.mobile')"
+          maxlength="11"
+          show-word-limit
         ></el-input>
       </el-form-item>
       <el-form-item prop="cityId" label="所属地域">

@@ -11,6 +11,7 @@
           <el-input
             placeholder="机构名称"
             v-model="dataForm.orgName"
+            clearable
           ></el-input>
         </el-form-item>
         <el-form-item>

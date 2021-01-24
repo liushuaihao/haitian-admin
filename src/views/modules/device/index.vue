@@ -36,21 +36,13 @@
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input
-            placeholder="测量设备ID号"
-            v-model="dataForm.measureId"
-            clearable
-          ></el-input>
-        </el-form-item>
-        <el-form-item>
           <el-select
             v-model="dataForm.stateCode"
             placeholder="绑定状态"
             clearable
           >
-            <el-option label="全部" value="quanbu"></el-option>
-            <el-option label="绑定" value="bangding"></el-option>
-            <el-option label="空闲" value="kongxian"></el-option>
+            <el-option label="绑定" value="0"></el-option>
+            <el-option label="空闲" value="1"></el-option>
           </el-select>
         </el-form-item>
 
@@ -82,9 +74,13 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="getDataList()">{{ $t("query") }}</el-button>
-          <el-button type="primary" @click="addOrUpdateHandle()">{{
-            $t("add")
-          }}</el-button>
+          <!-- device:devicebin:add -->
+          <el-button
+            type="primary"
+            v-if="$hasPermission('device:devicebin:add')"
+            @click="addOrUpdateHandle()"
+            >{{ $t("add") }}</el-button
+          >
         </el-form-item>
       </el-form>
       <!-- 设备ID 姓名 电话 身份证号 状态 时间 -->
@@ -139,23 +135,46 @@
           width="200"
         >
           <template slot-scope="scope">
+            <!-- device:devicebin:info -->
             <el-button
               type="text"
               size="small"
+              v-if="
+                scope.row.stateLabel == '绑定' &&
+                  $hasPermission('device:devicebin:info')
+              "
               @click="infoHandle(scope.row.id)"
               >详情</el-button
             >
+            <!-- device:devicebin:del -->
             <el-button
               type="text"
               size="small"
               @click="deleteHandle(scope.row.id)"
+              v-if="$hasPermission('device:devicebin:del')"
               >{{ $t("delete") }}</el-button
             >
+            <!-- device:devicebin:unbind -->
             <el-button
               type="text"
               size="small"
               @click="unbindHandle(scope.row.id)"
+              v-if="
+                scope.row.stateLabel == '绑定' &&
+                  $hasPermission('device:devicebin:unbind')
+              "
               >解绑</el-button
+            >
+            <!--   v-if="$hasPermission('device:devicebin:add')" -->
+            <el-button
+              type="text"
+              size="small"
+              @click="addOrUpdateHandle(scope.row.deviceId, true)"
+              v-if="
+                scope.row.stateLabel == '空闲' &&
+                  $hasPermission('device:devicebin:add')
+              "
+              >绑定</el-button
             >
           </template>
         </el-table-column>
@@ -181,7 +200,7 @@
 
     <el-dialog
       :visible.sync="addVisible"
-      title="添加设备"
+      :title="isUpdate ? '绑定设备' : '添加设备'"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
     >
@@ -192,15 +211,15 @@
         @keyup.enter.native="dataFormSubmitHandle()"
         label-width="120px"
       >
-        <el-form-item label="手机号" prop="mobile">
+        <el-form-item label="患者手机号" prop="mobile">
           <el-input
             v-model="addForm.mobile"
             maxlength="11"
             show-word-limit
           ></el-input>
         </el-form-item>
-        <el-form-item label="设备ID" prop="deviceId">
-          <el-input v-model="addForm.deviceId"></el-input>
+        <el-form-item label="中控设备ID" prop="deviceId">
+          <el-input :disabled="isUpdate" v-model="addForm.deviceId"></el-input>
         </el-form-item>
       </el-form>
       <template slot="footer">
@@ -227,7 +246,7 @@ export default {
       mixinViewModuleOptions: {
         getDataListURL: "/device/devicebin/list",
         getDataListIsPage: true,
-        deleteURL: "",
+        deleteURL: "/device/devicebin/delete",
         deleteIsBatch: true,
       },
       regionTree: [],
@@ -240,6 +259,7 @@ export default {
         deviceId: "", //设备ID
         mobile: "", //手机号
       },
+      isUpdate: false,
     };
   },
   computed: {
@@ -279,10 +299,14 @@ export default {
     this.regionTreeList();
   },
   methods: {
-    addOrUpdateHandle() {
+    addOrUpdateHandle(deviceId, isUpdate) {
       this.addVisible = true;
+      this.isUpdate = isUpdate;
       this.$nextTick(() => {
         this.$refs["addForm"].resetFields();
+        if (deviceId) {
+          this.addForm.deviceId = deviceId;
+        }
       });
     },
     // 表单提交
@@ -341,7 +365,38 @@ export default {
       }
       return arr;
     },
-    unbindHandle(id) {},
+    unbindHandle(id) {
+      this.$confirm(
+        this.$t("prompt.info", { handle: "解绑" }),
+        this.$t("prompt.title"),
+        {
+          confirmButtonText: this.$t("confirm"),
+          cancelButtonText: this.$t("cancel"),
+          type: "warning",
+        }
+      )
+        .then(() => {
+          this.$http
+            .post("/device/devicebin/unBind", {
+              id,
+            })
+            .then(({ data: res }) => {
+              if (res.code !== 0) {
+                return this.$message.error(res.msg);
+              }
+              this.$message({
+                message: this.$t("prompt.success"),
+                type: "success",
+                duration: 500,
+                onClose: () => {
+                  this.query();
+                },
+              });
+            })
+            .catch(() => {});
+        })
+        .catch(() => {});
+    },
     infoHandle(id) {
       this.addOrUpdateVisible = true;
       this.$nextTick(() => {

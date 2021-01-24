@@ -18,6 +18,8 @@
               placeholder="姓名"
               v-model="dataForm.realName"
               clearable
+              maxlength="10"
+              show-word-limit
             ></el-input>
           </el-form-item>
           <el-form-item prop="mobile">
@@ -25,6 +27,8 @@
               placeholder="手机号"
               v-model="dataForm.mobile"
               clearable
+              maxlength="11"
+              show-word-limit
             ></el-input>
           </el-form-item>
           <el-form-item prop="idCard">
@@ -32,6 +36,8 @@
               placeholder="身份证号"
               clearable
               v-model="dataForm.idCard"
+              maxlength="20"
+              show-word-limit
             ></el-input>
           </el-form-item>
           <el-form-item>
@@ -56,6 +62,7 @@
               placeholder="密码"
               clearable
               v-model="dataForm.password"
+              maxlength="12"
             ></el-input>
           </el-form-item>
           <el-form-item prop="confirmPassword">
@@ -64,6 +71,7 @@
               placeholder="确认密码"
               clearable
               v-model="dataForm.confirmPassword"
+              maxlength="12"
             ></el-input>
           </el-form-item>
 

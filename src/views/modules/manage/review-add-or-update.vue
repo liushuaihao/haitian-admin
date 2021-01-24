@@ -5,7 +5,7 @@
     :close-on-click-modal="false"
     :close-on-press-escape="false"
   >
-    <el-form :model="dataForm" ref="dataForm" label-width="120px">
+    <el-form :model="dataForm" ref="dataForm" label-width="120px" disabled>
       <el-form-item prop="realName" :label="$t('user.realName')">
         <el-input
           v-model="dataForm.realName"

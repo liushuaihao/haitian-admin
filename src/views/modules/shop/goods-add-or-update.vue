@@ -21,6 +21,7 @@
           style="width:250px"
           placeholder="商品类型"
           clearable
+          :disabled="!dataForm.id ? false : true"
         >
           <el-option label="在线服务" value="0"></el-option>
           <el-option label="设备租赁" value="1"></el-option>
@@ -353,6 +354,9 @@
 import Cookies from "js-cookie";
 import debounce from "lodash/debounce";
 import "quill/dist/quill.snow.css";
+import "quill/dist/quill.core.css";
+import "quill/dist/quill.bubble.css";
+
 import Quill from "quill";
 export default {
   data() {
@@ -856,5 +860,10 @@ export default {
     background-color: #f5f7fa;
     color: #909399;
   }
+}
+#J_quillEdito {
+  min-height: 300px;
+  resize: vertical;
+  overflow: auto;
 }
 </style>

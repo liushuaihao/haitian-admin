@@ -14,7 +14,11 @@
         clearable
       >
         <el-col :span="10">
-          <el-input v-model="dataForm.addtnotd"></el-input>
+          <el-input
+            v-model="dataForm.addtnotd"
+            maxlength="10"
+            show-word-limit
+          ></el-input>
         </el-col>
       </el-form-item>
       <el-form-item
@@ -25,7 +29,11 @@
         clearable
       >
         <el-col :span="10">
-          <el-input v-model="dataForm.deptName"></el-input>
+          <el-input
+            v-model="dataForm.deptName"
+            maxlength="10"
+            show-word-limit
+          ></el-input>
         </el-col>
       </el-form-item>
     </el-form>
@@ -83,15 +91,18 @@ export default {
   methods: {
     //新增
     addTnotd: function() {
-      this.visible = false;
-      if (this.dataForm.addtnotd != "") {
+      this.$refs["dataForm"].validate((valid) => {
+        if (!valid) {
+          return false;
+        }
         this.$http
           .post("/sys/dept/add", { deptName: this.dataForm.addtnotd })
           .then((res) => {
+            this.visible = false;
             this.$emit("refreshDataList");
           })
           .catch(() => {});
-      }
+      });
     },
     modification: function() {
       //   信息
@@ -106,22 +117,33 @@ export default {
     },
     // 修改
     updates: function() {
-      this.visible = false;
       let param = {
         deptName: this.dataForm.deptName,
         id: this.dataForm.id,
       };
-      this.$http
-        .put("/sys/dept/updateDept", { id: param.id, deptName: param.deptName })
-        .then((res) => {
-          this.$emit("refreshDataList");
-        })
-        .catch(() => {});
+      this.$refs["dataForm"].validate((valid) => {
+        if (!valid) {
+          return false;
+        }
+        this.$http
+          .post("/sys/dept/updateDept", {
+            id: param.id,
+            deptName: param.deptName,
+          })
+          .then((res) => {
+            this.visible = false;
+            this.$emit("refreshDataList");
+          })
+          .catch(() => {});
+      });
     },
     init() {
       this.visible = true;
       this.$nextTick(() => {
-        this.modification();
+        this.$refs["dataForm"].resetFields();
+        if (this.dataForm.id) {
+          this.modification();
+        }
       });
     },
   },

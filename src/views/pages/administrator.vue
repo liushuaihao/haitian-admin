@@ -18,6 +18,8 @@
               placeholder="姓名"
               v-model="dataForm.realName"
               clearable
+              maxlength="10"
+              show-word-limit
             ></el-input>
           </el-form-item>
           <el-form-item prop="mobile">
@@ -25,6 +27,8 @@
               placeholder="手机号"
               v-model="dataForm.mobile"
               clearable
+              maxlength="11"
+              show-word-limit
             ></el-input>
           </el-form-item>
           <el-form-item prop="idCard">
@@ -32,6 +36,8 @@
               placeholder="身份证号"
               v-model="dataForm.idCard"
               clearable
+              maxlength="20"
+              show-word-limit
             ></el-input>
           </el-form-item>
           <el-form-item prop="password">
@@ -40,6 +46,8 @@
               show-password
               v-model="dataForm.password"
               clearable
+              maxlength="12"
+              show-word-limit
             ></el-input>
           </el-form-item>
           <el-form-item prop="confirmPassword">
@@ -48,6 +56,8 @@
               show-password
               type="confirmPassword"
               clearable
+              maxlength="12"
+              show-word-limit
               placeholder="确认密码"
             ></el-input>
           </el-form-item>
@@ -70,6 +80,7 @@
 
 <script>
 import debounce from "lodash/debounce";
+import { isEmail, isMobile } from "@/utils/validate";
 export default {
   data() {
     var checkPhone = (rule, value, callback) => {
@@ -143,7 +154,11 @@ export default {
           },
         ],
         mobile: [
-          { required: true, validator: validateMobile, trigger: "blur" },
+          {
+            required: true,
+            validator: validateMobile,
+            trigger: "blur",
+          },
         ],
       };
     },
