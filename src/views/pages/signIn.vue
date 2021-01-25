@@ -1,7 +1,7 @@
 <template>
   <div id="login-main">
     <!-- login-div-box -->
-    <img src="~@/assets/img/title.png" style="margin-bottom:30px" alt="" />
+    <img src="~@/assets/img/title.png" style="margin-bottom:30px;" alt="" />
     <el-card class="signin">
       <div class="l-tab">
         <div class="active">用户注册</div>
@@ -324,6 +324,9 @@ export default {
                 this.getCaptcha();
                 return this.$message.error(res.msg);
               }
+
+              this.$message.success("注册成功");
+              this.$router.replace({ name: "login" });
             })
             .catch(() => {});
         });

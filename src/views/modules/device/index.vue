@@ -66,10 +66,10 @@
             <el-option label="全部" value="0"></el-option>
             <el-option label="心电设备" value="1"></el-option>
             <el-option label="呼吸设备" value="2"></el-option>
-            <el-option label="左上设备" value="3"></el-option>
-            <el-option label="右上设备" value="4"></el-option>
-            <el-option label="左下设备" value="5"></el-option>
-            <el-option label="右下设备" value="6"></el-option>
+            <el-option label="左上肢设备" value="3"></el-option>
+            <el-option label="右上肢设备" value="4"></el-option>
+            <el-option label="左下肢设备" value="5"></el-option>
+            <el-option label="右下肢设备" value="6"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>

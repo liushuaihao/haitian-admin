@@ -178,7 +178,7 @@ export default {
                 return this.$message.error(res.msg);
               }
               this.$message.success("提交成功");
-
+              this.$router.replace({ name: "login" });
               this.$nextTick(() => {
                 this.$refs["dataForm"].resetFields();
               });

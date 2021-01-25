@@ -21,6 +21,9 @@
           v-model="dataForm.password"
           type="password"
           :placeholder="$t('updatePassword.password')"
+          maxlength="12"
+          show-word-limit
+          clearable
         ></el-input>
       </el-form-item>
       <el-form-item
@@ -31,6 +34,9 @@
           v-model="dataForm.newPassword"
           type="password"
           :placeholder="$t('updatePassword.newPassword')"
+          maxlength="12"
+          show-word-limit
+          clearable
         ></el-input>
       </el-form-item>
       <el-form-item
@@ -41,6 +47,9 @@
           v-model="dataForm.confirmPassword"
           type="password"
           :placeholder="$t('updatePassword.confirmPassword')"
+          maxlength="12"
+          show-word-limit
+          clearable
         ></el-input>
       </el-form-item>
     </el-form>

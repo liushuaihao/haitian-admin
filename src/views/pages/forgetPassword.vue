@@ -17,6 +17,8 @@
             <el-input
               v-model="dataForm.mobile"
               placeholder="手机号"
+              maxlength="11"
+              show-word-limit
               clearable
             ></el-input>
           </el-form-item>
@@ -25,6 +27,7 @@
               v-model="dataForm.password"
               placeholder="密码"
               show-password
+              maxlength="12"
               type="password"
               clearable
             ></el-input>
@@ -35,6 +38,7 @@
               show-password
               type="confirmPassword"
               clearable
+              maxlength="12"
               placeholder="确认密码"
             ></el-input>
           </el-form-item>
@@ -207,6 +211,7 @@ export default {
                 return this.$message.error(res.msg);
               }
               this.$message.success("提交成功");
+              this.$router.replace({ name: "login" });
 
               this.$nextTick(() => {
                 this.$refs["dataForm"].resetFields();

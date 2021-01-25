@@ -52,6 +52,12 @@
           align="center"
         ></el-table-column>
         <el-table-column
+          prop="createDate"
+          label="提交时间"
+          header-align="center"
+          align="center"
+        ></el-table-column>
+        <el-table-column
           prop="status"
           label="状态"
           header-align="center"
