@@ -14,7 +14,11 @@
         呼吸率情况
       </div>
       <div class="details-main">
-        <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
+        <el-form
+          :inline="true"
+          :model="dataForm"
+          @keyup.enter.native="getDataList()"
+        >
           <el-form-item>
             <el-date-picker
               v-model="daterange"
@@ -36,15 +40,15 @@
               <el-radio :label="9">1个月</el-radio>
             </el-radio-group>
           </el-form-item>
-          <div class="human">
-          <el-form-item label="呼吸率：">
-            <div>70次/分</div>
-          </el-form-item>
-          <el-form-item label="时段：">
-            <div>2019-04-05 14:00</div>
-          </el-form-item>
-        </div>
-        <div class="tjx">呼吸率展示</div>
+          <!-- <div class="human">
+            <el-form-item label="呼吸率：">
+              <div>70次/分</div>
+            </el-form-item>
+            <el-form-item label="时段：">
+              <div>2019-04-05 14:00</div>
+            </el-form-item>
+          </div> -->
+          <div class="tjx">呼吸率展示</div>
         </el-form>
       </div>
     </div>
@@ -55,7 +59,7 @@ export default {
   components: {
     "details-info": () => import("@/components/details-info"),
   },
-  data () {
+  data() {
     return {
       basicInformation: {
         name: "张三",
@@ -64,19 +68,19 @@ export default {
         stature: "165",
         weight: "70",
         tel: "16601275207",
-        site: "北京市海淀区中关村科技大厦502"
+        site: "北京市海淀区中关村科技大厦502",
       },
       daterange: "",
-      time: ""
+      time: "",
     };
   },
   watch: {
-    daterange (val) {
-      this.dataForm.startDate = val[0]
-      this.dataForm.endDate = val[1]
-    }
+    daterange(val) {
+      this.dataForm.startDate = val[0];
+      this.dataForm.endDate = val[1];
+    },
   },
-  methods: {}
+  methods: {},
 };
 </script>
 <style scoped>
@@ -100,11 +104,11 @@ export default {
   margin-bottom: 20px;
   background-color: #ccc;
 }
-.human{
+.human {
   width: 36%;
   display: flex;
 }
-.human>div{
+.human > div {
   flex: 1;
 }
 </style>

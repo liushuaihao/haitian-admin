@@ -20,11 +20,11 @@
           show-word-limit
         ></el-input>
       </el-form-item>
-      <el-form-item prop="telephone" :label="$t('sms.mobile')">
+      <el-form-item prop="telephone" label="电话">
         <el-input
           v-model="dataForm.telephone"
-          :placeholder="$t('sms.mobile')"
-          maxlength="11"
+          :placeholder="电话"
+          maxlength="30"
           show-word-limit
         ></el-input>
       </el-form-item>
@@ -83,13 +83,6 @@ export default {
             required: true,
             message: this.$t("validate.required"),
             trigger: "blur",
-          },
-        ],
-        telephone: [
-          {
-            required: true,
-            message: this.$t("validate.required"),
-            trigger: "change",
           },
         ],
         cityId: [

@@ -10,22 +10,23 @@
     注：因此组件为公共组ss件 请不要擅自改动此组件 如本组件不满足需求 请联系大佬修改
    -->
   <div class="chart-container" ref="container">
-    <div
+    <!-- <div
       class="chart-title"
       v-if="title != ''"
       ref="title"
       :style="{ 'padding-left': icon ? '30px' : '0px' }"
     >
-      <!--  -->
-      <!-- <i v-if="icon!=''" :class="[icon]"></i> -->
+      
+       <i v-if="icon!=''" :class="[icon]"></i> 
       <img v-if="icon != ''" :src="icon" alt class="chart-icon-img" />
       <span class="chart-title-text" v-html="title"></span>
-    </div>
+    </div> -->
     <div
       class="chart-body"
       ref="chartDiv"
       :id="echartsId"
       :style="layout"
+      v-if="ispage"
     ></div>
     <!-- -->
   </div>
@@ -46,55 +47,67 @@ export default {
     },
     option: {
       type: Object,
-      default () {
+      default() {
         return null;
       },
     },
     layout: {
       type: Object,
-      default () {
+      default() {
         return {};
       },
     },
   },
-  data () {
+  data() {
     return {
       chartObj: null,
       chartData: {},
       chartDom: null,
+      Dom: null,
       resizeHanlder: null,
+      ispage: true,
     };
   },
-  // created () {},
-  mounted () {
-    // console.log(11111, this.option)
+  mounted() {
     this.chartDom = document.getElementById(this.echartsId);
-    // console.log(this.chartDom)
+    this.Dom = document.querySelector(".el-tabs__content");
+    console.log(this.Dom);
     this.chartObj = this.$echarts.init(this.chartDom);
-    this.chartObj.on("click", (params) => {
-      this.itemClick(params);
-    });
     this.drawChart();
     this.resizeHanlder = debounce(this.refreshChart);
     // 添加尺寸改变事件
+    this.Dom.addEventListener("resize", this.resizeHanlder);
     window.addEventListener("resize", this.resizeHanlder);
   },
-  // watch: {},,
+  watch: {
+    sidebarFold: {
+      immediate: true,
+      handler: function(newval) {
+        console.log(newval);
+        debounce(this.refreshChart);
+      },
+    },
+    option() {
+      this.drawChart();
+    },
+  },
   computed: {
-    echartsId () {
+    echartsId() {
       return "echarts" + Math.random() * 100000;
+    },
+    sidebarFold() {
+      return this.$store.state.sidebarFold;
     },
   },
   methods: {
     // 刷新图标
-    refresh () {
+    refresh() {
       this.drawChart();
     },
-    clearChart () {
+    clearChart() {
       this.chartDom.innerHtml = "";
     },
-    resizeChart () {
-      // console.log('this.$refs["title"]',this.$refs["title"]);
+    resizeChart() {
       let titleHeight = this.$refs["title"].clientHeight;
       let totleHeight = this.$refs["container"].clientHeight;
       this.style = {
@@ -102,24 +115,21 @@ export default {
       };
       this.refreshChart();
     },
-    refreshChart () {
-      // console.log("this.chartObj",this.chartObj.resize);
+    refreshChart() {
+      console.log("this.chartObj", this.chartObj.resize);
       this.chartObj.resize();
     },
-    drawChart () {
+    drawChart() {
       this.clearChart();
       if (this.option && Object.keys(this.option).length > 0) {
         this.chartObj.setOption(this.option);
       }
     },
-    setOption (option) {
+    setOption(option) {
       this.chartObj.setOption(option);
       this.drawChart();
     },
-    itemClick (params) {
-      this.$emit("item-click", params);
-    },
-    setProps (props) {
+    setProps(props) {
       if (Object.keys(props).length > 0) {
         for (let key in props) {
           this[key] = props[key];
@@ -131,15 +141,11 @@ export default {
       }
     },
   },
-  beforeDestroy () {
+  beforeDestroy() {
+    this.Dom.removeEventListener("resize", this.refreshChart);
     window.removeEventListener("resize", this.refreshChart);
   },
   components: {},
-  watch: {
-    option () {
-      this.drawChart();
-    },
-  },
 };
 </script>
 <style scoped lang="scss">

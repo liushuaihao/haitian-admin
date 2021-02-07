@@ -20,13 +20,13 @@
             clearable
           ></el-input>
         </el-form-item>
-        <!-- <el-form-item>
+        <el-form-item>
           <el-input
-            v-model="dataForm.IDNumber"
+            v-model="dataForm.idCard"
             placeholder="身份证号"
             clearable
           ></el-input>
-        </el-form-item> -->
+        </el-form-item>
         <el-form-item>
           <el-select
             v-model="dataForm.userType"

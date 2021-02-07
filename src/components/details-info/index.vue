@@ -16,17 +16,23 @@
     <p>张女儿：16601275207</p>
     <p>张弟弟：16601275207</p>
     <p>关联设备</p>
-    <p>主控设备：1111-0000-1111</p>
-    <p>手环设备：1111-0000-1111</p>
-    <p>心电设备：1111-0000-1111</p>
-    <p>呼吸设备：1111-0000-1111</p>
-    <p>下肢运动及机电：1111-0000-1111</p>
+    <p>主控设备ID：1111-0000-1111</p>
+    <p>主控设备通讯号：16601275207</p>
   </div>
 </template>
 <script>
 export default {
+  props: {
+    userId: {
+      type: [Number, String],
+      default: () => "",
+    },
+  },
   data() {
     return {
+      dataForm: {
+        emergencyList: [],
+      },
       basicInformation: {
         name: "张三",
         sex: "男",
@@ -38,6 +44,18 @@ export default {
       },
     };
   },
-  methods: {},
+  methods: {
+    info() {
+      this.$http
+        .get("/device/devicebin/getPatientDetailAndDevice", {
+          params: {
+            userId: this.userId,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+        });
+    },
+  },
 };
 </script>

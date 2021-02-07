@@ -1,81 +1,197 @@
 <template>
-  <el-card shadow="never" class="aui-card--fill">
-    <p>
-      <el-button type="success">导出</el-button>
-    </p>
-    <div class="details-box" id="ecg-details-dome">
-      <div class="details-title">
-        基本信息
-      </div>
-      <div class="details-main">
-        <details-info />
-      </div>
-      <div class="details-title">
-        心电情况
-      </div>
-      <div class="details-main">
-        <el-form :inline="true" :model="dataForm">
-          <el-form-item>
-            <el-date-picker
-              v-model="daterange"
-              type="datetimerange"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              :range-separator="$t('datePicker.range')"
-              start-placeholder="起止时间"
-              end-placeholder="结束时间"
-            ></el-date-picker>
-          </el-form-item>
-          <el-form-item>
-            <el-button @click="getDataList()">{{ $t("query") }}</el-button>
-          </el-form-item>
-
-          <div class="tjx">心电图</div>
-          <ecg />
-          <ecgcan grids="grids" ifStarts="ifStarts" myCanvas="myCanvas" />
-          <!--<huxi /> -->
-          <el-form-item label="分析时段：">
-            <el-radio-group v-model="type" @change="getHeartRate">
-              <el-radio :label="0">24小时</el-radio>
-              <el-radio :label="1">1周</el-radio>
-              <el-radio :label="2">1个月</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <!-- <div class="human">
-            <el-form-item label="心率：">
-              <div>60~100次/分</div>
-            </el-form-item>
-            <el-form-item label="时段：">
-              <div>2019-04-05 14:00</div>
-            </el-form-item>
-          </div> -->
-          <div class="tjx">心率展示</div>
-          <chartEcg :dataList="heartRateData" />
-          <el-form-item label="心电变异性分析：">
-            <div>T波改变 异常建议进一步进行检查</div>
-          </el-form-item>
-        </el-form>
+  <div>
+    <div class="sssss">
+      <canvas :id="grids" width="751px" height="751px"></canvas>
+      <div class="sss">
+        <canvas
+          style="border:1px solid #ff3232;"
+          width="751px"
+          height="751px"
+          :id="myCanvas"
+        ></canvas>
       </div>
     </div>
-  </el-card>
+    <!-- <button @click="startOrStop">{{ ifStart ? "暂停" : "开始" }}</button> -->
+  </div>
 </template>
+
 <script>
 export default {
-  components: {
-    "details-info": () => import("@/components/details-info"),
-    ecg: () => import("@/components/ecg"),
-    ecgcan: () => import("@/components/ecg/ecg"),
-    huxi: () => import("@/components/huxi"),
-    chartEcg: () => import("@/components/chartEcg"),
+  name: "lookEcgs",
+  props: {
+    //props用来接收，一定是放在data()的外面，不要放在data()里面。
+    arr: {
+      //title一定是在父组件绑定的值。父组件绑定什么，子组件接收的这就写什么
+      type: Array, // type:是接受过来的类型。一定要是什么类型在子组件里定义
+      default: () => {
+        return []; //没有return会报错，而null 需求而定 也可以空数组等[]
+      },
+    },
+    grids: {
+      //title一定是在父组件绑定的值。父组件绑定什么，子组件接收的这就写什么
+      type: String, // type:是接受过来的类型。一定要是什么类型在子组件里定义
+      default: () => {
+        return null; //没有return会报错，而null 需求而定 也可以空数组等[]
+      },
+    },
+    ifStarts: {
+      //title一定是在父组件绑定的值。父组件绑定什么，子组件接收的这就写什么
+      type: Boolean, // type:是接受过来的类型。一定要是什么类型在子组件里定义
+      default: () => {
+        return; //没有return会报错，而null 需求而定 也可以空数组等[]
+      },
+    },
+    myCanvas: {
+      //title一定是在父组件绑定的值。父组件绑定什么，子组件接收的这就写什么
+      type: String, // type:是接受过来的类型。一定要是什么类型在子组件里定义
+      default: () => {
+        return null; //没有return会报错，而null 需求而定 也可以空数组等[]
+      },
+    },
   },
   data() {
     return {
-      ifStarts: true,
-      daterange: "",
-      type: 0,
-      userId: "",
-      dataForm: {},
-      heartRateData: [],
-      arr: [
+      canvasTxt: "",
+      // arr : [],
+      startLoop: false,
+      ifStart: this.ifStarts,
+      myTimeout: null,
+      line: 0,
+      xNum: 0.27,
+      yNum: 0.065,
+      width: 800,
+      height: 150,
+    };
+  },
+  watch: {
+    ifStarts(val) {
+      if (val) {
+        this.loop();
+      } else {
+        clearTimeout(this.myTimeout);
+      }
+    },
+  },
+  methods: {
+    dian() {
+      let canvas = document.getElementById(this.myCanvas);
+      this.canvasTxt = canvas.getContext("2d");
+      // this.loop();
+      this.drawgrid();
+    },
+    // 画网格
+    drawgrid() {
+      var c_canvas = document.getElementById(this.grids);
+      c_canvas.getContext("2d").clearRect(0, 0, this.width, this.height);
+      this.drawSmallGrid(c_canvas);
+      this.drawMediumGrid(c_canvas);
+      this.drawBigGrid(c_canvas);
+      this.drawLine(c_canvas);
+    },
+    getArr(arr) {
+      if (arr.length >= parseInt((2 * this.width) / this.xNum + 1)) {
+        return arr.slice(0, parseInt((2 * this.width) / this.xNum + 1));
+      } else {
+        return this.getArr(
+          arr.concat(
+            arr.slice(
+              0,
+              parseInt((2 * this.width) / this.xNum + 1) - arr.length
+            )
+          )
+        );
+      }
+    },
+    loop() {
+      this.canvasTxt.clearRect(0, 0, this.width, this.height);
+      let arr = this.getArr(this.arr);
+      this.canvasTxt.beginPath();
+      if (this.line === -1 * parseInt(this.arr.length / this.xNum))
+        this.line = 0;
+      this.drawgrid();
+      this.canvasTxt.moveTo(
+        this.line,
+        parseInt(this.height / 2) - arr[0] * this.yNum
+      );
+      for (let i = 0; i < arr.length - 1; i++) {
+        let endY = parseInt(this.height / 2) - arr[i + 1] * this.yNum;
+        this.canvasTxt.lineTo(this.line + (i + 1) * this.xNum, endY);
+      }
+      this.canvasTxt.stroke();
+      this.line -= 1;
+      // this.myTimeout = setTimeout(this.loop, 60);
+    },
+    //小网格
+    drawSmallGrid(canvas) {
+      var context = canvas.getContext("2d");
+      context.strokeStyle = "#f1dedf";
+      context.strokeWidth = 1;
+      context.beginPath();
+      for (var x = 0.5; x < 751; x += 3) {
+        context.moveTo(x, 0);
+        context.lineTo(x, 751);
+        context.stroke();
+      }
+
+      for (var y = 0.5; y < 751; y += 3) {
+        context.moveTo(0, y);
+        context.lineTo(751, y);
+        context.stroke();
+      }
+      context.closePath();
+      return;
+    },
+    //中网格
+    drawMediumGrid(canvas) {
+      var context = canvas.getContext("2d");
+      context.strokeStyle = "#f0adaa";
+      context.strokeWidth = 1;
+      context.beginPath();
+      for (var x = 0.5; x < 751; x += 15) {
+        context.moveTo(x, 0);
+        context.lineTo(x, 751);
+        context.stroke();
+      }
+
+      for (var y = 0.5; y < 751; y += 15) {
+        context.moveTo(0, y);
+        context.lineTo(751, y);
+
+        context.stroke();
+      }
+      context.closePath();
+      return;
+    },
+    //大网格
+    drawBigGrid(canvas) {
+      var context = canvas.getContext("2d");
+      context.strokeStyle = "#e0514b";
+      context.strokeWidth = 1;
+      context.beginPath();
+      for (var x = 0.5; x < 751; x += 75) {
+        context.moveTo(x, 0);
+        context.lineTo(x, 751);
+        context.stroke();
+      }
+
+      for (var y = 0.5; y < 751; y += 75) {
+        context.moveTo(0, y);
+        context.lineTo(751, y);
+        context.stroke();
+      }
+      context.closePath();
+      return;
+    },
+    // 线条
+    drawLine(canvas) {
+      var ctx = canvas.getContext("2d");
+      ctx.strokeStyle = "#000";
+      ctx.strokeWidth = 1;
+      ctx.beginPath();
+      // ctx.moveTo(0.5, 200);
+      // ctx.lineTo(50, 200);
+
+      let arr = [
         1927,
         1953,
         1951,
@@ -576,61 +692,33 @@ export default {
         1887,
         1907,
         1925,
-      ],
-      arr_v11: [],
-    };
-  },
-  watch: {
-    daterange(val) {
-      this.dataForm.startDate = val[0];
-      this.dataForm.endDate = val[1];
+      ];
+      arr.map((item, index) => {
+        ctx.lineTo(index + 1, item / 10);
+        console.log(index + 1, item);
+      });
+      // for (var x = 9; x < 117; x++) {
+      //   ctx.lineTo(x * 6, (Math.random() * 10 - 5) * 20 + 200);
+      //   console.log(x * 6, (Math.random() * 10 - 5) * 20 + 200);
+      // }
+
+      // ctx.lineTo(700, 200);
+      // ctx.lineTo(750, 200);
+      ctx.stroke();
+      ctx.closePath();
     },
-  },
-  created() {
-    // //*************************************使用示例****************************
-    let luo2_zhuan = this.jinzhi(this.arr);
-    this.arr_v11 = luo2_zhuan.map(Number); //数字是字符串的必须转number类型，要不然canvas不认。
-    console.log(this.arr_v11);
-    this.userId = this.$route.params.userId;
-    console.log(this.$route.params);
-    if (this.userId) {
-      this.getHeartRate();
-    }
-  },
-  methods: {
-    getHeartRate() {
-      this.$http
-        .get("/ecg/getHeartRate", {
-          params: {
-            userId: this.userId,
-            type: this.type,
-          },
-        })
-        .then(({ data: res }) => {
-          if (res.code !== 0) {
-            return this.$message.error(res.msg);
-          }
-          this.heartRateData = res.data;
-        })
-        .catch(() => {});
-    },
-    handleDown() {
-      this.$htmlToPdf.downloadPDF(
-        document.querySelector("#ecg-details-dome"),
-        this.$route.name
-      );
-    },
-    jinzhi(list) {
-      // let list = lsit.split(",");
-      console.log(list);
+
+    jinzhi(lsit) {
+      let list = lsit.split(",");
+      //    console.log(list)
       let yu1 = ["7fff"];
       let yu2 = ["8000"];
       let yu1_v = parseInt(yu1, 16);
       let yu2_v = parseInt(yu2, 16);
       let list_xin_2 = [];
-      list.forEach((yuan) => {
-        // item = item.replace("0X", ""); //16进制 比如 0x0006   拿的其实就是后四位。这是这一步的来历
-        // let yuan = parseInt(item, 16);
+      list.forEach((item) => {
+        item = item.replace("0X", ""); //16进制 比如 0x0006   拿的其实就是后四位。这是这一步的来历
+        let yuan = parseInt(item, 16);
         let ins = yuan & yu2_v;
         if (ins == 0) {
           // console.log(String(yuan))
@@ -641,38 +729,30 @@ export default {
           list_xin_2.push(fu_item);
         }
       });
-      console.log(list_xin_2);
       return list_xin_2;
+      console.log(list_xin_1);
     },
+
+    // //*************************************使用示例****************************
+    //   let luo2_zhuan =this.jinzhi(luo2_number)
+    //   this.arr_v11 = luo2_zhuan.map(Number)  //数字是字符串的必须转number类型，要不然canvas不认。
+  },
+  destroyed() {
+    clearTimeout(this.myTimeout);
+  },
+  mounted() {
+    this.$nextTick(() => this.dian());
   },
 };
 </script>
+
 <style scoped>
-.details > h3 {
-  text-align: center;
-  line-height: 80px;
-  margin: 0;
+.sssss {
+  position: relative;
 }
-.personal {
-  display: flex;
-  width: 70%;
-}
-.personal > p {
-  flex: 1;
-}
-.tjx {
-  height: 300px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
-  background-color: #ccc;
-}
-.human {
-  width: 36%;
-  display: flex;
-}
-.human > div {
-  flex: 1;
+.sss {
+  position: absolute;
+  top: 0px;
+  left: 0px;
 }
 </style>

@@ -14,17 +14,15 @@
         定位信息
       </div>
       <div class="details-main">
-        <el-form>
-          <div class="human">
-            <el-form-item label="经度：">
-              <div>117.087013</div>
-            </el-form-item>
-            <el-form-item label="纬度：">
-              <div>36.200089</div>
-            </el-form-item>
-          </div>
+        <el-form :inline="true" v-if="position">
+          <el-form-item label="经度：">
+            <div>{{ position.baiduLat }}</div>
+          </el-form-item>
+          <el-form-item label="纬度：">
+            <div>{{ position.baiduLng }}</div>
+          </el-form-item>
         </el-form>
-        <gpsMap />
+        <gpsMap :position="position" />
       </div>
     </div>
   </el-card>
@@ -36,23 +34,38 @@ export default {
     gpsMap,
     "details-info": () => import("@/components/details-info"),
   },
-  data () {
+  data() {
     return {
-      basicInformation: {
-        name: "张三",
-        sex: "男",
-        age: "22",
-        stature: "165",
-        weight: "70",
-        tel: "16601275207",
-        site: "北京市海淀区中关村科技大厦502"
-      }
+      position: null,
+      userId: "",
     };
   },
-  mounted () {
+  created() {
+    this.userId = this.$route.params.userId;
+    if (this.userId) {
+      this.getLatestLocationByUserId();
+    }
+  },
+  mounted() {
     this.map();
   },
-  methods: {}
+  methods: {
+    getLatestLocationByUserId() {
+      this.$http
+        .get("/gps/getLatestLocationByUserId", {
+          params: {
+            id: this.userId,
+          },
+        })
+        .then(({ data: res }) => {
+          if (res.code !== 0) {
+            return this.$message.error(res.msg);
+          }
+          this.position = res.data;
+        })
+        .catch(() => {});
+    },
+  },
 };
 </script>
 <style scoped>

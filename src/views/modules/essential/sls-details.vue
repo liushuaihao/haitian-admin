@@ -16,10 +16,10 @@
       <div class="details-main">
         <el-form :inline="true" @keyup.enter.native="getDataList()">
           <el-form-item label="分析时段：">
-            <el-radio-group v-model="time">
-              <el-radio :label="3">24小时</el-radio>
-              <el-radio :label="6">1周</el-radio>
-              <el-radio :label="9">1个月</el-radio>
+            <el-radio-group v-model="type">
+              <el-radio :label="0">24小时</el-radio>
+              <el-radio :label="1">1周</el-radio>
+              <el-radio :label="2">1个月</el-radio>
             </el-radio-group>
           </el-form-item>
           <div class="human"></div>
@@ -37,22 +37,37 @@ export default {
   components: {
     "details-info": () => import("@/components/details-info"),
   },
-  data () {
+  data() {
     return {
-      basicInformation: {
-        name: "张三",
-        sex: "男",
-        age: "22",
-        stature: "165",
-        weight: "70",
-        tel: "16601275207",
-        site: "北京市海淀区中关村科技大厦502",
-      },
-      daterange: "",
-      time: "",
+      type: 0,
+      userId: "",
+      dataList: [],
     };
   },
-  methods: {},
+  created() {
+    this.userId = this.$route.params.userId;
+    console.log(this.$route.params);
+    if (this.userId) {
+      this.getStepRateAndStride();
+    }
+  },
+  methods: {
+    getStepRateAndStride() {
+      this.$http
+        .get("/step/getStepRateAndStride", {
+          params: {
+            patientId: this.userId,
+          },
+        })
+        .then(({ data: res }) => {
+          if (res.code !== 0) {
+            return this.$message.error(res.msg);
+          }
+          this.dataList = res.data;
+        })
+        .catch(() => {});
+    },
+  },
 };
 </script>
 <style scoped>

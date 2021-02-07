@@ -122,7 +122,7 @@
       <el-form-item
         v-if="dataForm.goodsType == 2 ? false : true"
         prop="pkgList"
-        :label="(dataForm.goodsType == 0 ? '服务' : '设备') + '时长'"
+        :label="(dataForm.goodsType == 0 ? '服务' : '租赁') + '时长'"
       >
         <el-button type="primary" style="margin-bottom:15px" @click="addPkg()"
           >添加</el-button

@@ -24,9 +24,28 @@
 <script>
 export default {
   name: "demo",
+  props: {
+    position: {
+      type: Object,
+      default: () => {
+        return null;
+      },
+    },
+  },
+  watch: {
+    position: {
+      handler(val) {
+        this.$set(this.map, "center", {
+          lng: val.baiduLng,
+          lat: val.baiduLat,
+        });
+      },
+      deep: true,
+    },
+  },
   data: () => ({
     map: {
-      center: { lng: 117.087013, lat: 36.200089 },
+      center: { lng: 116.403967, lat: 39.915114 },
       zoom: 15,
       show: true,
       dragging: true,
@@ -34,7 +53,6 @@ export default {
   }),
   methods: {
     handler({ BMap, map }) {
-      console.log(BMap, map);
       // 鼠标缩放
       map.enableScrollWheelZoom(true);
       // 点击事件获取经纬度

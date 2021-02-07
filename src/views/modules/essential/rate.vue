@@ -1,25 +1,51 @@
 <template>
   <el-card shadow="never" class="aui-card--fill">
     <div class="mod-mod-essential_rate">
-      <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
+      <el-form
+        :inline="true"
+        :model="dataForm"
+        @keyup.enter.native="getDataList()"
+      >
+        <el-form-item>
+          <el-date-picker
+            v-model="daterange"
+            type="datetimerange"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :range-separator="$t('datePicker.range')"
+            start-placeholder="起止时间"
+            end-placeholder="结束时间"
+          ></el-date-picker>
+        </el-form-item>
         <el-form-item>
           <el-input
-            v-model="dataForm.identityCard"
+            v-model="dataForm.idCard"
             :placeholder="$t('essential.identityCard')"
             clearable
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input v-model="dataForm.name" :placeholder="$t('essential.name')" clearable></el-input>
+          <el-input
+            v-model="dataForm.realName"
+            :placeholder="$t('essential.name')"
+            clearable
+          ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input v-model="dataForm.mobile" :placeholder="$t('essential.mobile')" clearable></el-input>
+          <el-input
+            v-model="dataForm.mobile"
+            :placeholder="$t('essential.mobile')"
+            clearable
+          ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input v-model="dataForm.id" :placeholder="$t('essential.id')" clearable></el-input>
+          <el-input
+            v-model="dataForm.deviceId"
+            :placeholder="$t('essential.id')"
+            clearable
+          ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="getDataList()">{{ $t('query') }}</el-button>
+          <el-button @click="getDataList()">{{ $t("query") }}</el-button>
         </el-form-item>
       </el-form>
       <el-table
@@ -31,7 +57,7 @@
         style="width: 100%;"
       >
         <el-table-column
-          prop="name"
+          prop="realName"
           :label="$t('essential.name')"
           header-align="center"
           align="center"
@@ -43,20 +69,25 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="identityCard"
+          prop="idCard"
           :label="$t('essential.identityCard')"
           header-align="center"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="id"
+          prop="deviceId"
           :label="$t('essential.id')"
           header-align="center"
           align="center"
         ></el-table-column>
-        <el-table-column prop="Breathing" label="呼吸值" header-align="center" align="center"></el-table-column>
         <el-table-column
-          prop="tmti"
+          prop="breatheRate"
+          label="呼吸值"
+          header-align="center"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="beginTime"
           label="最近时间"
           sortable="custom"
           header-align="center"
@@ -83,7 +114,9 @@
           width="150"
         >
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="forwardUrl(scope.row)">查看</el-button>
+            <el-button type="text" size="small" @click="forwardUrl(scope.row)"
+              >查看</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -105,19 +138,13 @@ import mixinViewModule from "@/mixins/view-module";
 import { addDynamicRoute } from "@/router"; // 添加动态路由
 export default {
   mixins: [mixinViewModule],
-  data () {
+  data() {
     return {
       mixinViewModuleOptions: {
-        getDataListURL: "",
+        getDataListURL: "/breathe/list",
         getDataListIsPage: true,
         deleteURL: "",
-        deleteIsBatch: true
-      },
-      dataForm: {
-        identityCard: "",
-        name: "",
-        mobile: "",
-        id: ""
+        deleteIsBatch: true,
       },
       dataList: [
         {
@@ -126,7 +153,7 @@ export default {
           mobile: "13012345671",
           identityCard: "11011011123456789",
           Breathing: "60",
-          tmti: "2019-04-05" // 最近时间
+          tmti: "2019-04-05", // 最近时间
         },
         {
           id: "1111-0000-1111",
@@ -134,7 +161,7 @@ export default {
           mobile: "13012345671",
           identityCard: "11011011123456789",
           Breathing: "70",
-          tmti: "2019-04-05"
+          tmti: "2019-04-05",
         },
         {
           id: "1111-0000-1111",
@@ -142,7 +169,7 @@ export default {
           mobile: "13012345671",
           identityCard: "11011011123456789",
           Breathing: "60",
-          tmti: "2019-04-05"
+          tmti: "2019-04-05",
         },
         {
           id: "1111-0000-1111",
@@ -150,7 +177,7 @@ export default {
           mobile: "13012345671",
           identityCard: "11011011123456789",
           Breathing: "80",
-          tmti: "2019-04-05"
+          tmti: "2019-04-05",
         },
         {
           id: "1111-0000-1111",
@@ -158,22 +185,34 @@ export default {
           mobile: "13012345671",
           identityCard: "11011011123456789",
           Breathing: "50",
-          tmti: "2019-04-05"
+          tmti: "2019-04-05",
         },
-      ]
+      ],
+      daterange: null,
     };
   },
+  watch: {
+    daterange(val) {
+      if (val) {
+        this.dataForm.beginTime = val[0];
+        this.dataForm.endTime = val[1];
+      } else {
+        this.dataForm.beginTime = null;
+        this.dataForm.endTime = null;
+      }
+    },
+  },
   methods: {
-    forwardUrl (row) {
+    forwardUrl(row) {
       var routeParams = {
         routeName: `${this.$route.name}__instance_${row.id}`,
         menuId: `${this.$route.meta.menuId}`,
         title: `${this.$route.meta.title}详情 - ${row.name}`,
         path: "essential/rate-details",
-        params: {}
+        params: {},
       };
       addDynamicRoute(routeParams, this.$router, this.$route);
-    }
-  }
+    },
+  },
 };
 </script>

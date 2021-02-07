@@ -201,7 +201,7 @@
               align="center"
             >
               <template slot-scope="scope">
-                <el-tag v-if="scope.row.payStatus === 1" type="success"
+                <el-tag v-if="scope.row.payStatus == 1" type="success"
                   >已付款</el-tag
                 >
                 <el-tag v-else>未付款</el-tag>
@@ -227,7 +227,7 @@
               align="center"
             >
               <template slot-scope="scope">
-                <el-tag type="success" v-if="scope.row.transStatus === 1"
+                <el-tag type="success" v-if="scope.row.transStatus == 1"
                   >已发货</el-tag
                 >
                 <el-tag v-else>未发货</el-tag>
@@ -292,7 +292,7 @@ export default {
       this.$http
         .get(`/shop/order/getOrderDetail?id=${this.dataForm.id}`)
         .then(({ data: res }) => {
-          if (res.code !== 0) {
+          if (res.code != 0) {
             return this.$message.error(res.msg);
           }
           this.dataForm = {

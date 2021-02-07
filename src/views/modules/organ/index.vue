@@ -55,7 +55,7 @@
         ></el-table-column>
         <el-table-column
           prop="telephone"
-          label="手机号"
+          label="电话"
           header-align="center"
           align="center"
         ></el-table-column>
